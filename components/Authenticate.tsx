@@ -9,10 +9,6 @@ export default function Authenticate(){
             // quality={25} // {number 1-100}
             src="/chess_bg.jpg"
             alt="chess background"
-    />
-    <div className='bg-red-500'>
-       <GoogleLogin/>
-    </div>
-    
+    />    
     </div>
 }

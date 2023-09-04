@@ -4,5 +4,5 @@ import { atom } from 'recoil'
 
 export const highlightedArray = atom({
     key: 'highlightedArray',
-    default: [],
+    default: [[1,1]],
   });

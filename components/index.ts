@@ -5,6 +5,7 @@ import GoogleLogin from './Google'
 import EmojiPickComponent from './EmojiPicker'
 import Right from './Right'
 import Left from './Left'
+import Board from './Board'
 
 export {
     Authenticate,
@@ -13,5 +14,6 @@ export {
     GoogleLogin,
     EmojiPickComponent,
     Right,
-    Left
+    Left,
+    Board
 }

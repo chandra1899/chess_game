@@ -1,19 +1,16 @@
-import { Left, Right } from "@/components"
+"use client"
 
-const rows=['A','B','C','D','E','F','G','H']
-const cols=['1','2','3','4','5','6','7','8']
-const initialBoardState = [
-    ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
-    ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎"],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-    ["♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙"],
-    ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
-  ];
+import { Board, Left, Right } from "@/components"
+import { useRecoilState, useRecoilValue,useSetRecoilState ,} from "recoil";
+import { highlightedArray } from "@/store/atoms/highlight";
+
+
+
 
 export default async function Game() {
+    // const highlightedBox=useRecoilValue(highlightedArray)
+    // const [highlightedBox, setHighlightedBox] = useRecoilState(highlightedArray);
+    
   
   return (
     <main className='flex justify-center items-center bg-black'>
@@ -21,18 +18,7 @@ export default async function Game() {
         <Left/>
 
         <div className='chessboard h-[100vh] w-[49%] bg-[#222222e6] flex flex-col justify-center items-center'>
-            <div className='h-auto w-[100%]  flex flex-col justify-center items-center'>
-                {rows.map((row,rowIndex)=>(
-                    <div className="flex flex-row">
-                        {cols.map((col,colIndex)=>(
-                            <div className={`h-[57px] w-[57px] cursor-pointer text-[3rem] flex justify-center items-center ${rowIndex%2===0?`${colIndex%2==0?`bg-[#E6BF83]`:`bg-[#8C6529]`}`:`${colIndex%2==0?`bg-[#8C6529]`:`bg-[#E6BF83]`}`}`}>
-                                {initialBoardState[rowIndex][colIndex]}
-                            </div>
-                        ))}
-                    </div>
-                ))}
-
-            </div>
+            <Board  />
         </div>
 
         <Right/>

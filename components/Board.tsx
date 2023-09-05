@@ -6,6 +6,7 @@ import { highlightedArray } from '@/store/atoms/highlight';
 import React from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { capture } from '@/store/atoms/capture';
+import { selected } from '@/store/atoms/selectedBlock';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -28,6 +29,9 @@ const Board = () => {
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
+    const setSelectedSol=useSetRecoilState(selected)
+    const setBoardState=useSetRecoilState(board)
+    const selectedSol=useRecoilValue(selected)
 
     const isHighlighted=(row:number,col:number):boolean=>{   
         return highlightedBox.some(arr => 
@@ -46,12 +50,13 @@ const Board = () => {
     }
 
     const hightlightBlocks=(row:number,col:number)=>{
+       
         if((isWhiteSide && boardState[row][col]==='♙') || (!isWhiteSide && boardState[row][col]==='♟︎')){
             setHighlightedBox([[]])
             console.log(isWhiteSide);
             
             if(isWhiteSide){
-                if(boardState[row-1][col]===""){
+                if(isValid(row-1,col) && boardState[row-1][col]===""){
                     if(isValid(row-1,col))
                     setHighlightedBox([[row-1,col]])
                     if(row===6){
@@ -68,7 +73,7 @@ const Board = () => {
                 }
             }
             else{
-                if(boardState[row+1][col]===""){
+                if(isValid(row+1,col) && boardState[row+1][col]===""){
                     if(isValid(row+1,col))
                     setHighlightedBox([[row+1,col]])
                     if(row===1){
@@ -98,16 +103,46 @@ const Board = () => {
   
   const handleOnClick=(row:number,col:number)=>{
     // console.log(row,col);
-    if(boardState[row][col]===""){
-        setHighlightedBox([[row,col]])
-    }
-    else if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
+    // if(boardState[row][col]===""){
+    //     setHighlightedBox([[row,col]])
+    // }
+     if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
         hightlightBlocks(row,col)
     }
-    else setHighlightedBox([[]])
+    // else setHighlightedBox([[]])
 
-    
-    
+    if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
+        // console.log('i selected here');
+        setSelectedSol([row,col])
+    }else{
+        if(selectedSol.length===0 && boardState[row][col]===""){
+            setHighlightedBox([[row,col]])
+        }else if(selectedSol.length===0 && isBlack(row,col)){
+            setHighlightedBox([[]])
+        }else if(selectedSol.length!==0){
+            if(isHighlighted(row,col)){
+                // console.log('i came here');
+                
+                setBoardState((pre)=>{
+                    const newBoard=pre.map(innerArray => [...innerArray])
+                    // console.log(newBoard);
+                    // console.log(selectedSol[1]);
+                    
+                    newBoard[row][col]=newBoard[selectedSol[0]][selectedSol[1]]
+                    newBoard[selectedSol[0]][selectedSol[1]]=""
+                    return newBoard
+                })
+                setHighlightedBox([[row,col],[selectedSol[0],selectedSol[1]]])
+            }else{
+                if(boardState[row][col]===""){
+                    setHighlightedBox([[row,col]])
+                }else if(isBlack(row,col)){
+                    setHighlightedBox([[]])
+                }
+            }
+        }
+    }
+
   }
   return (
     <div className='h-auto w-[100%]  flex flex-col justify-center items-center'>

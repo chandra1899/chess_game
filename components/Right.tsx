@@ -29,7 +29,7 @@ const Right = () => {
             <input type="text"
             value={message}
             onChange={handleChange}
-            className={`bg-transparent border-slate-500 border-[0.1rem] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[40px] w-[80%] py-2 px-3  rounded-md outline-none focus:border-blue focus:border-[0.1rem] focus:border-solid  font-medium m-2`}
+            className={`bg-transparent border-slate-500 border-[0.1rem] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[37px] w-[80%] py-2 px-3  rounded-md outline-none focus:border-blue focus:border-[0.1rem] focus:border-solid  font-medium m-2`}
             placeholder='Type Message'
              />
              <IoMdSend size='28px' className='cursor-pointer'/>

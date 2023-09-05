@@ -160,6 +160,15 @@ const Board = () => {
 
     }
 
+    const hightlightBlocksForKnight=(row:number,col:number)=>{
+        let possiblilities=[[-1,-2],[-1,2],[1,-2],[1,2],[-2,-1],[-2,1],[2,-1],[2,1]]
+        for(let i=0;i<possiblilities.length;i++){
+            if(isValid(row+possiblilities[i][0],col+possiblilities[i][1]) && ((isWhiteSide && !isWhite(row+possiblilities[i][0],col+possiblilities[i][1])) || (!isWhiteSide && !isBlack(row+possiblilities[i][0],col+possiblilities[i][1])))){
+                setHighlightedBox((pre)=>[...pre,[row+possiblilities[i][0],col+possiblilities[i][1]]])
+            }
+        }
+    }
+
     const hightlightBlocks=(row:number,col:number)=>{
        
         //for pawn
@@ -220,6 +229,10 @@ const Board = () => {
             setHighlightedBox([[]])
             hightlightBlocksForKing(row,col) 
         }
+        else if((isWhiteSide && boardState[row][col]==='♘') || (!isWhiteSide && boardState[row][col]==='♞')){
+            setHighlightedBox([[]])
+            hightlightBlocksForKnight(row,col) 
+        }
     }
 
     const isValid=(row:number,col:number)=>{
@@ -259,6 +272,14 @@ const Board = () => {
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     return newBoard
                 })
+                if(boardState[row][col]===""){
+                    //play move_Self
+                    document.getElementById('move_self').play()
+
+                }else if((isWhiteSide && isBlack(row,col) || (!isWhiteSide && isWhite(row,col)))){
+                    //play capture
+                    document.getElementById('capture').play()
+                }
                 setHighlightedBox([[row,col],[selectedSol[0],selectedSol[1]]])
             }else{
                 if(boardState[row][col]===""){
@@ -272,11 +293,11 @@ const Board = () => {
 
   }
   return (
-    <div className='h-auto w-[100%]  flex flex-col justify-center items-center'>
+    <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
                 {rows.map((row,rowIndex)=>(
                     <div className="flex flex-row">
                         {cols.map((col,colIndex)=>(
-                            <div className={`h-[57px] w-[57px] cursor-pointer text-[3rem] flex justify-center items-center border-[1px] border-black
+                            <div className={`h-[57px] ${isWhiteSide?'':'rotate-180'} w-[57px] cursor-pointer text-[3rem] flex justify-center items-center border-[1px] border-black
                             ${isHighlighted(rowIndex,colIndex)?
                                 `${(isWhiteSide && isBlack(rowIndex,colIndex)) || (!isWhiteSide && isWhite(rowIndex,colIndex))?`bg-red-500`:`bg-green-500`}`
                             :`

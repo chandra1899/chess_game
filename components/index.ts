@@ -6,6 +6,8 @@ import EmojiPickComponent from './EmojiPicker'
 import Right from './Right'
 import Left from './Left'
 import Board from './Board'
+import HomeLeft from './HomeLeft'
+import HomeRight from './HomeRight'
 
 export {
     Authenticate,
@@ -15,5 +17,7 @@ export {
     EmojiPickComponent,
     Right,
     Left,
-    Board
+    Board,
+    HomeRight,
+    HomeLeft
 }

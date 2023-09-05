@@ -18,6 +18,8 @@ export default async function Game() {
         <Left/>
 
         <div className='chessboard h-[100vh] w-[49%] bg-[#222222e6] flex flex-col justify-center items-center'>
+          <audio src="/capture.mp3" id="capture"></audio>
+          <audio src="/move-self.mp3" id="move_self"></audio>
             <Board  />
         </div>
 

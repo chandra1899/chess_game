@@ -51,6 +51,7 @@ const Board = () => {
 
     const hightlightBlocks=(row:number,col:number)=>{
        
+        //for pawn
         if((isWhiteSide && boardState[row][col]==='♙') || (!isWhiteSide && boardState[row][col]==='♟︎')){
             setHighlightedBox([[]])
             console.log(isWhiteSide);
@@ -88,10 +89,7 @@ const Board = () => {
                 if( isValid(row+1,col-1) && isWhite(row+1,col-1)){
                     setHighlightedBox((pre)=>{return [...pre,[row+1,col-1]]})
                 }
-            }
-            
-            
-            
+            }            
         }
     }
 
@@ -117,7 +115,7 @@ const Board = () => {
     }else{
         if(selectedSol.length===0 && boardState[row][col]===""){
             setHighlightedBox([[row,col]])
-        }else if(selectedSol.length===0 && isBlack(row,col)){
+        }else if((selectedSol.length===0 && isWhiteSide && isBlack(row,col)) || (selectedSol.length===0 && !isWhiteSide && isWhite(row,col))){
             setHighlightedBox([[]])
         }else if(selectedSol.length!==0){
             if(isHighlighted(row,col)){
@@ -136,7 +134,7 @@ const Board = () => {
             }else{
                 if(boardState[row][col]===""){
                     setHighlightedBox([[row,col]])
-                }else if(isBlack(row,col)){
+                }else if((isWhiteSide && isBlack(row,col)) || (!isWhiteSide && isWhite(row,col))){
                     setHighlightedBox([[]])
                 }
             }

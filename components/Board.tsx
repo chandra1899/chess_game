@@ -3,8 +3,9 @@
 import { board } from '@/store/atoms/board';
 import { WhiteSideIs } from '@/store/atoms/whiteSIde';
 import { highlightedArray } from '@/store/atoms/highlight';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { checkCheckmate } from '@/store/atoms/checkCheckmate';
 import { capture } from '@/store/atoms/capture';
 import { selected } from '@/store/atoms/selectedBlock';
 
@@ -26,9 +27,11 @@ const whiteParts=["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖","♙"]
 
 const Board = () => {
     const highlightedBox=useRecoilValue(highlightedArray)
+    const attackBox=useRecoilValue(checkCheckmate)
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
+    const setCheckCheckmateBox=useSetRecoilState(checkCheckmate)
     const setSelectedSol=useSetRecoilState(selected)
     const setBoardState=useSetRecoilState(board)
     const selectedSol=useRecoilValue(selected)
@@ -157,7 +160,6 @@ const Board = () => {
                 }
             }
         }
-
     }
 
     const hightlightBlocksForKnight=(row:number,col:number)=>{
@@ -169,48 +171,82 @@ const Board = () => {
         }
     }
 
+    const hightlightBlocksForPawns=(row:number,col:number)=>{
+        if(isWhiteSide){
+            if(isValid(row-1,col) && boardState[row-1][col]===""){
+                if(isValid(row-1,col))
+                setHighlightedBox([[row-1,col]])
+                if(row===6){
+                    if(isValid(row-2,col) && boardState[row-2][col]===""){
+                        setHighlightedBox((pre)=>[...pre,[row-2,col]])
+                    }
+                }
+            }
+            if(isValid(row-1,col-1) && isBlack(row-1,col-1)){
+                setHighlightedBox((pre)=>{return [...pre,[row-1,col-1]]})
+            }
+            if( isValid(row-1,col+1) && isBlack(row-1,col+1)){
+                setHighlightedBox((pre)=>{return [...pre,[row-1,col+1]]})
+            }
+        }
+        else{
+            if(isValid(row+1,col) && boardState[row+1][col]===""){
+                if(isValid(row+1,col))
+                setHighlightedBox([[row+1,col]])
+                if(row===1){
+                    if(isValid(row+2,col) && boardState[row+2][col]===""){
+                        setHighlightedBox((pre)=>[...pre,[row+2,col]])
+                    }
+                }
+            }
+            if(isValid(row+1,col+1) && isWhite(row+1,col+1)){
+                setHighlightedBox((pre)=>{return [...pre,[row+1,col+1]]})
+            }
+            if( isValid(row+1,col-1) && isWhite(row+1,col-1)){
+                setHighlightedBox((pre)=>{return [...pre,[row+1,col-1]]})
+            }
+        } 
+    }
+
+    const getWhitePawnsIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]=='♙'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
+    const attackBlocksForPawns=(row:number,col:number)=>{
+        if(isValid(row-1,col-1)){
+            setCheckCheckmateBox((pre)=>{return [...pre,[row-1,col-1]]})
+        }
+        if(isValid(row-1,col+1)){
+            setCheckCheckmateBox((pre)=>{return [...pre,[row-1,col+1]]})
+        }
+    }
+
+    const checkOppositeKingCheckmate=async ()=>{
+        //for pawns
+        // setHighlightedBox([[]])
+        let Indexs=await getWhitePawnsIndex()
+       for(let i=0;i<Indexs.length;i++) {
+        attackBlocksForPawns(Indexs[i][0],Indexs[i][1])
+       }
+        // console.log(attackBox.length);
+       
+    }
+
     const hightlightBlocks=(row:number,col:number)=>{
        
         //for pawn
         if((isWhiteSide && boardState[row][col]==='♙') || (!isWhiteSide && boardState[row][col]==='♟︎')){
             setHighlightedBox([[]])
-            // console.log(isWhiteSide);
-            console.log('hello1');
-            
-            if(isWhiteSide){
-                if(isValid(row-1,col) && boardState[row-1][col]===""){
-                    if(isValid(row-1,col))
-                    setHighlightedBox([[row-1,col]])
-                    if(row===6){
-                        if(isValid(row-2,col) && boardState[row-2][col]===""){
-                            setHighlightedBox((pre)=>[...pre,[row-2,col]])
-                        }
-                    }
-                }
-                if(isValid(row-1,col-1) && isBlack(row-1,col-1)){
-                    setHighlightedBox((pre)=>{return [...pre,[row-1,col-1]]})
-                }
-                if( isValid(row-1,col+1) && isBlack(row-1,col+1)){
-                    setHighlightedBox((pre)=>{return [...pre,[row-1,col+1]]})
-                }
-            }
-            else{
-                if(isValid(row+1,col) && boardState[row+1][col]===""){
-                    if(isValid(row+1,col))
-                    setHighlightedBox([[row+1,col]])
-                    if(row===1){
-                        if(isValid(row+2,col) && boardState[row+2][col]===""){
-                            setHighlightedBox((pre)=>[...pre,[row+2,col]])
-                        }
-                    }
-                }
-                if(isValid(row+1,col+1) && isWhite(row+1,col+1)){
-                    setHighlightedBox((pre)=>{return [...pre,[row+1,col+1]]})
-                }
-                if( isValid(row+1,col-1) && isWhite(row+1,col-1)){
-                    setHighlightedBox((pre)=>{return [...pre,[row+1,col-1]]})
-                }
-            }            
+            hightlightBlocksForPawns(row,col)         
+                      
         }
         else if((isWhiteSide && boardState[row][col]==='♖') || (!isWhiteSide && boardState[row][col]==='♜')){
             setHighlightedBox([[]])
@@ -220,12 +256,12 @@ const Board = () => {
             setHighlightedBox([[]])
             hightlightBlocksForBishop(row,col)
         }
-        else if((isWhiteSide && boardState[row][col]==='♔') || (!isWhiteSide && boardState[row][col]==='♚')){
+        else if((isWhiteSide && boardState[row][col]==='♕') || (!isWhiteSide && boardState[row][col]==='♛')){
             setHighlightedBox([[]])
             hightlightBlocksForRook(row,col) 
-            hightlightBlocksForBishop(row,col) 
+            hightlightBlocksForBishop(row,col)
         }
-        else if((isWhiteSide && boardState[row][col]==='♕') || (!isWhiteSide && boardState[row][col]==='♛')){
+        else if((isWhiteSide && boardState[row][col]==='♔') || (!isWhiteSide && boardState[row][col]==='♚')){
             setHighlightedBox([[]])
             hightlightBlocksForKing(row,col) 
         }
@@ -292,6 +328,11 @@ const Board = () => {
     }
 
   }
+  useEffect(()=>{
+    checkOppositeKingCheckmate()
+    // console.log(attackBox);
+    setHighlightedBox(attackBox)
+  },[])
   return (
     <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
                 {rows.map((row,rowIndex)=>(

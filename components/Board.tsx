@@ -212,7 +212,43 @@ const Board = () => {
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]=='♙'){
+                if(boardState[i][j]==='♙'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
+    const getWhiteRookIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♖' || boardState[i][j]==='♕'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
+    const getWhiteBishopIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♗' || boardState[i][j]==='♕'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
+    const getWhiteKnightIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♘'){
                     Indexs.push([i,j])
                 }
             }
@@ -221,22 +257,127 @@ const Board = () => {
     }
 
     const attackBlocksForPawns=(row:number,col:number)=>{
-        if(isValid(row-1,col-1)){
+        if(isValid(row-1,col-1) && boardState[row-1][col-1]!==""){
             setCheckCheckmateBox((pre)=>{return [...pre,[row-1,col-1]]})
         }
-        if(isValid(row-1,col+1)){
+        if(isValid(row-1,col+1) && boardState[row-1][col+1]!==""){
             setCheckCheckmateBox((pre)=>{return [...pre,[row-1,col+1]]})
         }
     }
+    const attackBlocksForRooks=(row:number,col:number)=>{
+         //1st side
+         let newRow1=row-1;
+         let newCol1=col;
+         while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]===""){
+             newRow1--
+         }
+         if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1)) || (!isWhiteSide && isWhite(newRow1,newCol1)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow1,newCol1]]);
+         }
+         //2st side
+         let newRow2=row+1;
+         let newCol2=col;
+         while(isValid(newRow2,newCol2) && boardState[newRow2][newCol2]===""){
+             newRow2++
+         }
+         if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2)) || (!isWhiteSide && isWhite(newRow2,newCol2)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow2,newCol2]]);
+         }
+         //3rd side
+         let newRow3=row;
+         let newCol3=col-1;
+         while(isValid(newRow3,newCol3) && boardState[newRow3][newCol3]===""){
+             newCol3--
+         }
+         if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3)) || (!isWhiteSide && isWhite(newRow3,newCol3)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow3,newCol3]]);
+         }
+         //4rth side
+         let newRow4=row;
+         let newCol4=col+1;
+         while(isValid(newRow4,newCol4) && boardState[newRow4][newCol4]===""){
+             newCol4++
+         }
+         if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4)) || (!isWhiteSide && isWhite(newRow4,newCol4)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow4,newCol4]]);
+         }
+    }
+    const attackBlocksForBishops=(row:number,col:number)=>{
+        //1st side
+        let newRow1=row-1;
+        let newCol1=col-1;
+        while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]===""){
+            newRow1--
+            newCol1--
+        }
+        if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1)) || (!isWhiteSide && isWhite(newRow1,newCol1)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow1,newCol1]]);
+        }
+        //2st side
+        let newRow2=row+1;
+        let newCol2=col+1;
+        while(isValid(newRow2,newCol2) && boardState[newRow2][newCol2]===""){
+            newRow2++
+            newCol2++
+        }
+        if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2)) || (!isWhiteSide && isWhite(newRow2,newCol2)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow2,newCol2]]);
+        }
+        //3rd side
+        let newRow3=row+1;
+        let newCol3=col-1;
+        while(isValid(newRow3,newCol3) && boardState[newRow3][newCol3]===""){
+            newCol3--
+            newRow3++
+        }
+        if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3)) || (!isWhiteSide && isWhite(newRow3,newCol3)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow3,newCol3]]);
+        }
+        //4rth side
+        let newRow4=row-1;
+        let newCol4=col+1;
+        while(isValid(newRow4,newCol4) && boardState[newRow4][newCol4]===""){
+            newCol4++
+            newRow4--
+        }
+        if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4)) || (!isWhiteSide && isWhite(newRow4,newCol4)))){
+            setCheckCheckmateBox((pre)=>[...pre,[newRow4,newCol4]]);
+        }
+    }
 
-    const checkOppositeKingCheckmate=async ()=>{
+    const attackBlocksForKnight=(row:number,col:number)=>{
+        let possiblilities=[[-1,-2],[-1,2],[1,-2],[1,2],[-2,-1],[-2,1],[2,-1],[2,1]]
+        for(let i=0;i<possiblilities.length;i++){
+            if(isValid(row+possiblilities[i][0],col+possiblilities[i][1]) && boardState[row+possiblilities[i][0]][col+possiblilities[i][1]]!=="" && ((isWhiteSide && !isWhite(row+possiblilities[i][0],col+possiblilities[i][1])) || (!isWhiteSide && !isBlack(row+possiblilities[i][0],col+possiblilities[i][1])))){
+                setCheckCheckmateBox((pre)=>[...pre,[row+possiblilities[i][0],col+possiblilities[i][1]]])
+            }
+        }
+    }
+
+    const checkOppositeKingCheckmate=()=>{
         //for pawns
-        // setHighlightedBox([[]])
-        let Indexs=await getWhitePawnsIndex()
-       for(let i=0;i<Indexs.length;i++) {
-        attackBlocksForPawns(Indexs[i][0],Indexs[i][1])
+        let IndexsPawns=getWhitePawnsIndex()
+       for(let i=0;i<IndexsPawns.length;i++) {
+        attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1])
        }
-        // console.log(attackBox.length);
+
+    //     //for Rooks
+    //     let IndexsforRooks=getWhiteRookIndex()
+    //    for(let i=0;i<IndexsforRooks.length;i++) {
+    //     attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1])
+    //    }
+
+    //     //for Bishops
+    //     let IndexsforBishops=getWhiteBishopIndex()
+    //    for(let i=0;i<IndexsforBishops.length;i++) {
+    //     attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1])
+    //    }
+       
+    //     //for Knights
+    //     let IndexsforBishops=getWhiteKnightIndex()
+    //    for(let i=0;i<IndexsforBishops.length;i++) {
+    //     attackBlocksForKnight(IndexsforBishops[i][0],IndexsforBishops[i][1])
+    //    }
        
     }
 
@@ -330,7 +471,7 @@ const Board = () => {
   }
   useEffect(()=>{
     checkOppositeKingCheckmate()
-    // console.log(attackBox);
+    // console.log(attackBox)
     setHighlightedBox(attackBox)
   },[])
   return (

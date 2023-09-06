@@ -223,11 +223,35 @@ const Board = () => {
         return Indexs;
     }
 
+    const getBlackPawnsIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♟︎'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
     const getWhiteRookIndex=()=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
                 if(boardState[i][j]==='♖' || boardState[i][j]==='♕'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
+    const getBlackRookIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♜' || boardState[i][j]==='♛'){
                     Indexs.push([i,j])
                 }
             }
@@ -247,11 +271,34 @@ const Board = () => {
         return Indexs;
     }
 
+    const getBlackBishopIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♝' || boardState[i][j]==='♛'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+
     const getWhiteKnightIndex=()=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
                 if(boardState[i][j]==='♘'){
+                    Indexs.push([i,j])
+                }
+            }
+        }
+        return Indexs;
+    }
+    const getBlackKnightIndex=()=>{
+        let Indexs=[];
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                if(boardState[i][j]==='♞'){
                     Indexs.push([i,j])
                 }
             }
@@ -377,7 +424,12 @@ const Board = () => {
 
     const checkOppositeKingCheckmate=()=>{
         //for pawns
-        let IndexsPawns=getWhitePawnsIndex()
+        let IndexsPawns
+        if(isWhiteSide){
+            IndexsPawns=getWhitePawnsIndex()
+        }else{
+            IndexsPawns=getBlackPawnsIndex()
+        }
        for(let i=0;i<IndexsPawns.length;i++) {
         if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],isWhiteSide)){
             // setIsOppoKingCheck(true)
@@ -386,7 +438,12 @@ const Board = () => {
        }
 
         //for Rooks
-        let IndexsforRooks=getWhiteRookIndex()
+        let IndexsforRooks
+        if(isWhiteSide){
+            IndexsforRooks=getWhiteRookIndex()
+        }else{
+            IndexsforRooks=getBlackRookIndex()
+        }
        for(let i=0;i<IndexsforRooks.length;i++) {
         if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],isWhiteSide)){
                 // setIsOppoKingCheck(true)
@@ -395,7 +452,12 @@ const Board = () => {
        }
 
         //for Bishops
-        let IndexsforBishops=getWhiteBishopIndex()
+        let IndexsforBishops
+        if(isWhiteSide){
+            IndexsforBishops=getWhiteBishopIndex()
+        }else{
+            IndexsforBishops=getBlackBishopIndex()
+        }
        for(let i=0;i<IndexsforBishops.length;i++) {
         if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],isWhiteSide)){
             // setIsOppoKingCheck(true)
@@ -404,7 +466,12 @@ const Board = () => {
        }
        
         //for Knights
-        let IndexsforKnights=getWhiteKnightIndex()
+        let IndexsforKnights
+        if(isWhiteSide){
+            IndexsforKnights=getWhiteKnightIndex()
+        }else{
+            IndexsforKnights=getBlackKnightIndex()
+        }
        for(let i=0;i<IndexsforKnights.length;i++) {
         if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],isWhiteSide)){
             // setIsOppoKingCheck(true)
@@ -509,14 +576,11 @@ const Board = () => {
 
   }
   useEffect(()=>{
-    // checkOppositeKingCheckmate()
     if(checkOppositeKingCheckmate()){
         setIsOppoKingCheck(true)
     }else{
         setIsOppoKingCheck(false)
     }
-    // console.log(attackBox)
-    // setHighlightedBox(attackBox)
   },[boardState])
   return (
     <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>

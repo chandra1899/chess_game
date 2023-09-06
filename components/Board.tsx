@@ -380,8 +380,8 @@ const Board = () => {
         let IndexsPawns=getWhitePawnsIndex()
        for(let i=0;i<IndexsPawns.length;i++) {
         if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],isWhiteSide)){
-            setIsOppoKingCheck(true)
-            return ;
+            // setIsOppoKingCheck(true)
+            return true;
         }
        }
 
@@ -389,8 +389,8 @@ const Board = () => {
         let IndexsforRooks=getWhiteRookIndex()
        for(let i=0;i<IndexsforRooks.length;i++) {
         if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],isWhiteSide)){
-                setIsOppoKingCheck(true)
-                return ;
+                // setIsOppoKingCheck(true)
+                return true;
             }
        }
 
@@ -398,8 +398,8 @@ const Board = () => {
         let IndexsforBishops=getWhiteBishopIndex()
        for(let i=0;i<IndexsforBishops.length;i++) {
         if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],isWhiteSide)){
-            setIsOppoKingCheck(true)
-            return ;
+            // setIsOppoKingCheck(true)
+            return true;
         }
        }
        
@@ -407,12 +407,12 @@ const Board = () => {
         let IndexsforKnights=getWhiteKnightIndex()
        for(let i=0;i<IndexsforKnights.length;i++) {
         if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],isWhiteSide)){
-            setIsOppoKingCheck(true)
-            return ;
+            // setIsOppoKingCheck(true)
+            return true;
         }
        }
-
-       setIsOppoKingCheck(false)
+       return false;
+    //    setIsOppoKingCheck(false)
     }
 
     const hightlightBlocks=(row:number,col:number)=>{
@@ -483,7 +483,11 @@ const Board = () => {
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     return newBoard
                 })
-                await checkOppositeKingCheckmate()
+                // if(checkOppositeKingCheckmate()){
+                //     setIsOppoKingCheck(true)
+                // }else{
+                //     setIsOppoKingCheck(false)
+                // }
                 if(boardState[row][col]===""){
                     //play move_Self
                     document.getElementById('move_self').play()
@@ -505,10 +509,15 @@ const Board = () => {
 
   }
   useEffect(()=>{
-    checkOppositeKingCheckmate()
+    // checkOppositeKingCheckmate()
+    if(checkOppositeKingCheckmate()){
+        setIsOppoKingCheck(true)
+    }else{
+        setIsOppoKingCheck(false)
+    }
     // console.log(attackBox)
     // setHighlightedBox(attackBox)
-  },[])
+  },[boardState])
   return (
     <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
                 {rows.map((row,rowIndex)=>(

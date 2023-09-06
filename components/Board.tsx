@@ -8,6 +8,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { checkCheckmate } from '@/store/atoms/checkCheckmate';
 import { capture } from '@/store/atoms/capture';
 import { selected } from '@/store/atoms/selectedBlock';
+import { isOppoKingChecked } from '@/store/atoms/isOppoKingChecked';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -27,10 +28,12 @@ const whiteParts=["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖","♙"]
 
 const Board = () => {
     const highlightedBox=useRecoilValue(highlightedArray)
+    const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
     const attackBox=useRecoilValue(checkCheckmate)
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
+    const setIsOppoKingCheck=useSetRecoilState(isOppoKingChecked)
     const setCheckCheckmateBox=useSetRecoilState(checkCheckmate)
     const setSelectedSol=useSetRecoilState(selected)
     const setBoardState=useSetRecoilState(board)
@@ -256,13 +259,26 @@ const Board = () => {
         return Indexs;
     }
 
-    const attackBlocksForPawns=(row:number,col:number)=>{
-        if(isValid(row-1,col-1) && boardState[row-1][col-1]!==""){
-            setCheckCheckmateBox((pre)=>{return [...pre,[row-1,col-1]]})
+    const attackBlocksForPawns=(row:number,col:number,forWhiteKing:boolean)=>{
+        if(isWhiteSide && !forWhiteKing){
+            if(isValid(row-1,col-1) && boardState[row-1][col-1]==="♚"){
+                return true
+            }
+            if(isValid(row-1,col+1) && boardState[row-1][col+1]==="♚"){
+                return true
+            }
+            return false
         }
-        if(isValid(row-1,col+1) && boardState[row-1][col+1]!==""){
-            setCheckCheckmateBox((pre)=>{return [...pre,[row-1,col+1]]})
+        if(!isWhiteSide && forWhiteKing){
+            if(isValid(row+1,col+1) && boardState[row+1][col+1]==="♔"){
+                return true
+            }
+            if(isValid(row+1,col-1) && boardState[row+1][col-1]==="♔"){
+                return true
+            }
+            return false
         }
+      
     }
     const attackBlocksForRooks=(row:number,col:number)=>{
          //1st side
@@ -358,7 +374,10 @@ const Board = () => {
         //for pawns
         let IndexsPawns=getWhitePawnsIndex()
        for(let i=0;i<IndexsPawns.length;i++) {
-        attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1])
+        if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],false)){
+            setIsOppoKingCheck(true)
+            return ;
+        }
        }
 
     //     //for Rooks
@@ -480,6 +499,7 @@ const Board = () => {
                     <div className="flex flex-row">
                         {cols.map((col,colIndex)=>(
                             <div className={`h-[57px] ${isWhiteSide?'':'rotate-180'} w-[57px] cursor-pointer text-[3rem] flex justify-center items-center border-[1px] border-black
+                            ${isOppoKingCheck && ((isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (!isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isHighlighted(rowIndex,colIndex)?
                                 `${(isWhiteSide && isBlack(rowIndex,colIndex)) || (!isWhiteSide && isWhite(rowIndex,colIndex))?`bg-red-500`:`bg-green-500`}`
                             :`

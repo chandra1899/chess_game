@@ -4,5 +4,5 @@ import { atom } from 'recoil'
 
 export const checkCheckmate = atom({
     key: 'checkCheckmate',
-    default: [],
+    default: [[1,1]],
   });

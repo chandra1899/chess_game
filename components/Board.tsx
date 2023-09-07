@@ -27,8 +27,6 @@ const whiteParts=["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖","♙"]
 //     ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
 //   ];
 
-type inputArrayElement=undefined | number
-
 const Board = () => {
     const highlightedBox=useRecoilValue(highlightedArray)
     const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
@@ -64,34 +62,45 @@ const Board = () => {
         //1st side
         let newRow1=row-1;
         let newCol1=col;
-        while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]===""){
-            console.log('hello2');
+        while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]==="" ){
+            if(!isOkToMove(row,col,newRow1,newCol1)){
+                newRow1--
+                continue
+            }
             setHighlightedBox((pre)=>[...pre,[newRow1,newCol1]]);
             newRow1--
         }
-        if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1)) || (!isWhiteSide && isWhite(newRow1,newCol1)))){
+        if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1)) || (!isWhiteSide && isWhite(newRow1,newCol1))) && isOkToMove(row,col,newRow1,newCol1)){
             setHighlightedBox((pre)=>[...pre,[newRow1,newCol1]]);
         }
         //2st side
         let newRow2=row+1;
         let newCol2=col;
         while(isValid(newRow2,newCol2) && boardState[newRow2][newCol2]===""){
+            if(!isOkToMove(row,col,newRow2,newCol2)){
+                newRow2++
+                continue
+            }
             // console.log('hello2');
             setHighlightedBox((pre)=>[...pre,[newRow2,newCol2]]);
             newRow2++
         }
-        if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2)) || (!isWhiteSide && isWhite(newRow2,newCol2)))){
+        if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2)) || (!isWhiteSide && isWhite(newRow2,newCol2))) && isOkToMove(row,col,newRow2,newCol2)){
             setHighlightedBox((pre)=>[...pre,[newRow2,newCol2]]);
         }
         //3rd side
         let newRow3=row;
         let newCol3=col-1;
         while(isValid(newRow3,newCol3) && boardState[newRow3][newCol3]===""){
+            if(!isOkToMove(row,col,newRow3,newCol3)){
+                newCol3--
+                continue
+            }
             // console.log('hello2');
             setHighlightedBox((pre)=>[...pre,[newRow3,newCol3]]);
             newCol3--
         }
-        if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3)) || (!isWhiteSide && isWhite(newRow3,newCol3)))){
+        if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3)) || (!isWhiteSide && isWhite(newRow3,newCol3))) && isOkToMove(row,col,newRow3,newCol3)){
             setHighlightedBox((pre)=>[...pre,[newRow3,newCol3]]);
         }
         //4rth side
@@ -99,10 +108,14 @@ const Board = () => {
         let newCol4=col+1;
         while(isValid(newRow4,newCol4) && boardState[newRow4][newCol4]===""){
             // console.log('hello2');
+            if(!isOkToMove(row,col,newRow4,newCol4)){
+                newCol4++
+                continue
+            }
             setHighlightedBox((pre)=>[...pre,[newRow4,newCol4]]);
             newCol4++
         }
-        if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4)) || (!isWhiteSide && isWhite(newRow4,newCol4)))){
+        if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4)) || (!isWhiteSide && isWhite(newRow4,newCol4))) && isOkToMove(row,col,newRow4,newCol4)){
             setHighlightedBox((pre)=>[...pre,[newRow4,newCol4]]);
         }
     }
@@ -111,7 +124,12 @@ const Board = () => {
          //1st side
          let newRow1=row-1;
          let newCol1=col-1;
-         while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]===""){
+         while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]==="" ){
+            if(!isOkToMove(row,col,newRow1,newCol1)){
+                newRow1--
+                newCol1--
+                continue
+            }
             //  console.log('hello2');
              setHighlightedBox((pre)=>[...pre,[newRow1,newCol1]]);
              newRow1--
@@ -124,6 +142,11 @@ const Board = () => {
          let newRow2=row+1;
          let newCol2=col+1;
          while(isValid(newRow2,newCol2) && boardState[newRow2][newCol2]===""){
+            if(!isOkToMove(row,col,newRow2,newCol2)){
+                newRow2++
+                newCol2++
+                continue
+            }
              // console.log('hello2');
              setHighlightedBox((pre)=>[...pre,[newRow2,newCol2]]);
              newRow2++
@@ -136,6 +159,11 @@ const Board = () => {
          let newRow3=row+1;
          let newCol3=col-1;
          while(isValid(newRow3,newCol3) && boardState[newRow3][newCol3]===""){
+            if(!isOkToMove(row,col,newRow3,newCol3)){
+                newCol3--
+                newRow3++
+                continue
+            }
              // console.log('hello2');
              setHighlightedBox((pre)=>[...pre,[newRow3,newCol3]]);
              newCol3--
@@ -148,6 +176,11 @@ const Board = () => {
          let newRow4=row-1;
          let newCol4=col+1;
          while(isValid(newRow4,newCol4) && boardState[newRow4][newCol4]===""){
+            if(!isOkToMove(row,col,newRow4,newCol4)){
+                newCol4++
+                newRow4--
+                continue
+            }
              // console.log('hello2');
              setHighlightedBox((pre)=>[...pre,[newRow4,newCol4]]);
              newCol4++
@@ -163,7 +196,7 @@ const Board = () => {
         const newCol=[-1,0,1]
         for(let i=0;i<3;i++){
             for(let j=0;j<3;j++){
-                if(!(newRow[i]===0 && newCol[j]===0) && isValid(row+newRow[i],col+newCol[j]) && ((isWhiteSide && !isWhite(row+newRow[i],col+newCol[j])) || (!isWhiteSide && !isBlack(row+newRow[i],col+newCol[j])))){  
+                if(!(newRow[i]===0 && newCol[j]===0) && isValid(row+newRow[i],col+newCol[j]) && ((isWhiteSide && !isWhite(row+newRow[i],col+newCol[j])) || (!isWhiteSide && !isBlack(row+newRow[i],col+newCol[j]))) && isOkToMove(row,col,row+newRow[i],col+newCol[j])){  
                     setHighlightedBox((pre)=>[...pre,[row+newRow[i],col+newCol[j]]]);
                 }
             }
@@ -173,7 +206,7 @@ const Board = () => {
     const hightlightBlocksForKnight=(row:number,col:number)=>{
         let possiblilities=[[-1,-2],[-1,2],[1,-2],[1,2],[-2,-1],[-2,1],[2,-1],[2,1]]
         for(let i=0;i<possiblilities.length;i++){
-            if(isValid(row+possiblilities[i][0],col+possiblilities[i][1]) && ((isWhiteSide && !isWhite(row+possiblilities[i][0],col+possiblilities[i][1])) || (!isWhiteSide && !isBlack(row+possiblilities[i][0],col+possiblilities[i][1])))){
+            if(isValid(row+possiblilities[i][0],col+possiblilities[i][1]) && ((isWhiteSide && !isWhite(row+possiblilities[i][0],col+possiblilities[i][1])) || (!isWhiteSide && !isBlack(row+possiblilities[i][0],col+possiblilities[i][1]))) && isOkToMove(row,col,row+possiblilities[i][0],col+possiblilities[i][1])){
                 setHighlightedBox((pre)=>[...pre,[row+possiblilities[i][0],col+possiblilities[i][1]]])
             }
         }
@@ -182,35 +215,35 @@ const Board = () => {
     const hightlightBlocksForPawns=(row:number,col:number)=>{
         if(isWhiteSide){
             if(isValid(row-1,col) && boardState[row-1][col]===""){
-                if(isValid(row-1,col))
+                if(isValid(row-1,col) && isOkToMove(row,col,row-1,col))
                 setHighlightedBox([[row-1,col]])
                 if(row===6){
-                    if(isValid(row-2,col) && boardState[row-2][col]===""){
+                    if(isValid(row-2,col) && boardState[row-2][col]==="" && isOkToMove(row,col,row-2,col)){
                         setHighlightedBox((pre)=>[...pre,[row-2,col]])
                     }
                 }
             }
-            if(isValid(row-1,col-1) && isBlack(row-1,col-1)){
+            if(isValid(row-1,col-1) && isBlack(row-1,col-1) && isOkToMove(row,col,row-1,col-1)){
                 setHighlightedBox((pre)=>{return [...pre,[row-1,col-1]]})
             }
-            if( isValid(row-1,col+1) && isBlack(row-1,col+1)){
+            if( isValid(row-1,col+1) && isBlack(row-1,col+1) && isOkToMove(row,col,row-1,col+1)){
                 setHighlightedBox((pre)=>{return [...pre,[row-1,col+1]]})
             }
         }
         else{
             if(isValid(row+1,col) && boardState[row+1][col]===""){
-                if(isValid(row+1,col))
+                if(isValid(row+1,col) && isOkToMove(row,col,row+1,col))
                 setHighlightedBox([[row+1,col]])
                 if(row===1){
-                    if(isValid(row+2,col) && boardState[row+2][col]===""){
+                    if(isValid(row+2,col) && boardState[row+2][col]==="" && isOkToMove(row,col,row+2,col)){
                         setHighlightedBox((pre)=>[...pre,[row+2,col]])
                     }
                 }
             }
-            if(isValid(row+1,col+1) && isWhite(row+1,col+1)){
+            if(isValid(row+1,col+1) && isWhite(row+1,col+1) && isOkToMove(row,col,row+1,col+1)){
                 setHighlightedBox((pre)=>{return [...pre,[row+1,col+1]]})
             }
-            if( isValid(row+1,col-1) && isWhite(row+1,col-1)){
+            if( isValid(row+1,col-1) && isWhite(row+1,col-1) && isOkToMove(row,col,row+1,col-1)){
                 setHighlightedBox((pre)=>{return [...pre,[row+1,col-1]]})
             }
         } 
@@ -621,18 +654,6 @@ const Board = () => {
             setHighlightedBox([[]])
             hightlightBlocksForKnight(row,col) 
         }
-
-        //check if we move to that is our king checked
-
-       
-        // for(let i=0;i<highlightedBox.length;i++){
-        //     let newFutureBoard=boardState.map(innerArray => [...innerArray])
-        //     newFutureBoard[highlightedBox[0][0]][highlightedBox[0][1]]=boardState[selectedSol[0]][selectedSol[1]]
-        //     newFutureBoard[selectedSol[0]][selectedSol[1]]=""
-        //     console.log(newFutureBoard);
-        //     console.log(selectedSol);            
-        // }
-    
     }
 
     const isValid=(row:number,col:number)=>{
@@ -640,42 +661,16 @@ const Board = () => {
         return false
     }
 
-    const filterHighlightedArray=async (row:number,col:number)=>{
-        let newHighlightedArray=[]
-        
-    //     highlightedBox.map(async (highlightedValue)=>{
-    //     let newFutureBoard=await boardState.map(innerArray => [...innerArray])
-    //     newFutureBoard[highlightedValue[0]][highlightedValue[1]]=newFutureBoard[row][col]
-        // newFutureBoard[row][col]=""
-        // if(!checkOurKingCheckmate(newFutureBoard)){
-        //     newHighlightedArray.push([highlightedValue[0],highlightedValue[1]])
-        // }
-    // })
-    for(let i=0;i<highlightedBox.length;i++){
+    const isOkToMove=(rowFrom:number,colFrom:number,rowTO:number,colTO:number)=>{
         let newFutureBoard=boardState.map(innerArray => [...innerArray])
-        newFutureBoard[highlightedBox[i][0]][highlightedBox[i][1]]=boardState[row][col]
-        newFutureBoard[row][col]=""
-        console.log(newFutureBoard);
-        if(!checkOurKingCheckmate(newFutureBoard)){
-            // newHighlightedArray.push(highlightedBox[i])
-            console.log('false');
-            
-        }else{
-            console.log('true');
-
-        }
-        // console.log(selectedSol);            
-    }
-    // console.log(newHighlightedArray);
-    
-    // setHighlightedBox(newHighlightedArray)
+        newFutureBoard[rowTO][colTO]=boardState[rowFrom][colFrom]
+        newFutureBoard[rowFrom][colFrom]=""
+        return !checkOurKingCheckmate(newFutureBoard)
     }
   
   const handleOnClick=async (row:number,col:number)=>{
      if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
-        // setSelectedSol([row,col])
         hightlightBlocks(row,col)
-        filterHighlightedArray(row,col)
     }
 
     if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
@@ -740,7 +735,7 @@ const Board = () => {
                             ${isOppoKingCheck && ((isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (!isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isOurKingCheck && ((!isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isHighlighted(rowIndex,colIndex)?
-                                `${(isWhiteSide && isBlack(rowIndex,colIndex)) || (!isWhiteSide && isWhite(rowIndex,colIndex))?`bg-red-500`:`bg-green-500`}`
+                                `${(isWhiteSide && isBlack(rowIndex,colIndex)) || (!isWhiteSide && isWhite(rowIndex,colIndex))?`bg-red-600`:`bg-green-600`}`
                             :`
                             ${rowIndex%2===0?`${colIndex%2==0?`bg-[#E6BF83]`:`bg-[#8C6529]`}`:`${colIndex%2==0?`bg-[#8C6529]`:`bg-[#E6BF83]`}`}`}
                             `}

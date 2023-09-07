@@ -216,11 +216,11 @@ const Board = () => {
         } 
     }
 
-    const getWhitePawnsIndex=()=>{
+    const getWhitePawnsIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♙'){
+                if(newBoardState[i][j]==='♙'){
                     Indexs.push([i,j])
                 }
             }
@@ -228,11 +228,11 @@ const Board = () => {
         return Indexs;
     }
 
-    const getBlackPawnsIndex=()=>{
+    const getBlackPawnsIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♟︎'){
+                if(newBoardState[i][j]==='♟︎'){
                     Indexs.push([i,j])
                 }
             }
@@ -240,11 +240,11 @@ const Board = () => {
         return Indexs;
     }
 
-    const getWhiteRookIndex=()=>{
+    const getWhiteRookIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♖' || boardState[i][j]==='♕'){
+                if(newBoardState[i][j]==='♖' || newBoardState[i][j]==='♕'){
                     Indexs.push([i,j])
                 }
             }
@@ -252,11 +252,11 @@ const Board = () => {
         return Indexs;
     }
 
-    const getBlackRookIndex=()=>{
+    const getBlackRookIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♜' || boardState[i][j]==='♛'){
+                if(newBoardState[i][j]==='♜' || newBoardState[i][j]==='♛'){
                     Indexs.push([i,j])
                 }
             }
@@ -264,11 +264,11 @@ const Board = () => {
         return Indexs;
     }
 
-    const getWhiteBishopIndex=()=>{
+    const getWhiteBishopIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♗' || boardState[i][j]==='♕'){
+                if(newBoardState[i][j]==='♗' || newBoardState[i][j]==='♕'){
                     Indexs.push([i,j])
                 }
             }
@@ -276,11 +276,11 @@ const Board = () => {
         return Indexs;
     }
 
-    const getBlackBishopIndex=()=>{
+    const getBlackBishopIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♝' || boardState[i][j]==='♛'){
+                if(newBoardState[i][j]==='♝' || newBoardState[i][j]==='♛'){
                     Indexs.push([i,j])
                 }
             }
@@ -288,22 +288,22 @@ const Board = () => {
         return Indexs;
     }
 
-    const getWhiteKnightIndex=()=>{
+    const getWhiteKnightIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♘'){
+                if(newBoardState[i][j]==='♘'){
                     Indexs.push([i,j])
                 }
             }
         }
         return Indexs;
     }
-    const getBlackKnightIndex=()=>{
+    const getBlackKnightIndex=(newBoardState:[[string]])=>{
         let Indexs=[];
         for(let i=0;i<8;i++){
             for(let j=0;j<8;j++){
-                if(boardState[i][j]==='♞'){
+                if(newBoardState[i][j]==='♞'){
                     Indexs.push([i,j])
                 }
             }
@@ -311,128 +311,128 @@ const Board = () => {
         return Indexs;
     }
 
-    const attackBlocksForPawns=(row:number,col:number,fromWhiteSide:boolean)=>{
+    const attackBlocksForPawns=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
         if(fromWhiteSide){
-            if(isValid(row-1,col-1) && boardState[row-1][col-1]==="♚"){
+            if(isValid(row-1,col-1) && newBoardState[row-1][col-1]==="♚"){
                 return true
             }
-            if(isValid(row-1,col+1) && boardState[row-1][col+1]==="♚"){
+            if(isValid(row-1,col+1) && newBoardState[row-1][col+1]==="♚"){
                 return true
             }
             return false
         }
         else{
-            if(isValid(row+1,col+1) && boardState[row+1][col+1]==="♔"){
+            if(isValid(row+1,col+1) && newBoardState[row+1][col+1]==="♔"){
                 return true
             }
-            if(isValid(row+1,col-1) && boardState[row+1][col-1]==="♔"){
+            if(isValid(row+1,col-1) && newBoardState[row+1][col-1]==="♔"){
                 return true
             }
             return false
         }
       
     }
-    const attackBlocksForRooks=(row:number,col:number,fromWhiteSide:boolean)=>{
+    const attackBlocksForRooks=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
          //1st side
          let newRow1=row-1;
          let newCol1=col;
-         while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]===""){
+         while(isValid(newRow1,newCol1) && newBoardState[newRow1][newCol1]===""){
              newRow1--
          }
-         if(isValid(newRow1,newCol1) && ((fromWhiteSide && boardState[newRow1][newCol1]==='♚') || (!fromWhiteSide && boardState[newRow1][newCol1]==='♔'))){
+         if(isValid(newRow1,newCol1) && ((fromWhiteSide && newBoardState[newRow1][newCol1]==='♚') || (!fromWhiteSide && newBoardState[newRow1][newCol1]==='♔'))){
             return true
          }
          //2st side
          let newRow2=row+1;
          let newCol2=col;
-         while(isValid(newRow2,newCol2) && boardState[newRow2][newCol2]===""){
+         while(isValid(newRow2,newCol2) && newBoardState[newRow2][newCol2]===""){
              newRow2++
          }
-         if(isValid(newRow2,newCol2) && ((fromWhiteSide && boardState[newRow2][newCol2]==='♚') || (!fromWhiteSide && boardState[newRow2][newCol2]==='♔'))){
+         if(isValid(newRow2,newCol2) && ((fromWhiteSide && newBoardState[newRow2][newCol2]==='♚') || (!fromWhiteSide && newBoardState[newRow2][newCol2]==='♔'))){
             return true
          }
          //3rd side
          let newRow3=row;
          let newCol3=col-1;
-         while(isValid(newRow3,newCol3) && boardState[newRow3][newCol3]===""){
+         while(isValid(newRow3,newCol3) && newBoardState[newRow3][newCol3]===""){
              newCol3--
          }
-         if(isValid(newRow3,newCol3) && ((fromWhiteSide && boardState[newRow3][newCol3]==='♚') || (!fromWhiteSide && boardState[newRow3][newCol3]==='♔'))){
+         if(isValid(newRow3,newCol3) && ((fromWhiteSide && newBoardState[newRow3][newCol3]==='♚') || (!fromWhiteSide && newBoardState[newRow3][newCol3]==='♔'))){
             return true
          }
          //4rth side
          let newRow4=row;
          let newCol4=col+1;
-         while(isValid(newRow4,newCol4) && boardState[newRow4][newCol4]===""){
+         while(isValid(newRow4,newCol4) && newBoardState[newRow4][newCol4]===""){
              newCol4++
          }
-         if(isValid(newRow4,newCol4) && ((fromWhiteSide && boardState[newRow4][newCol4]==='♚') || (!fromWhiteSide && boardState[newRow4][newCol4]==='♔'))){
+         if(isValid(newRow4,newCol4) && ((fromWhiteSide && newBoardState[newRow4][newCol4]==='♚') || (!fromWhiteSide && newBoardState[newRow4][newCol4]==='♔'))){
             return true
          }
          return false;
     }
 
-    const attackBlocksForBishops=(row:number,col:number,fromWhiteSide:boolean)=>{
+    const attackBlocksForBishops=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
         //1st side
         let newRow1=row-1;
         let newCol1=col-1;
-        while(isValid(newRow1,newCol1) && boardState[newRow1][newCol1]===""){
+        while(isValid(newRow1,newCol1) && newBoardState[newRow1][newCol1]===""){
             newRow1--
             newCol1--
         }
-        if(isValid(newRow1,newCol1) && ((fromWhiteSide && boardState[newRow1][newCol1]==='♚') || (!fromWhiteSide && boardState[newRow1][newCol1]==='♔'))){
+        if(isValid(newRow1,newCol1) && ((fromWhiteSide && newBoardState[newRow1][newCol1]==='♚') || (!fromWhiteSide && newBoardState[newRow1][newCol1]==='♔'))){
             return true
         }
         //2st side
         let newRow2=row+1;
         let newCol2=col+1;
-        while(isValid(newRow2,newCol2) && boardState[newRow2][newCol2]===""){
+        while(isValid(newRow2,newCol2) && newBoardState[newRow2][newCol2]===""){
             newRow2++
             newCol2++
         }
-        if(isValid(newRow2,newCol2) && ((fromWhiteSide && boardState[newRow2][newCol2]==='♚') || (!fromWhiteSide && boardState[newRow2][newCol2]==='♔'))){
+        if(isValid(newRow2,newCol2) && ((fromWhiteSide && newBoardState[newRow2][newCol2]==='♚') || (!fromWhiteSide && newBoardState[newRow2][newCol2]==='♔'))){
             return true
         }
         //3rd side
         let newRow3=row+1;
         let newCol3=col-1;
-        while(isValid(newRow3,newCol3) && boardState[newRow3][newCol3]===""){
+        while(isValid(newRow3,newCol3) && newBoardState[newRow3][newCol3]===""){
             newCol3--
             newRow3++
         }
-        if(isValid(newRow3,newCol3) && ((fromWhiteSide && boardState[newRow3][newCol3]==='♚') || (!fromWhiteSide && boardState[newRow3][newCol3]==='♔'))){
+        if(isValid(newRow3,newCol3) && ((fromWhiteSide && newBoardState[newRow3][newCol3]==='♚') || (!fromWhiteSide && newBoardState[newRow3][newCol3]==='♔'))){
             return true
         }
         //4rth side
         let newRow4=row-1;
         let newCol4=col+1;
-        while(isValid(newRow4,newCol4) && boardState[newRow4][newCol4]===""){
+        while(isValid(newRow4,newCol4) && newBoardState[newRow4][newCol4]===""){
             newCol4++
             newRow4--
         }
-        if(isValid(newRow4,newCol4) && ((fromWhiteSide && boardState[newRow4][newCol4]==='♚') || (!fromWhiteSide && boardState[newRow4][newCol4]==='♔'))){
+        if(isValid(newRow4,newCol4) && ((fromWhiteSide && newBoardState[newRow4][newCol4]==='♚') || (!fromWhiteSide && newBoardState[newRow4][newCol4]==='♔'))){
             return true
         }
         return false
     }
 
-    const attackBlocksForKnight=(row:number,col:number,fromWhiteSide:boolean)=>{
+    const attackBlocksForKnight=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
         let possiblilities=[[-1,-2],[-1,2],[1,-2],[1,2],[-2,-1],[-2,1],[2,-1],[2,1]]
 
         for(let i=0;i<possiblilities.length;i++){
-            if(isValid(row+possiblilities[i][0],col+possiblilities[i][1]) && ((fromWhiteSide && boardState[row+possiblilities[i][0]][col+possiblilities[i][1]]==='♚') || (!fromWhiteSide && boardState[row+possiblilities[i][0]][col+possiblilities[i][1]]==='♔'))){
+            if(isValid(row+possiblilities[i][0],col+possiblilities[i][1]) && ((fromWhiteSide && newBoardState[row+possiblilities[i][0]][col+possiblilities[i][1]]==='♚') || (!fromWhiteSide && newBoardState[row+possiblilities[i][0]][col+possiblilities[i][1]]==='♔'))){
                 return true
             }
         }
         return false
     }
 
-    const attackBlocksForKing=(row:number,col:number,fromWhiteSide:boolean)=>{
+    const attackBlocksForKing=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
         const newRow=[-1,0,1]
         const newCol=[-1,0,1]
         for(let i=0;i<3;i++){
             for(let j=0;j<3;j++){
-                if(!(newRow[i]===0 && newCol[j]===0) && isValid(row+newRow[i],col+newCol[j]) && ((fromWhiteSide && boardState[row+newRow[i]][col+newCol[j]]==='♚') || (!fromWhiteSide && boardState[row+newRow[i]][col+newCol[j]]==='♔'))){  
+                if(!(newRow[i]===0 && newCol[j]===0) && isValid(row+newRow[i],col+newCol[j]) && ((fromWhiteSide && newBoardState[row+newRow[i]][col+newCol[j]]==='♚') || (!fromWhiteSide && newBoardState[row+newRow[i]][col+newCol[j]]==='♔'))){  
                     return true
                 }
             }
@@ -444,12 +444,12 @@ const Board = () => {
         //for pawns
         let IndexsPawns
         if(isWhiteSide){
-            IndexsPawns=getWhitePawnsIndex()
+            IndexsPawns=getWhitePawnsIndex(boardState)
         }else{
-            IndexsPawns=getBlackPawnsIndex()
+            IndexsPawns=getBlackPawnsIndex(boardState)
         }
        for(let i=0;i<IndexsPawns.length;i++) {
-        if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],isWhiteSide)){
+        if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],isWhiteSide,boardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -458,12 +458,12 @@ const Board = () => {
         //for Rooks
         let IndexsforRooks
         if(isWhiteSide){
-            IndexsforRooks=getWhiteRookIndex()
+            IndexsforRooks=getWhiteRookIndex(boardState)
         }else{
-            IndexsforRooks=getBlackRookIndex()
+            IndexsforRooks=getBlackRookIndex(boardState)
         }
        for(let i=0;i<IndexsforRooks.length;i++) {
-        if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],isWhiteSide)){
+        if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],isWhiteSide,boardState)){
                 // setIsOppoKingCheck(true)
                 return true;
             }
@@ -472,12 +472,12 @@ const Board = () => {
         //for Bishops
         let IndexsforBishops
         if(isWhiteSide){
-            IndexsforBishops=getWhiteBishopIndex()
+            IndexsforBishops=getWhiteBishopIndex(boardState)
         }else{
-            IndexsforBishops=getBlackBishopIndex()
+            IndexsforBishops=getBlackBishopIndex(boardState)
         }
        for(let i=0;i<IndexsforBishops.length;i++) {
-        if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],isWhiteSide)){
+        if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],isWhiteSide,boardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -486,12 +486,12 @@ const Board = () => {
         //for Knights
         let IndexsforKnights
         if(isWhiteSide){
-            IndexsforKnights=getWhiteKnightIndex()
+            IndexsforKnights=getWhiteKnightIndex(boardState)
         }else{
-            IndexsforKnights=getBlackKnightIndex()
+            IndexsforKnights=getBlackKnightIndex(boardState)
         }
        for(let i=0;i<IndexsforKnights.length;i++) {
-        if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],isWhiteSide)){
+        if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],isWhiteSide,boardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -506,7 +506,7 @@ const Board = () => {
                     }
                 }
         }
-        if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],isWhiteSide)){
+        if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],isWhiteSide,boardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -515,16 +515,18 @@ const Board = () => {
     //    setIsOppoKingCheck(false)
     }
 
-    const checkOurKingCheckmate=()=>{
+    const checkOurKingCheckmate=(newBoardState:[[string]])=>{
+        // console.log(typeof boardState);
+        
         //for pawns
         let IndexsPawns
         if(!isWhiteSide){
-            IndexsPawns=getWhitePawnsIndex()
+            IndexsPawns=getWhitePawnsIndex(newBoardState)
         }else{
-            IndexsPawns=getBlackPawnsIndex()
+            IndexsPawns=getBlackPawnsIndex(newBoardState)
         }
        for(let i=0;i<IndexsPawns.length;i++) {
-        if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],!isWhiteSide)){
+        if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],!isWhiteSide,newBoardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -533,12 +535,12 @@ const Board = () => {
         //for Rooks
         let IndexsforRooks
         if(!isWhiteSide){
-            IndexsforRooks=getWhiteRookIndex()
+            IndexsforRooks=getWhiteRookIndex(newBoardState)
         }else{
-            IndexsforRooks=getBlackRookIndex()
+            IndexsforRooks=getBlackRookIndex(newBoardState)
         }
        for(let i=0;i<IndexsforRooks.length;i++) {
-        if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],!isWhiteSide)){
+        if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],!isWhiteSide,newBoardState)){
                 // setIsOppoKingCheck(true)
                 return true;
             }
@@ -547,12 +549,12 @@ const Board = () => {
         //for Bishops
         let IndexsforBishops
         if(!isWhiteSide){
-            IndexsforBishops=getWhiteBishopIndex()
+            IndexsforBishops=getWhiteBishopIndex(newBoardState)
         }else{
-            IndexsforBishops=getBlackBishopIndex()
+            IndexsforBishops=getBlackBishopIndex(newBoardState)
         }
        for(let i=0;i<IndexsforBishops.length;i++) {
-        if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],!isWhiteSide)){
+        if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],!isWhiteSide,newBoardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -561,12 +563,12 @@ const Board = () => {
         //for Knights
         let IndexsforKnights
         if(!isWhiteSide){
-            IndexsforKnights=getWhiteKnightIndex()
+            IndexsforKnights=getWhiteKnightIndex(newBoardState)
         }else{
-            IndexsforKnights=getBlackKnightIndex()
+            IndexsforKnights=getBlackKnightIndex(newBoardState)
         }
        for(let i=0;i<IndexsforKnights.length;i++) {
-        if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],!isWhiteSide)){
+        if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],!isWhiteSide,newBoardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -581,7 +583,7 @@ const Board = () => {
                     }
                 }
         }
-        if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],!isWhiteSide)){
+        if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],!isWhiteSide,newBoardState)){
             // setIsOppoKingCheck(true)
             return true;
         }
@@ -619,26 +621,64 @@ const Board = () => {
             setHighlightedBox([[]])
             hightlightBlocksForKnight(row,col) 
         }
+
+        //check if we move to that is our king checked
+
+       
+        // for(let i=0;i<highlightedBox.length;i++){
+        //     let newFutureBoard=boardState.map(innerArray => [...innerArray])
+        //     newFutureBoard[highlightedBox[0][0]][highlightedBox[0][1]]=boardState[selectedSol[0]][selectedSol[1]]
+        //     newFutureBoard[selectedSol[0]][selectedSol[1]]=""
+        //     console.log(newFutureBoard);
+        //     console.log(selectedSol);            
+        // }
+    
     }
 
     const isValid=(row:number,col:number)=>{
         if(row>=0 && row<=7 && col>=0 && col<=7 ) return true
         return false
     }
- 
+
+    const filterHighlightedArray=async (row:number,col:number)=>{
+        let newHighlightedArray=[]
+        
+    //     highlightedBox.map(async (highlightedValue)=>{
+    //     let newFutureBoard=await boardState.map(innerArray => [...innerArray])
+    //     newFutureBoard[highlightedValue[0]][highlightedValue[1]]=newFutureBoard[row][col]
+        // newFutureBoard[row][col]=""
+        // if(!checkOurKingCheckmate(newFutureBoard)){
+        //     newHighlightedArray.push([highlightedValue[0],highlightedValue[1]])
+        // }
+    // })
+    for(let i=0;i<highlightedBox.length;i++){
+        let newFutureBoard=boardState.map(innerArray => [...innerArray])
+        newFutureBoard[highlightedBox[i][0]][highlightedBox[i][1]]=boardState[row][col]
+        newFutureBoard[row][col]=""
+        console.log(newFutureBoard);
+        if(!checkOurKingCheckmate(newFutureBoard)){
+            // newHighlightedArray.push(highlightedBox[i])
+            console.log('false');
+            
+        }else{
+            console.log('true');
+
+        }
+        // console.log(selectedSol);            
+    }
+    // console.log(newHighlightedArray);
+    
+    // setHighlightedBox(newHighlightedArray)
+    }
   
   const handleOnClick=async (row:number,col:number)=>{
-    // console.log(row,col);
-    // if(boardState[row][col]===""){
-    //     setHighlightedBox([[row,col]])
-    // }
      if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
+        // setSelectedSol([row,col])
         hightlightBlocks(row,col)
+        filterHighlightedArray(row,col)
     }
-    // else setHighlightedBox([[]])
 
     if((isWhiteSide && isWhite(row,col)) || (!isWhiteSide && isBlack(row,col))){
-        // console.log('i selected here');
         setSelectedSol([row,col])
     }else{
         if(selectedSol.length===0 && boardState[row][col]===""){
@@ -647,13 +687,9 @@ const Board = () => {
             setHighlightedBox([[]])
         }else if(selectedSol.length!==0){
             if(isHighlighted(row,col)){
-                // console.log('i came here');
                 
                 setBoardState((pre)=>{
                     const newBoard=pre.map(innerArray => [...innerArray])
-                    // console.log(newBoard);
-                    // console.log(selectedSol[1]);
-                    
                     newBoard[row][col]=newBoard[selectedSol[0]][selectedSol[1]]
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     return newBoard
@@ -689,7 +725,7 @@ const Board = () => {
     }else{
         setIsOppoKingCheck(false)
     }
-    if(checkOurKingCheckmate()){
+    if(checkOurKingCheckmate(boardState)){
         setIsOurKingCheck(true)
     }else{
         setIsOurKingCheck(false)

@@ -9,6 +9,7 @@ import { checkCheckmate } from '@/store/atoms/checkCheckmate';
 import { capture } from '@/store/atoms/capture';
 import { selected } from '@/store/atoms/selectedBlock';
 import { isOppoKingChecked } from '@/store/atoms/isOppoKingChecked';
+import { isOurKingChecked } from '@/store/atoms/isOurKingChecked';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -26,13 +27,17 @@ const whiteParts=["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖","♙"]
 //     ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
 //   ];
 
+type inputArrayElement=undefined | number
+
 const Board = () => {
     const highlightedBox=useRecoilValue(highlightedArray)
     const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
+    const isOurKingCheck=useRecoilValue(isOurKingChecked)
     const attackBox=useRecoilValue(checkCheckmate)
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
+    const setIsOurKingCheck=useSetRecoilState(isOurKingChecked)
     const setIsOppoKingCheck=useSetRecoilState(isOppoKingChecked)
     const setCheckCheckmateBox=useSetRecoilState(checkCheckmate)
     const setSelectedSol=useSetRecoilState(selected)
@@ -422,6 +427,19 @@ const Board = () => {
         return false
     }
 
+    const attackBlocksForKing=(row:number,col:number,fromWhiteSide:boolean)=>{
+        const newRow=[-1,0,1]
+        const newCol=[-1,0,1]
+        for(let i=0;i<3;i++){
+            for(let j=0;j<3;j++){
+                if(!(newRow[i]===0 && newCol[j]===0) && isValid(row+newRow[i],col+newCol[j]) && ((fromWhiteSide && boardState[row+newRow[i]][col+newCol[j]]==='♚') || (!fromWhiteSide && boardState[row+newRow[i]][col+newCol[j]]==='♔'))){  
+                    return true
+                }
+            }
+        }
+       return false
+    }
+
     const checkOppositeKingCheckmate=()=>{
         //for pawns
         let IndexsPawns
@@ -478,6 +496,96 @@ const Board = () => {
             return true;
         }
        }
+
+        //for King
+        let IndexsforKing
+            for(let i=0;i<8;i++){
+                for(let j=0;j<8;j++){
+                    if((isWhiteSide && boardState[i][j]==='♔') || (!isWhiteSide && boardState[i][j]==='♚')){
+                        IndexsforKing=[i,j]
+                    }
+                }
+        }
+        if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],isWhiteSide)){
+            // setIsOppoKingCheck(true)
+            return true;
+        }
+
+       return false;
+    //    setIsOppoKingCheck(false)
+    }
+
+    const checkOurKingCheckmate=()=>{
+        //for pawns
+        let IndexsPawns
+        if(!isWhiteSide){
+            IndexsPawns=getWhitePawnsIndex()
+        }else{
+            IndexsPawns=getBlackPawnsIndex()
+        }
+       for(let i=0;i<IndexsPawns.length;i++) {
+        if(attackBlocksForPawns(IndexsPawns[i][0],IndexsPawns[i][1],!isWhiteSide)){
+            // setIsOppoKingCheck(true)
+            return true;
+        }
+       }
+
+        //for Rooks
+        let IndexsforRooks
+        if(!isWhiteSide){
+            IndexsforRooks=getWhiteRookIndex()
+        }else{
+            IndexsforRooks=getBlackRookIndex()
+        }
+       for(let i=0;i<IndexsforRooks.length;i++) {
+        if(attackBlocksForRooks(IndexsforRooks[i][0],IndexsforRooks[i][1],!isWhiteSide)){
+                // setIsOppoKingCheck(true)
+                return true;
+            }
+       }
+
+        //for Bishops
+        let IndexsforBishops
+        if(!isWhiteSide){
+            IndexsforBishops=getWhiteBishopIndex()
+        }else{
+            IndexsforBishops=getBlackBishopIndex()
+        }
+       for(let i=0;i<IndexsforBishops.length;i++) {
+        if(attackBlocksForBishops(IndexsforBishops[i][0],IndexsforBishops[i][1],!isWhiteSide)){
+            // setIsOppoKingCheck(true)
+            return true;
+        }
+       }
+       
+        //for Knights
+        let IndexsforKnights
+        if(!isWhiteSide){
+            IndexsforKnights=getWhiteKnightIndex()
+        }else{
+            IndexsforKnights=getBlackKnightIndex()
+        }
+       for(let i=0;i<IndexsforKnights.length;i++) {
+        if(attackBlocksForKnight(IndexsforKnights[i][0],IndexsforKnights[i][1],!isWhiteSide)){
+            // setIsOppoKingCheck(true)
+            return true;
+        }
+       }
+
+        //for King
+        let IndexsforKing
+            for(let i=0;i<8;i++){
+                for(let j=0;j<8;j++){
+                    if((!isWhiteSide && boardState[i][j]==='♔') || (isWhiteSide && boardState[i][j]==='♚')){
+                        IndexsforKing=[i,j]
+                    }
+                }
+        }
+        if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],!isWhiteSide)){
+            // setIsOppoKingCheck(true)
+            return true;
+        }
+
        return false;
     //    setIsOppoKingCheck(false)
     }
@@ -581,6 +689,11 @@ const Board = () => {
     }else{
         setIsOppoKingCheck(false)
     }
+    if(checkOurKingCheckmate()){
+        setIsOurKingCheck(true)
+    }else{
+        setIsOurKingCheck(false)
+    }
   },[boardState])
   return (
     <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
@@ -589,6 +702,7 @@ const Board = () => {
                         {cols.map((col,colIndex)=>(
                             <div className={`h-[57px] ${isWhiteSide?'':'rotate-180'} w-[57px] cursor-pointer text-[3rem] flex justify-center items-center border-[1px] border-black
                             ${isOppoKingCheck && ((isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (!isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
+                            ${isOurKingCheck && ((!isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isHighlighted(rowIndex,colIndex)?
                                 `${(isWhiteSide && isBlack(rowIndex,colIndex)) || (!isWhiteSide && isWhite(rowIndex,colIndex))?`bg-red-500`:`bg-green-500`}`
                             :`

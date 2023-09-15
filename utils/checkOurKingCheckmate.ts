@@ -72,7 +72,7 @@ export const checkOurKingCheckmate=(newBoardState:[[string]],isWhiteSide:boolean
                 }
             }
     }
-    if(attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],!isWhiteSide,newBoardState)){
+    if(IndexsforKing!==undefined && attackBlocksForKing(IndexsforKing[0],IndexsforKing[1],!isWhiteSide,newBoardState)){
         // setIsOppoKingCheck(true)
         return true;
     }

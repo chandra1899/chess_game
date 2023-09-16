@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 
 const MoveState=({color}:{color:string})=>{
+  const [selected,setSelected]=useState('')
   return (
-    <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center cursor-pointer bg-${color} ${color=='slate-100'?'text-black hover:bg-slate-300':'text-white hover:bg-slate-800'} transition-all ease-in-out delay-[20ms] my-3`}>
+    <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center cursor-pointer hover:bg-[#A0793D] ${color=='white'?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`}>
       <p className='font-bold'>H4</p>
       <Image
       height={30}
@@ -21,21 +22,21 @@ const Left = () => {
   return (
     <div className='h-[100vh] w-[23%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
       <div className='h-[100%] w-[100%] overflow-y-scroll'>
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
-      <MoveState color='slate-100' />
+      <MoveState color='white' />
       <MoveState color='black' />
       </div>
       <div className='absolute h-[55px] w-[100%] bg-[#222222e6] bottom-0 flex flex-row justify-between items-center'>

@@ -1,16 +1,21 @@
 "use client"
 
-import { Board, Left, Right } from "@/components"
+import { BackDrop, Board, CopyLink, Left, Right } from "@/components"
 import { useRecoilState, useRecoilValue,useSetRecoilState ,} from "recoil";
 import { highlightedArray } from "@/store/atoms/highlight";
+import { useEffect } from "react";
+import { shareLink } from "@/store/atoms/shareLink";
 
 export default async function Game() {
-    // const highlightedBox=useRecoilValue(highlightedArray)
-    // const [highlightedBox, setHighlightedBox] = useRecoilState(highlightedArray);
-    
+    const setShrLink=useSetRecoilState(shareLink)
+    useEffect(()=>{
+      setShrLink(true)
+    },[])
   
   return (
     <main className='flex justify-center items-center bg-black'>
+      <CopyLink/>
+      <BackDrop/>
       <div className='flex flex-row justify-center items-center h-auto w-[97vw]'>
         <Left/>
 

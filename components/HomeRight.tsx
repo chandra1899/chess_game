@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 const HomeRight = () => {
   const router = useRouter();
   const generateRandomCharactors = ()=>{
-    let allChar="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789^!@#$%&*()_~[]{};:></?|";
+    let allChar="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let randomCharactors = "";
 
     for(let i=0;i<8;i++){

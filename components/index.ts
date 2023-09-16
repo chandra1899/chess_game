@@ -8,6 +8,9 @@ import Left from './Left'
 import Board from './Board'
 import HomeLeft from './HomeLeft'
 import HomeRight from './HomeRight'
+import CopyLink from './CopyLink'
+import GameOver from './GameOver'
+import BackDrop from './BackDrop'
 
 export {
     Authenticate,
@@ -19,5 +22,8 @@ export {
     Left,
     Board,
     HomeRight,
-    HomeLeft
+    HomeLeft,
+    CopyLink,
+    GameOver,
+    BackDrop
 }

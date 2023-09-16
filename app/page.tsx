@@ -9,7 +9,6 @@ export default function Home() {
   return (
     <main>
       <div className='h-[100vh] w-[100vw] bg-black'>
-
       <nav className='flex flex-row h-[40px] w-[100vw] justify-between px-12 pr-24 pt-2 items-center bg-[#222222e6]'>
         <div className='flex w-[60%] justify-around'>
         <h3 className='text-white font-medium text-[18px]'>ChessFocus</h3>

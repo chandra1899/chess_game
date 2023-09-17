@@ -3,7 +3,7 @@
 import { board } from '@/store/atoms/board';
 import { WhiteSideIs } from '@/store/atoms/whiteSIde';
 import { highlightedArray } from '@/store/atoms/highlight';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { checkCheckmate } from '@/store/atoms/checkCheckmate';
 import { selected } from '@/store/atoms/selectedBlock';
@@ -20,11 +20,14 @@ import { hightlightBlocksForBishop } from '@/utils/pieces/bishop';
 import { hightlightBlocksForKing } from '@/utils/pieces/king';
 import { hightlightBlocksForKnight } from '@/utils/pieces/knight';
 import { hightlightBlocksForPawns } from '@/utils/pieces/pawn';
+import { useParams } from 'next/navigation';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
 
-const Board = () => {
+const Board = ({socket}:{socket:any}) => {
+    // const [rerender,setRerender]=useState(true)
+    const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
     const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
     const isOurKingCheck=useRecoilValue(isOurKingChecked)
@@ -89,6 +92,12 @@ const Board = () => {
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     return newBoard
                 })
+                let data={
+                    from:[selectedSol[0],selectedSol[1]],
+                    to:[row,col],
+                    roomId:id
+                }
+                await socket.emit('move',data)
                 // if(checkOppositeKingCheckmate()){
                 //     setIsOppoKingCheck(true)
                 // }else{
@@ -126,6 +135,13 @@ const Board = () => {
         setIsOurKingCheck(false)
     }
   },[boardState])
+  
+  useEffect(()=>{
+    socket.on('moved',(data)=>{
+        console.log(data);
+        
+    })
+  },[socket])
   return (
     <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
                 {rows.map((row,rowIndex)=>(

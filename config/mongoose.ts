@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import * as mongoose from "mongoose";
 //connecting to mongoDB
 export const connectMongoDB=()=>{
     mongoose.connect(process.env.MONGODB_URL);

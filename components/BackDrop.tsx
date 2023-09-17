@@ -1,3 +1,5 @@
+"use client"
+
 import { shareLink } from '@/store/atoms/shareLink'
 import React from 'react'
 import { useRecoilValue } from 'recoil'

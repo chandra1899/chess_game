@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "node": "node server.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -27,6 +28,8 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
     "recoil": "^0.7.7",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2"

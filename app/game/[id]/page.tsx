@@ -6,8 +6,44 @@ import { highlightedArray } from "@/store/atoms/highlight";
 import { useEffect } from "react";
 import { shareLink } from "@/store/atoms/shareLink";
 
-export default async function Game() {
-    const setShrLink=useSetRecoilState(shareLink)
+import { io } from "socket.io-client";
+import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react"
+import { connectMongoDB } from "@/config/mongoose";
+import GroupCreatedBy from "@/models/groupCreatedBy";
+import { WhiteSideIs } from "@/store/atoms/whiteSIde";
+import axios from "axios";
+let socket =io("http://localhost:3001");
+
+export default function Game() {
+  const { data: session, status } = useSession()  
+  console.log(session);
+  
+  const {id} = useParams()
+  const setShrLink=useSetRecoilState(shareLink)
+  const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
+  const socketFunction=async ()=>{
+    
+      socket.on("connect", async () => {
+        console.log("SOCKET CONNECTED!", socket.id);
+        let email=session?.user?.email
+        if(!email) return ;
+        socket.emit('joinRoom', id,email);
+        
+        let res=await axios.post('/api/groupCreatedBy',{
+          email,roomName:id,
+        })
+        setWhiteSideIs(res.data.isWhiteSide)
+      });
+
+      if (socket) return () => socket.disconnect();
+    }
+
+    useEffect(()=>{
+      socketFunction()
+
+    },[session])
+  
     useEffect(()=>{
       setShrLink(true)
     },[])
@@ -22,7 +58,7 @@ export default async function Game() {
         <div className='chessboard h-[100vh] w-[55%] bg-[#222222e6] flex flex-col justify-center items-center'>
           <audio src="/capture.mp3" id="capture"></audio>
           <audio src="/move-self.mp3" id="move_self"></audio>
-            <Board  />
+            <Board  socket={socket} />
         </div>
 
         <Right/>

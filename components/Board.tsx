@@ -95,7 +95,8 @@ const Board = ({socket}:{socket:any}) => {
                 let data={
                     from:[selectedSol[0],selectedSol[1]],
                     to:[row,col],
-                    roomId:id
+                    roomId:id,
+                    isWhiteSide
                 }
                 await socket.emit('move',data)
                 // if(checkOppositeKingCheckmate()){
@@ -139,6 +140,24 @@ const Board = ({socket}:{socket:any}) => {
   useEffect(()=>{
     socket.on('moved',(data)=>{
         console.log(data);
+
+       if(data.isWhiteSide!==isWhiteSide){
+        setBoardState((pre)=>{
+            const newBoard=pre.map(innerArray => [...innerArray])
+            newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]
+            newBoard[data.from[0]][data.from[1]]=""
+            return newBoard
+        })
+        setHighlightedBox([])
+        if(boardState[data.to[0]][data.to[1]]===""){
+            //play move_Self
+            document.getElementById('move_self').play()
+
+        }else{
+            //play capture
+            document.getElementById('capture').play()
+        }
+       }
         
     })
   },[socket])

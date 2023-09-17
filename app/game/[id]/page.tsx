@@ -22,18 +22,22 @@ export default function Game() {
   const {id} = useParams()
   const setShrLink=useSetRecoilState(shareLink)
   const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
+
+  const checkForwhiteSIde=async ()=>{
+    let email=session?.user?.email
+    if(!email) return ;
+    let res=await axios.post('/api/groupCreatedBy',{
+      email,roomName:id,
+    })
+    setWhiteSideIs(res.data.isWhiteSide)
+  }
+
   const socketFunction=async ()=>{
-    
+    let email=session?.user?.email
+    if(!email) return ;
       socket.on("connect", async () => {
         console.log("SOCKET CONNECTED!", socket.id);
-        let email=session?.user?.email
-        if(!email) return ;
         socket.emit('joinRoom', id,email);
-        
-        let res=await axios.post('/api/groupCreatedBy',{
-          email,roomName:id,
-        })
-        setWhiteSideIs(res.data.isWhiteSide)
       });
 
       if (socket) return () => socket.disconnect();
@@ -41,7 +45,10 @@ export default function Game() {
 
     useEffect(()=>{
       socketFunction()
+    },[session,socket])
 
+    useEffect(()=>{
+      checkForwhiteSIde()
     },[session])
   
     useEffect(()=>{

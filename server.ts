@@ -13,7 +13,7 @@ const io = new Server(httpServer, {
   },
 });
 
-    io.on("connection", (socket) => {
+    io.on("connection",async  (socket) => {
     console.log("A user connected:", socket.id);
     
     socket.on('joinRoom', async (roomName,email) => {
@@ -30,11 +30,11 @@ const io = new Server(httpServer, {
     socket.to(data.roomId).emit("receive_msg", data);
   });
 
-  socket.on("move", (data) => {
+  await socket.on("move", async (data) => {
     console.log("data",data);
    
     if(data.roomId){
-      io.to(data.roomId).emit("moved",data);
+      await io.to(data.roomId).emit("moved",data);
     }
     
     // socket.to(data.roomId).emit("receive_msg", data);

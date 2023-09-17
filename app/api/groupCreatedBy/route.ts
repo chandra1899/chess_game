@@ -5,7 +5,6 @@ import GroupCreatedBy from '@/models/groupCreatedBy'
 export async function POST(req:Request){
     try {
         const {email,roomName}=await req.json()
-        console.log(email,roomName);
         
         let isWhiteSide=true
         await connectMongoDB()

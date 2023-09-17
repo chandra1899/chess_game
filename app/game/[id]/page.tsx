@@ -13,7 +13,7 @@ import { connectMongoDB } from "@/config/mongoose";
 import GroupCreatedBy from "@/models/groupCreatedBy";
 import { WhiteSideIs } from "@/store/atoms/whiteSIde";
 import axios from "axios";
-let socket =io("http://localhost:3001");
+let socket =io("http://localhost:3001")
 
 export default function Game() {
   const { data: session, status } = useSession()  

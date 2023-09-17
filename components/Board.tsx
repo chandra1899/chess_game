@@ -12,7 +12,7 @@ import { isOurKingChecked } from '@/store/atoms/isOurKingChecked';
 
 import { isBlack } from '@/utils/checkForColor';
 import { isWhite } from '@/utils/checkForColor';
-import { isHighlighted } from '@/utils/isHighlighted';
+import { isHighlighted, isHighlightedOppoMove } from '@/utils/isHighlighted';
 import { checkOurKingCheckmate } from '@/utils/checkOurKingCheckmate';
 import { checkOppositeKingCheckmate } from '@/utils/checkOppositeKingCheckmate';
 import { hightlightBlocksForRook } from '@/utils/pieces/rook';
@@ -21,6 +21,7 @@ import { hightlightBlocksForKing } from '@/utils/pieces/king';
 import { hightlightBlocksForKnight } from '@/utils/pieces/knight';
 import { hightlightBlocksForPawns } from '@/utils/pieces/pawn';
 import { useParams } from 'next/navigation';
+import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -29,11 +30,13 @@ const Board = ({socket}:{socket:any}) => {
     // const [rerender,setRerender]=useState(true)
     const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
+    const highlightedOppoMoveBox=useRecoilValue(highlightedOppoMoveArray)
     const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
     const isOurKingCheck=useRecoilValue(isOurKingChecked)
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
+    const setHighlightedOppoMoveBox=useSetRecoilState(highlightedOppoMoveArray)
     const setIsOurKingCheck=useSetRecoilState(isOurKingChecked)
     const setIsOppoKingCheck=useSetRecoilState(isOppoKingChecked)
     const setSelectedSol=useSetRecoilState(selected)
@@ -72,6 +75,7 @@ const Board = ({socket}:{socket:any}) => {
     }
   
   const handleOnClick=async (row:number,col:number)=>{
+    setHighlightedOppoMoveBox([[]])
      if((isWhiteSide && isWhite(row,col,boardState)) || (!isWhiteSide && isBlack(row,col,boardState))){
         hightlightBlocks(row,col)
     }
@@ -149,6 +153,7 @@ const Board = ({socket}:{socket:any}) => {
             return newBoard
         })
         setHighlightedBox([])
+        setHighlightedOppoMoveBox([data.from,data.to])
         if(boardState[data.to[0]][data.to[1]]===""){
             //play move_Self
             document.getElementById('move_self').play()
@@ -167,6 +172,7 @@ const Board = ({socket}:{socket:any}) => {
                     <div className="flex flex-row">
                         {cols.map((col,colIndex)=>(
                             <div className={`h-[57px] ${isWhiteSide?'':'rotate-180'} w-[57px] cursor-pointer text-[3rem] flex justify-center items-center border-[1px] border-black
+                            ${isHighlightedOppoMove(rowIndex,colIndex,highlightedOppoMoveBox)?'bg-blue':''}
                             ${isOppoKingCheck && ((isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (!isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isOurKingCheck && ((!isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isHighlighted(rowIndex,colIndex,highlightedBox)?

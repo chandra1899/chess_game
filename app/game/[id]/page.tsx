@@ -15,6 +15,8 @@ import { WhiteSideIs } from "@/store/atoms/whiteSIde";
 import axios from "axios";
 import { Turn } from "@/store/atoms/turn";
 import { Messages } from "@/store/atoms/messages";
+import { History } from "@/store/atoms/history";
+import { board } from "@/store/atoms/board";
 let socket =io("http://localhost:3001");
 
 export default function Game() {
@@ -23,9 +25,12 @@ export default function Game() {
   
   const {id} = useParams()
   const setMessages=useSetRecoilState(Messages)
+  const setBoard=useSetRecoilState(board)
   const setShrLink=useSetRecoilState(shareLink)
   const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
   const setTurn=useSetRecoilState(Turn)
+  const setHistory=useSetRecoilState(History)
+  const isWhiteSide=useRecoilValue(WhiteSideIs)
 
   const checkForwhiteSIde=async ()=>{
     let email=session?.user?.email
@@ -65,11 +70,27 @@ export default function Game() {
         setMessages(res.data.messages)        
       }
     }
+
+    const getHistory=async ()=>{
+      let res=await axios.post('/api/gethistory',{
+        roomName:id
+      })
+      if(res.status===200){
+        // console.log(res);
+        console.log(res.data.history);
+        setHistory(res.data.history)
+        let len=res.data.history.length;
+        let historyArrayLast=res.data.history[len-1]
+        setBoard(historyArrayLast.board)
+        setTurn(historyArrayLast.isWhiteSide!==isWhiteSide)
+      }
+    }
   
     useEffect(()=>{
       setShrLink(true)
       getGroupMessages()
-    },[])
+      getHistory()
+    },[session,socket])
   
   return (
     <main className='flex justify-center items-center bg-black'>

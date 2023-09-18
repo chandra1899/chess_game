@@ -24,6 +24,7 @@ import { useParams } from 'next/navigation';
 import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
 import { Turn } from '@/store/atoms/turn';
 import { History } from '@/store/atoms/history';
+import axios from 'axios';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -78,6 +79,14 @@ const Board = ({socket}:{socket:any}) => {
             hightlightBlocksForKnight(row,col,boardState,isWhiteSide,setHighlightedBox) 
         }
     }
+
+    const saveBoardHistory=async (board:string[][],from:number[],to:[number,number])=>{
+        let res=await axios.post('/api/savehistory',{
+            board,isWhiteSide,from,to,roomName:id
+        })
+        // if(res.status===200) return true
+        // else return false
+    }
   
   const handleOnClick=async (row:number,col:number)=>{
     if(!turn) return;
@@ -100,6 +109,7 @@ const Board = ({socket}:{socket:any}) => {
                     const newBoard=pre.map(innerArray => [...innerArray])
                     newBoard[row][col]=newBoard[selectedSol[0]][selectedSol[1]]
                     newBoard[selectedSol[0]][selectedSol[1]]=""
+                    saveBoardHistory(newBoard,selectedSol,[row,col])
                     return newBoard
                 })
                 setTurn((pre)=>!pre)

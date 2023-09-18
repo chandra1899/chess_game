@@ -9,6 +9,7 @@ import { Messages } from '@/store/atoms/messages';
 import { WhiteSideIs } from '@/store/atoms/whiteSIde';
 import { useParams } from 'next/navigation';
 import { isEmaijiOpen } from '@/store/atoms/emoji';
+import axios from 'axios';
 
 const Right = ({socket}:{socket:any}) => {
   const scrollRef = useRef();
@@ -20,8 +21,7 @@ const Right = ({socket}:{socket:any}) => {
     const setisemojiopen=useSetRecoilState(isEmaijiOpen)
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
         setMessage(e.target.value)
-        // console.log(message);
-        
+        // console.log(message);    
     }
     const handleEmojiClick = (emojiObject:EmojiClickData) => {
         let msg = message;
@@ -34,16 +34,26 @@ const Right = ({socket}:{socket:any}) => {
         }
       }
     const handleSendMsg=async ()=>{  
-      setisemojiopen(false)
-      if(message=='') return ;
-      setMessages((pre)=>[...pre,{value:message,isWhiteSide}])
-      setMessage('')
-      let data={
+      const res=await axios.post('/api/savemessage',{
+        roomName:id,
+        value:message,
+        isWhiteSide
+      })
+      if(res.status===200){
+        setisemojiopen(false)
+        if(message=='') return ;
+        setMessages((pre)=>[...pre,{value:message,isWhiteSide}])
+        setMessage('')
+        let data={
         value:message,
         isWhiteSide,
         roomId:id
       }
       await socket.emit('send_msg',data)
+      }else{
+        //handleError
+      }
+      
     }
     useEffect(()=>{
       socket.on('receive_msg',(data)=>{
@@ -62,7 +72,7 @@ const Right = ({socket}:{socket:any}) => {
       <div className='overflow-y-scroll h-[100%] w-[100%] pb-20' ref={scrollRef}>
       {messages.map((msg:{value:string,isWhiteSide:boolean})=>(
         <div className='text-white min-h-[40px] p-2 m-2 relative'>
-          <span className={`font-medium absolute ${msg.isWhiteSide!==isWhiteSide?'bg-[#0020C2] left-4':'bg-[#2B65EC] right-4'} px-2 py-2 rounded-lg `}>{msg.value}</span>
+          <span className={`font-medium absolute ${msg.isWhiteSide!==isWhiteSide?'bg-[#0020C2] left-4 rounded-br-xl':'bg-[#2B65EC] right-4 rounded-bl-xl'} px-2 py-2 rounded-t-xl `}>{msg.value}</span>
         </div>
       ))}
       </div>

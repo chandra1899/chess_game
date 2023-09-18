@@ -110,19 +110,14 @@ const Board = ({socket}:{socket:any}) => {
                     isWhiteSide
                 }
                 await socket.emit('move',data)
-                // if(checkOppositeKingCheckmate()){
-                //     setIsOppoKingCheck(true)
-                // }else{
-                //     setIsOppoKingCheck(false)
-                // }
                 setHistory((pre)=>[...pre,data])
                 if(boardState[row][col]===""){
                     //play move_Self
-                    document.getElementById('move_self').play()
+                    document.getElementById('move_self')?.play()
 
                 }else if((isWhiteSide && isBlack(row,col,boardState) || (!isWhiteSide && isWhite(row,col,boardState)))){
                     //play capture
-                    document.getElementById('capture').play()
+                    document.getElementById('capture')?.play()
                 }
                 setHighlightedBox([[row,col],[selectedSol[0],selectedSol[1]]])
             }else{

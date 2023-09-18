@@ -14,6 +14,7 @@ import GroupCreatedBy from "@/models/groupCreatedBy";
 import { WhiteSideIs } from "@/store/atoms/whiteSIde";
 import axios from "axios";
 import { Turn } from "@/store/atoms/turn";
+import { Messages } from "@/store/atoms/messages";
 let socket =io("http://localhost:3001");
 
 export default function Game() {
@@ -21,6 +22,7 @@ export default function Game() {
   console.log(session);
   
   const {id} = useParams()
+  const setMessages=useSetRecoilState(Messages)
   const setShrLink=useSetRecoilState(shareLink)
   const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
   const setTurn=useSetRecoilState(Turn)
@@ -53,9 +55,20 @@ export default function Game() {
     useEffect(()=>{
       checkForwhiteSIde()
     },[session])
+
+    const getGroupMessages=async ()=>{
+      let res=await axios.post('/api/getmessages',{
+        roomName:id
+      })
+      if(res.status===200){
+        // console.log(res);
+        setMessages(res.data.messages)        
+      }
+    }
   
     useEffect(()=>{
       setShrLink(true)
+      getGroupMessages()
     },[])
   
   return (

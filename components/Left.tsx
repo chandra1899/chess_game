@@ -27,7 +27,7 @@ const MoveState=({data}:{data:{from:[number,number],to:[number,number],isWhiteSi
 const Left = () => {
   const history=useRecoilValue(History)
   return (
-    <div className='h-[100vh] w-[23%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
+    <div className='h-[100vh] hidden xs:block w-[23%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
       <div className='h-[100%] w-[100%] overflow-y-scroll'>
          {history.length!==0 && history.map((hisValue)=>(
           <MoveState data={hisValue} />

@@ -68,7 +68,7 @@ const Right = ({socket}:{socket:any}) => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
    }, [messages]);
   return (
-    <div className='relative chat h-[100vh] w-[27%] bg-black border-[1px] border-slate-600 '>
+    <div className='relative hidden xs:block chat h-[100vh] w-[27%] bg-black border-[1px] border-slate-600 '>
       <div className='overflow-y-scroll h-[100%] w-[100%] pb-20' ref={scrollRef}>
       {messages.map((msg:{value:string,isWhiteSide:boolean})=>(
         <div className='text-white min-h-[40px] p-2 m-2 relative'>

@@ -11,6 +11,7 @@ import HomeRight from './HomeRight'
 import CopyLink from './CopyLink'
 import GameOver from './GameOver'
 import BackDrop from './BackDrop'
+import PromotPeice from './PromotPeice'
 
 export {
     Authenticate,
@@ -25,5 +26,6 @@ export {
     HomeLeft,
     CopyLink,
     GameOver,
-    BackDrop
+    BackDrop,
+    PromotPeice
 }

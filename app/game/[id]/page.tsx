@@ -17,13 +17,15 @@ import { Turn } from "@/store/atoms/turn";
 import { Messages } from "@/store/atoms/messages";
 import { History } from "@/store/atoms/history";
 import { board } from "@/store/atoms/board";
-let socket =io("http://localhost:3001");
+import { PromotPeice } from '@/components'
+let socket =io("http://localhost:3001")
 
 export default function Game() {
   const { data: session, status } = useSession()  
   console.log(session);
   
   const {id} = useParams()
+  const turn=useRecoilValue(Turn)
   const setMessages=useSetRecoilState(Messages)
   const setBoard=useSetRecoilState(board)
   const setShrLink=useSetRecoilState(shareLink)
@@ -95,14 +97,17 @@ export default function Game() {
   return (
     <main className='flex justify-center items-center bg-black'>
       <CopyLink/>
+      <PromotPeice/>
       <BackDrop/>
-      <div className='flex flex-row justify-center items-center h-auto w-[97vw]'>
+      <div className='flex flex-row justify-center items-center h-auto w-[100vw] xs:w-[97vw]'>
         <Left/>
 
         <div className='chessboard h-[100vh] w-[55%] bg-[#222222e6] flex flex-col justify-center items-center'>
           <audio src="/capture.mp3" id="capture"></audio>
           <audio src="/move-self.mp3" id="move_self"></audio>
+          {!turn && <p className="bg-[#00C300] text-[3.5vw] xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Opponent Turn</p>}
             <Board  socket={socket} />
+          {turn && <p className="bg-[#00C300] text-[3.5vw] xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Your Turn</p>}
         </div>
 
         <Right socket={socket}/>

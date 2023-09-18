@@ -180,11 +180,11 @@ const Board = ({socket}:{socket:any}) => {
     })
   },[socket])
   return (
-    <div className={`h-auto w-[100%]  flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
+    <div className={`h-auto w-[99%vw] xs:w-[100%] flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
                 {rows.map((row,rowIndex)=>(
                     <div className="flex flex-row">
                         {cols.map((col,colIndex)=>(
-                            <div className={`h-[57px] ${isWhiteSide?'':'rotate-180'} w-[57px] cursor-pointer text-[3rem] flex justify-center items-center border-[1px] border-black
+                            <div className={`h-[12vw] xs:h-[57px] w-[12vw] xs:w-[57px] ${isWhiteSide?'':'rotate-180'}  cursor-pointer text-[10vw] xs:text-[3rem] flex justify-center items-center border-[1px] border-black
                             ${isHighlightedOppoMove(rowIndex,colIndex,highlightedOppoMoveBox)?'bg-blue':''}
                             ${isOppoKingCheck && ((isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (!isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}
                             ${isOurKingCheck && ((!isWhiteSide && boardState[rowIndex][colIndex]==='♚') || (isWhiteSide && boardState[rowIndex][colIndex]==='♔'))?'bg-yellow-300':''}

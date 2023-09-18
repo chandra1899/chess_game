@@ -22,6 +22,7 @@ import { hightlightBlocksForKnight } from '@/utils/pieces/knight';
 import { hightlightBlocksForPawns } from '@/utils/pieces/pawn';
 import { useParams } from 'next/navigation';
 import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
+import { Turn } from '@/store/atoms/turn';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -30,6 +31,7 @@ const Board = ({socket}:{socket:any}) => {
     // const [rerender,setRerender]=useState(true)
     const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
+    const turn=useRecoilValue(Turn)
     const highlightedOppoMoveBox=useRecoilValue(highlightedOppoMoveArray)
     const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
     const isOurKingCheck=useRecoilValue(isOurKingChecked)
@@ -42,6 +44,7 @@ const Board = ({socket}:{socket:any}) => {
     const setSelectedSol=useSetRecoilState(selected)
     const setBoardState=useSetRecoilState(board)
     const selectedSol=useRecoilValue(selected) 
+    const setTurn=useSetRecoilState(Turn)
 
     const hightlightBlocks=(row:number,col:number)=>{
        
@@ -75,6 +78,7 @@ const Board = ({socket}:{socket:any}) => {
     }
   
   const handleOnClick=async (row:number,col:number)=>{
+    if(!turn) return;
     setHighlightedOppoMoveBox([[]])
      if((isWhiteSide && isWhite(row,col,boardState)) || (!isWhiteSide && isBlack(row,col,boardState))){
         hightlightBlocks(row,col)
@@ -96,6 +100,7 @@ const Board = ({socket}:{socket:any}) => {
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     return newBoard
                 })
+                setTurn((pre)=>!pre)
                 let data={
                     from:[selectedSol[0],selectedSol[1]],
                     to:[row,col],
@@ -152,6 +157,7 @@ const Board = ({socket}:{socket:any}) => {
             newBoard[data.from[0]][data.from[1]]=""
             return newBoard
         })
+        setTurn((pre)=>!pre)
         setHighlightedBox([])
         setHighlightedOppoMoveBox([data.from,data.to])
         if(boardState[data.to[0]][data.to[1]]===""){

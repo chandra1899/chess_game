@@ -16,7 +16,7 @@ const io = new Server(httpServer, {
     io.on("connection",async  (socket) => {
     console.log("A user connected:", socket.id);
     
-    socket.on('joinRoom', async (roomName,email) => {
+    await socket.on('joinRoom', async (roomName,email) => {
       if(!email) return ;
       
       await socket.join(roomName);

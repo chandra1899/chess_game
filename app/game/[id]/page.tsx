@@ -13,6 +13,7 @@ import { connectMongoDB } from "@/config/mongoose";
 import GroupCreatedBy from "@/models/groupCreatedBy";
 import { WhiteSideIs } from "@/store/atoms/whiteSIde";
 import axios from "axios";
+import { Turn } from "@/store/atoms/turn";
 let socket =io("http://localhost:3001")
 
 export default function Game() {
@@ -22,6 +23,7 @@ export default function Game() {
   const {id} = useParams()
   const setShrLink=useSetRecoilState(shareLink)
   const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
+  const setTurn=useSetRecoilState(Turn)
 
   const checkForwhiteSIde=async ()=>{
     let email=session?.user?.email
@@ -30,6 +32,7 @@ export default function Game() {
       email,roomName:id,
     })
     setWhiteSideIs(res.data.isWhiteSide)
+    setTurn(res.data.isWhiteSide)
   }
 
   const socketFunction=async ()=>{
@@ -37,7 +40,7 @@ export default function Game() {
     if(!email) return ;
       socket.on("connect", async () => {
         console.log("SOCKET CONNECTED!", socket.id);
-        socket.emit('joinRoom', id,email);
+        await socket.emit('joinRoom', id,email);
       });
 
       if (socket) return () => socket.disconnect();

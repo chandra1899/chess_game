@@ -2,7 +2,7 @@ import { isValid } from "../isValid";
 import { isOkToMove } from "../isOkToMove";
 import { isBlack,isWhite } from "../checkForColor";
 
-export const hightlightBlocksForBishop=(row:number,col:number,boardState:[[string]],isWhiteSide:boolean,setHighlightedBox:any)=>{
+export const hightlightBlocksForBishop=(row:number,col:number,boardState:string[][],isWhiteSide:boolean,setHighlightedBox:any)=>{
     //1st side
     let newRow1=row-1;
     let newCol1=col-1;
@@ -73,7 +73,7 @@ export const hightlightBlocksForBishop=(row:number,col:number,boardState:[[strin
     }
 }
 
-export const getWhiteBishopIndex=(newBoardState:[[string]])=>{
+export const getWhiteBishopIndex=(newBoardState:string[][])=>{
     let Indexs=[];
     for(let i=0;i<8;i++){
         for(let j=0;j<8;j++){
@@ -85,7 +85,7 @@ export const getWhiteBishopIndex=(newBoardState:[[string]])=>{
     return Indexs;
 }
 
-export const getBlackBishopIndex=(newBoardState:[[string]])=>{
+export const getBlackBishopIndex=(newBoardState:string[][])=>{
     let Indexs=[];
     for(let i=0;i<8;i++){
         for(let j=0;j<8;j++){
@@ -97,7 +97,7 @@ export const getBlackBishopIndex=(newBoardState:[[string]])=>{
     return Indexs;
 }
 
-export const attackBlocksForBishops=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
+export const attackBlocksForBishops=(row:number,col:number,fromWhiteSide:boolean,newBoardState:string[][])=>{
     //1st side
     let newRow1=row-1;
     let newCol1=col-1;

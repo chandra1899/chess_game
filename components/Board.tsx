@@ -84,8 +84,6 @@ const Board = ({socket}:{socket:any}) => {
         let res=await axios.post('/api/savehistory',{
             board,isWhiteSide,from,to,roomName:id
         })
-        // if(res.status===200) return true
-        // else return false
     }
   
   const handleOnClick=async (row:number,col:number)=>{

@@ -2,7 +2,7 @@ import { isValid } from "../isValid";
 import { isBlack,isWhite } from "../checkForColor";
 import { isOkToMove } from "../isOkToMove";
 
-export const hightlightBlocksForKing=(row:number,col:number,boardState:[[string]],isWhiteSide:boolean,setHighlightedBox:any)=>{
+export const hightlightBlocksForKing=(row:number,col:number,boardState:string[][],isWhiteSide:boolean,setHighlightedBox:any)=>{
     const newRow=[-1,0,1]
     const newCol=[-1,0,1]
     for(let i=0;i<3;i++){
@@ -14,7 +14,7 @@ export const hightlightBlocksForKing=(row:number,col:number,boardState:[[string]
     }
 }
 
-export const attackBlocksForKing=(row:number,col:number,fromWhiteSide:boolean,newBoardState:[[string]])=>{
+export const attackBlocksForKing=(row:number,col:number,fromWhiteSide:boolean,newBoardState:string[][])=>{
     const newRow=[-1,0,1]
     const newCol=[-1,0,1]
     for(let i=0;i<3;i++){

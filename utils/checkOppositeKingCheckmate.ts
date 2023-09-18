@@ -4,7 +4,7 @@ import { getWhiteBishopIndex ,getBlackBishopIndex ,attackBlocksForBishops} from 
 import { getWhiteKnightIndex ,getBlackKnightIndex,attackBlocksForKnight} from "./pieces/knight"
 import { attackBlocksForKing } from "./pieces/king"
 
-export const checkOppositeKingCheckmate=(boardState:[[string]],isWhiteSide:boolean)=>{
+export const checkOppositeKingCheckmate=(boardState:string[][],isWhiteSide:boolean)=>{
     //for pawns
     let IndexsPawns
     if(isWhiteSide){

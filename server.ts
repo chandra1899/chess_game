@@ -24,10 +24,11 @@ const io = new Server(httpServer, {
     // console.log(`User joined room: ${roomName}`);
   });
 
-  socket.on("send_msg", (data) => {
+  await socket.on("send_msg", async (data) => {
     console.log(data, "DATA");
-    //This will send a message to a specific room ID
-    socket.to(data.roomId).emit("receive_msg", data);
+    if(data.roomId){
+      await io.to(data.roomId).emit("receive_msg", data);
+    }
   });
 
   await socket.on("move", async (data) => {

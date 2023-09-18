@@ -14,7 +14,7 @@ import GroupCreatedBy from "@/models/groupCreatedBy";
 import { WhiteSideIs } from "@/store/atoms/whiteSIde";
 import axios from "axios";
 import { Turn } from "@/store/atoms/turn";
-let socket =io("http://localhost:3001")
+let socket =io("http://localhost:3001");
 
 export default function Game() {
   const { data: session, status } = useSession()  
@@ -71,7 +71,7 @@ export default function Game() {
             <Board  socket={socket} />
         </div>
 
-        <Right/>
+        <Right socket={socket}/>
       </div>
     </main>
   )

@@ -23,6 +23,7 @@ import { hightlightBlocksForPawns } from '@/utils/pieces/pawn';
 import { useParams } from 'next/navigation';
 import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
 import { Turn } from '@/store/atoms/turn';
+import { History } from '@/store/atoms/history';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -45,6 +46,7 @@ const Board = ({socket}:{socket:any}) => {
     const setBoardState=useSetRecoilState(board)
     const selectedSol=useRecoilValue(selected) 
     const setTurn=useSetRecoilState(Turn)
+    const setHistory=useSetRecoilState(History)
 
     const hightlightBlocks=(row:number,col:number)=>{
        
@@ -113,6 +115,7 @@ const Board = ({socket}:{socket:any}) => {
                 // }else{
                 //     setIsOppoKingCheck(false)
                 // }
+                setHistory((pre)=>[...pre,data])
                 if(boardState[row][col]===""){
                     //play move_Self
                     document.getElementById('move_self').play()
@@ -151,6 +154,7 @@ const Board = ({socket}:{socket:any}) => {
         console.log(data);
 
        if(data.isWhiteSide!==isWhiteSide){
+        setHistory((pre)=>[...pre,data])
         setBoardState((pre)=>{
             const newBoard=pre.map(innerArray => [...innerArray])
             newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]

@@ -6,9 +6,11 @@ import { FaRegCopy } from "react-icons/fa"
 import { shareLink } from '@/store/atoms/shareLink'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useParams } from 'next/navigation'
+import { GameFinished } from '@/store/atoms/gameFilnished'
 
 const CopyLink = () => {
   const [copied,setCopied]=useState(false)
+  const gameFinished=useRecoilValue(GameFinished)
   const shrLink=useRecoilValue(shareLink)
   const setShrLink=useSetRecoilState(shareLink)
   const {id} = useParams()
@@ -30,7 +32,7 @@ const CopyLink = () => {
             src={'/close.svg'}
             alt='copy link'
             className='absolute top-0 right-0 cursor-pointer'
-            onClick={()=>{setShrLink((pre)=>!pre)}}
+            onClick={()=>{setShrLink(false)}}
       />
         </div>
        <div className='flex flex-row justify-center items-center mb-4'>

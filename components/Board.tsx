@@ -83,9 +83,14 @@ const Board = ({socket}:{socket:any}) => {
     }
 
     const saveBoardHistory=async (board:string[][],from:number[],to:[number,number])=>{
-        let res=await axios.post('/api/savehistory',{
-            board,isWhiteSide,from,to,roomName:id
-        })
+        try {
+            let res=await axios.post('/api/savehistory',{
+                board,isWhiteSide,from,to,roomName:id
+            })
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
   
   const handleOnClick=async (row:number,col:number)=>{
@@ -111,6 +116,7 @@ const Board = ({socket}:{socket:any}) => {
                     newBoard[row][col]=newBoard[selectedSol[0]][selectedSol[1]]
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     saveBoardHistory(newBoard,selectedSol,[row,col])
+                    // console.log(newBoard);
                     return newBoard
                 })
                 setTurn((pre)=>!pre)
@@ -198,7 +204,7 @@ const Board = ({socket}:{socket:any}) => {
                             `}
                             onClick={()=>{handleOnClick(rowIndex,colIndex)}}
                             >
-                                {boardState[rowIndex][colIndex]}
+                                {boardState && boardState[rowIndex][colIndex]}
                             </div>
                         ))}
                     </div>

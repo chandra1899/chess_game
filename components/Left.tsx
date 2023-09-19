@@ -15,14 +15,16 @@ const MoveState=({data,index,selected,setSelected}:{data:{from:[number,number],t
   const gameFinished=useRecoilValue(GameFinished)
   
   const getStateDetails=()=>{
-    console.log(selected);
+    // console.log(selected);
     
-    if(!gameFinished) return ;
+    if(!gameFinished || data.board==undefined) return ;
     setSelected(index)
     setBoard(data.board)
   }
+  // console.log(selected,'==',index);
+  
   return (
-    <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center ${selected===index?'bg-[#A0793D]':''} ${gameFinished?'cursor-pointer hover:bg-[#A0793D]':''} ${data.isWhiteSide?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`} onClick={getStateDetails}>
+    <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center ${selected==index?'bg-[#A0793D]':''} ${gameFinished?'cursor-pointer hover:bg-[#A0793D]':''} ${data.isWhiteSide?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`} onClick={getStateDetails}>
       <p className='font-bold'>{valueToLetter[data.from[0]]}{data.from[1]}</p>
       <Image
       height={30}
@@ -50,7 +52,7 @@ const Left = () => {
   },[selected,history[selected]])
 
   const handleKeyMove:KeyboardEventHandler<HTMLDivElement>=(e)=>{
-    console.log('key==',e.key);
+    // console.log('key==',e.key);
     if(e.key==='ArrowLeft'){
       setSelected((pre)=>{
         if(pre-1>=0)

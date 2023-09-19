@@ -24,10 +24,11 @@ let socket =io("http://localhost:3001")
 
 export default function Game() {
   const { data: session, status } = useSession()  
-  console.log(session);
+  // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
   const {id} = useParams()
   const turn=useRecoilValue(Turn)
+  const boardState=useRecoilValue(board)
   const setMessages=useSetRecoilState(Messages)
   const setGameFinished=useSetRecoilState(GameFinished)
   const setOpenGameOver=useSetRecoilState(OpenGameOver)
@@ -101,7 +102,12 @@ export default function Game() {
       })
       if(res.status===200){
         // console.log(res);
-        setMessages(res.data.messages)        
+        if(res.data.messages===undefined){
+          setMessages([])        
+        }
+        else{
+          setMessages(res.data.messages)
+        }
       }
     }
 
@@ -112,11 +118,16 @@ export default function Game() {
       if(res.status===200){
         // console.log(res);
         console.log(res.data.history);
-        setHistory(res.data.history)
-        let len=res.data.history.length;
-        let historyArrayLast=res.data.history[len-1]
-        setBoard(historyArrayLast.board)
-        setTurn(historyArrayLast.isWhiteSide!==isWhiteSide)
+        if(res.data.history===undefined || res.data.history.length===0){
+          setHistory([])
+        }else{
+          setHistory(res.data.history)
+          let len=res.data.history.length;
+          let historyArrayLast=res.data.history[len-1]
+          // console.log('board',historyArrayLast.board);
+          setTurn(historyArrayLast.isWhiteSide!==isWhiteSide)
+          setBoard(historyArrayLast.board)
+        }
       }
     }
   
@@ -124,6 +135,8 @@ export default function Game() {
       // setShrLink(true)
       getGroupMessages()
       getHistory()
+      console.log(boardState);
+      
     },[session,socket])
   
   return (

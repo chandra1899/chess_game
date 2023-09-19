@@ -10,7 +10,7 @@ const HomeRight = () => {
     let allChar="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let randomCharactors = "";
 
-    for(let i=0;i<8;i++){
+    for(let i=0;i<15;i++){
         let randomNum = Math.floor(Math.random() * allChar.length);
         randomCharactors+=allChar[randomNum];
     }

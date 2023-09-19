@@ -19,7 +19,8 @@ import { History } from "@/store/atoms/history";
 import { board } from "@/store/atoms/board";
 import { PromotPeice } from '@/components'
 import { GameFinished } from "@/store/atoms/gameFilnished";
-let socket =io("http://localhost:3001");
+import { OpenGameOver } from "@/store/atoms/opengameover";
+let socket =io("http://localhost:3001")
 
 export default function Game() {
   const { data: session, status } = useSession()  
@@ -29,6 +30,7 @@ export default function Game() {
   const turn=useRecoilValue(Turn)
   const setMessages=useSetRecoilState(Messages)
   const setGameFinished=useSetRecoilState(GameFinished)
+  const setOpenGameOver=useSetRecoilState(OpenGameOver)
   const setBoard=useSetRecoilState(board)
   const setShrLink=useSetRecoilState(shareLink)
   const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
@@ -51,8 +53,10 @@ export default function Game() {
       if(res2.data.existingGameInstance.gameStatus==='running'){
         setGameFinished(false)
         setShrLink(true)
-      }else{
+      }else{     
+        setGameFinished(true)
         setShrLink(false)
+        setOpenGameOver(true)
         if(res2.data.existingGameInstance.won==='white'){
           if(isWhiteSide)setWhoWon(true)
           else setWhoWon(false)
@@ -131,12 +135,12 @@ export default function Game() {
       <div className='flex flex-row justify-center items-center h-auto w-[100vw] xs:w-[97vw]'>
         <Left/>
 
-        <div className='chessboard h-[100vh] w-[55%] bg-[#222222e6] flex flex-col justify-center items-center'>
+        <div className='chessboard relative h-[100vh] w-[55%] bg-[#222222e6] flex flex-col justify-center items-center'>
           <audio src="/capture.mp3" id="capture"></audio>
           <audio src="/move-self.mp3" id="move_self"></audio>
-          {!turn && <p className="bg-[#00C300] text-[3.5vw] xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Opponent Turn</p>}
+          {!turn && <p className="bg-[#00C300] text-[3.5vw] absolute top-2 xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Opponent Turn</p>}
             <Board  socket={socket} />
-          {turn && <p className="bg-[#00C300] text-[3.5vw] xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Your Turn</p>}
+          {turn && <p className="bg-[#00C300] text-[3.5vw] absolute bottom-2 xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Your Turn</p>}
         </div>
 
         <Right socket={socket}/>

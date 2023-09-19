@@ -1,6 +1,5 @@
 import {NextResponse } from 'next/server'
 import { connectMongoDB } from '@/config/mongoose'
-import Message from '@/models/message'
 import Game from '@/models/game'
 
 interface gametype {

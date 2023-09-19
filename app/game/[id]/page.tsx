@@ -20,7 +20,7 @@ import { board } from "@/store/atoms/board";
 import { PromotPeice } from '@/components'
 import { GameFinished } from "@/store/atoms/gameFilnished";
 import { OpenGameOver } from "@/store/atoms/opengameover";
-let socket =io("http://localhost:3001")
+let socket =io("http://localhost:3001");
 
 export default function Game() {
   const { data: session, status } = useSession()  
@@ -28,7 +28,6 @@ export default function Game() {
   const [whoWon,setWhoWon]=useState(false)
   const {id} = useParams()
   const turn=useRecoilValue(Turn)
-  const boardState=useRecoilValue(board)
   const setMessages=useSetRecoilState(Messages)
   const setGameFinished=useSetRecoilState(GameFinished)
   const setOpenGameOver=useSetRecoilState(OpenGameOver)
@@ -89,6 +88,16 @@ export default function Game() {
     }
 
     useEffect(()=>{
+      setBoard([
+        ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
+        ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎"],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", "", ""],
+        ["♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙"],
+        ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
+      ])
       socketFunction()
     },[session,socket])
 
@@ -135,7 +144,7 @@ export default function Game() {
       // setShrLink(true)
       getGroupMessages()
       getHistory()
-      console.log(boardState);
+      // console.log(boardState);
       
     },[session,socket])
   

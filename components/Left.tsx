@@ -10,21 +10,23 @@ import { FormEventHandler, KeyboardEventHandler } from 'react';
 
 const valueToLetter=['A','B','C','D','E','F','G','H'];
 
-const MoveState=({data,index,selected,setSelected}:{data:{from:[number,number],to:[number,number],isWhiteSide:boolean,board:string[][]},index:number,selected:any,setSelected:any})=>{
+interface dataType {from:[number,number],to:[number,number],isWhiteSide:boolean,board:string[][]}
+
+const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,selected:any,setSelected:any})=>{
   const setBoard=useSetRecoilState(board)
   const gameFinished=useRecoilValue(GameFinished)
   
   const getStateDetails=()=>{
     // console.log(selected);
     
-    if(!gameFinished || data.board==undefined) return ;
+    if(!gameFinished || data.board===undefined) return ;
     setSelected(index)
     setBoard(data.board)
   }
-  // console.log(selected,'==',index);
+  console.log(selected===index);
   
   return (
-    <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center ${selected==index?'bg-[#A0793D]':''} ${gameFinished?'cursor-pointer hover:bg-[#A0793D]':''} ${data.isWhiteSide?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`} onClick={getStateDetails}>
+    <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center ${selected===index && gameFinished?'bg-[#A0793D]':''} ${gameFinished?'cursor-pointer hover:bg-[#A0793D]':''} ${data.isWhiteSide?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`} onClick={getStateDetails}>
       <p className='font-bold'>{valueToLetter[data.from[0]]}{data.from[1]}</p>
       <Image
       height={30}
@@ -40,14 +42,16 @@ const MoveState=({data,index,selected,setSelected}:{data:{from:[number,number],t
 
 const Left = () => {
   const history:any=useRecoilValue(History)
+  const gameFinished:any=useRecoilValue(GameFinished)
   const [selected,setSelected]=useState(0)
   const setBoard=useSetRecoilState(board)
+  
   useEffect(()=>{
     setSelected(history.length-1)
   },[history])
 
   useEffect(()=>{
-    if(history[selected])
+    if(history[selected] && gameFinished)
     setBoard(history[selected].board)
   },[selected,history[selected]])
 
@@ -74,10 +78,7 @@ const Left = () => {
       <div className='h-[100%] w-[100%] overflow-y-scroll pb-10' tabIndex={0} onKeyUp={handleKeyMove} >
          {history.length!==0 && history.map((hisValue:any,index:number)=>(
           <MoveState data={hisValue} index={index} selected={selected} setSelected={setSelected} />
-        ))}
-      {/* <MoveState color='white' />
-      <MoveState color='black' /> */}
-      
+        ))}      
       </div>
       <div className='absolute h-[55px] w-[100%] bg-[#222222e6] bottom-0 flex flex-row justify-between items-center'>
       <Image
@@ -85,7 +86,7 @@ const Left = () => {
       width={30}
       src={'/left_arrow.png'}
       alt='right arrow'
-      className='mx-8 cursor-pointer'
+      className='ml-4 cursor-pointer'
       onClick={()=>{setSelected((pre)=>{
         if(pre-1>=0)
         return pre-1
@@ -93,12 +94,13 @@ const Left = () => {
       }
         )}}
       />
+       {!gameFinished && <button className='text-[15px] text-black font-bold bg-yellow-300 hover:bg-yellow-400 cursor-pointer p-1 px-2 rounded-r-full rounded-l-full'>Offer Draw</button>}
        <Image
       height={30}
       width={30}
       src={'/right_arrow.png'}
       alt='right arrow'
-      className='mx-12 cursor-pointer'
+      className='mr-12 cursor-pointer'
       onClick={()=>{setSelected((pre:any)=>{
         if(pre+1<history.length)
         return pre+1

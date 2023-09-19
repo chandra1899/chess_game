@@ -149,16 +149,18 @@ const Board = ({socket}:{socket:any}) => {
 
   }
   useEffect(()=>{
-    if(checkOppositeKingCheckmate(boardState,isWhiteSide)){
-        setIsOppoKingCheck(true)
-    }else{
-        setIsOppoKingCheck(false)
-    }
-    if(checkOurKingCheckmate(boardState,isWhiteSide)){
-        setIsOurKingCheck(true)
-    }else{
-        setIsOurKingCheck(false)
-    }
+    // if(boardState){
+        if(checkOppositeKingCheckmate(boardState,isWhiteSide)){
+            setIsOppoKingCheck(true)
+        }else{
+            setIsOppoKingCheck(false)
+        }
+        if(checkOurKingCheckmate(boardState,isWhiteSide)){
+            setIsOurKingCheck(true)
+        }else{
+            setIsOurKingCheck(false)
+        }
+    // }
   },[boardState])
   
   useEffect(()=>{
@@ -204,7 +206,7 @@ const Board = ({socket}:{socket:any}) => {
                             `}
                             onClick={()=>{handleOnClick(rowIndex,colIndex)}}
                             >
-                                {boardState && boardState[rowIndex][colIndex]}
+                                {boardState[rowIndex][colIndex]}
                             </div>
                         ))}
                     </div>

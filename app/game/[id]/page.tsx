@@ -18,7 +18,8 @@ import { Messages } from "@/store/atoms/messages";
 import { History } from "@/store/atoms/history";
 import { board } from "@/store/atoms/board";
 import { PromotPeice } from '@/components'
-let socket =io("http://localhost:3001")
+import { GameFinished } from "@/store/atoms/gameFilnished";
+let socket =io("http://localhost:3001");
 
 export default function Game() {
   const { data: session, status } = useSession()  
@@ -27,6 +28,7 @@ export default function Game() {
   const {id} = useParams()
   const turn=useRecoilValue(Turn)
   const setMessages=useSetRecoilState(Messages)
+  const setGameFinished=useSetRecoilState(GameFinished)
   const setBoard=useSetRecoilState(board)
   const setShrLink=useSetRecoilState(shareLink)
   const setWhiteSideIs=useSetRecoilState(WhiteSideIs)
@@ -42,17 +44,35 @@ export default function Game() {
     })
     setWhiteSideIs(res.data.isWhiteSide)
     setTurn(res.data.isWhiteSide)
+    let res2=await axios.post('/api/creategameinstance',{
+      email,roomName:id,isWhiteSide:res.data.isWhiteSide
+    })
+    if(res2.status===200){
+      if(res2.data.existingGameInstance.gameStatus==='running'){
+        setGameFinished(false)
+      }else{
+
+      }
+    }
   }
 
   const socketFunction=async ()=>{
     let email=session?.user?.email
     if(!email) return ;
-      socket.on("connect", async () => {
+      await socket.on("connect", async () => {
         console.log("SOCKET CONNECTED!", socket.id);
         await socket.emit('joinRoom', id,email);
       });
 
-      if (socket) return () => socket.disconnect();
+      socket.on('error', function (data) {
+        console.log(data || 'error');
+      });
+
+      socket.on('connect_failed', function (data) {
+        console.log(data || 'connect_failed');
+      });
+
+      // if (socket) return () => socket.disconnect();
     }
 
     useEffect(()=>{

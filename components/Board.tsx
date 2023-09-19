@@ -25,6 +25,7 @@ import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
 import { Turn } from '@/store/atoms/turn';
 import { History } from '@/store/atoms/history';
 import axios from 'axios';
+import { GameFinished } from '@/store/atoms/gameFilnished';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -33,6 +34,7 @@ const Board = ({socket}:{socket:any}) => {
     // const [rerender,setRerender]=useState(true)
     const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
+    const gameFinished=useRecoilValue(GameFinished)
     const turn=useRecoilValue(Turn)
     const highlightedOppoMoveBox=useRecoilValue(highlightedOppoMoveArray)
     const isOppoKingCheck=useRecoilValue(isOppoKingChecked)
@@ -88,6 +90,7 @@ const Board = ({socket}:{socket:any}) => {
   
   const handleOnClick=async (row:number,col:number)=>{
     if(!turn) return;
+    if(gameFinished) return ;
     setHighlightedOppoMoveBox([[]])
      if((isWhiteSide && isWhite(row,col,boardState)) || (!isWhiteSide && isBlack(row,col,boardState))){
         hightlightBlocks(row,col)

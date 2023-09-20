@@ -22,19 +22,19 @@ const io = new Server(httpServer, {
       await socket.join(roomName);
       console.log('room and email',roomName,email);
       // update disconnect
-      await fetch('http://localhost:3000/api/setdisconnected',{
-      method:'POST',
-      headers:{
-        'Access-Control-Allow-Origin': '*',
-        Accept:"application/json",
-        "Content-Type":"application/json"
-      },
-      credentials:'include',
-      body:JSON.stringify({
-        email:socket.email,
-        roomName:socket.roomName
-      })
-    })
+    //   await fetch('http://localhost:3000/api/setdisconnected',{
+    //   method:'POST',
+    //   headers:{
+    //     'Access-Control-Allow-Origin': '*',
+    //     Accept:"application/json",
+    //     "Content-Type":"application/json"
+    //   },
+    //   credentials:'include',
+    //   body:JSON.stringify({
+    //     email:socket.email,
+    //     roomName:socket.roomName
+    //   })
+    // })
     // console.log(`User joined room: ${roomName}`);
   });
 
@@ -56,7 +56,7 @@ const io = new Server(httpServer, {
   });
 
   socket.on('disconnect', async function () {
-    let disconnectionMessage = socket.email + " Disconnected from Socket and room " + socket.roomName;
+    // let disconnectionMessage = socket.email + " Disconnected from Socket and room " + socket.roomName;
     let res=await fetch('http://localhost:3000/api/setdisconnected',{
       method:'POST',
       headers:{

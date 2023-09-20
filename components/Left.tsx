@@ -86,8 +86,9 @@ const Left = () => {
       width={30}
       src={'/left_arrow.png'}
       alt='right arrow'
-      className='ml-4 cursor-pointer'
+      className={`ml-4 ${gameFinished?'cursor-pointer':''}`}
       onClick={()=>{setSelected((pre)=>{
+        if(!gameFinished) return pre;
         if(pre-1>=0)
         return pre-1
         else return pre
@@ -100,8 +101,9 @@ const Left = () => {
       width={30}
       src={'/right_arrow.png'}
       alt='right arrow'
-      className='mr-12 cursor-pointer'
+      className={`mr-12 ${gameFinished?'cursor-pointer':''}`}
       onClick={()=>{setSelected((pre:any)=>{
+        if(!gameFinished) return pre;
         if(pre+1<history.length)
         return pre+1
       else return pre

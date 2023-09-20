@@ -12,6 +12,7 @@ import CopyLink from './CopyLink'
 import GameOver from './GameOver'
 import BackDrop from './BackDrop'
 import PromotPeice from './PromotPeice'
+import OfferDraw from './OfferDraw'
 
 export {
     Authenticate,
@@ -27,5 +28,6 @@ export {
     CopyLink,
     GameOver,
     BackDrop,
-    PromotPeice
+    PromotPeice,
+    OfferDraw
 }

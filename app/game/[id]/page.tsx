@@ -1,6 +1,6 @@
 "use client"
 
-import { BackDrop, Board, CopyLink, GameOver, Left, Right } from "@/components"
+import { BackDrop, Board, CopyLink, GameOver, Left, OfferDraw, Right } from "@/components"
 import { useRecoilState, useRecoilValue,useSetRecoilState ,} from "recoil";
 import { highlightedArray } from "@/store/atoms/highlight";
 import { useEffect, useState } from "react";
@@ -20,12 +20,15 @@ import { board } from "@/store/atoms/board";
 import { PromotPeice } from '@/components'
 import { GameFinished } from "@/store/atoms/gameFilnished";
 import { OpenGameOver } from "@/store/atoms/opengameover";
+import { IsOfferDrawOpen } from "@/store/atoms/isOfferDrawOpen";
 let socket =io("http://localhost:3001");
 
 export default function Game() {
   const { data: session, status } = useSession()  
   // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
+  const [draw,setDraw]=useState(false)
+  const [requested,setRequested]=useState('')
   const {id} = useParams()
   const turn=useRecoilValue(Turn)
   const setMessages=useSetRecoilState(Messages)
@@ -37,6 +40,7 @@ export default function Game() {
   const setTurn=useSetRecoilState(Turn)
   const setHistory=useSetRecoilState(History)
   const isWhiteSide=useRecoilValue(WhiteSideIs)
+  const setIsOfferDrawOpen=useSetRecoilState(IsOfferDrawOpen)
 
   const checkForwhiteSIde=async ()=>{
     let email=session?.user?.email
@@ -57,12 +61,16 @@ export default function Game() {
         setGameFinished(true)
         setShrLink(false)
         setOpenGameOver(true)
-        if(res2.data.existingGameInstance.won==='white'){
-          if(isWhiteSide)setWhoWon(true)
-          else setWhoWon(false)
+        if(res2.data.existingGameInstance.gameStatus==='draw'){
+          setDraw(true)
         }else{
-          if(!isWhiteSide)setWhoWon(true)
-          else setWhoWon(false)
+          if(res2.data.existingGameInstance.won==='white'){
+            if(isWhiteSide)setWhoWon(true)
+            else setWhoWon(false)
+          }else{
+            if(!isWhiteSide)setWhoWon(true)
+            else setWhoWon(false)
+          }
         }
       }
     }
@@ -74,6 +82,21 @@ export default function Game() {
       await socket.on("connect", async () => {
         console.log("SOCKET CONNECTED!", socket.id);
         await socket.emit('joinRoom', id,email);
+      });
+
+      await socket.on("receive_draw_req", async (email) => {
+        if(session?.user?.email!==email){
+        setRequested(email)
+        setIsOfferDrawOpen(true)
+        }
+      });
+      
+      await socket.on("draw_accepted", async (email) => {
+        if(session?.user?.email!==email){
+          setGameFinished(true)
+          setOpenGameOver(true)
+        }
+        setDraw(true)
       });
 
       socket.on('error', function (data) {
@@ -152,10 +175,11 @@ export default function Game() {
     <main className='flex justify-center items-center bg-black'>
       <CopyLink/>
       <PromotPeice/>
-      <GameOver whoWon={whoWon} />
+      <OfferDraw requested={requested} socket={socket} />
+      <GameOver whoWon={whoWon} draw={draw} />
       <BackDrop/>
       <div className='flex flex-row justify-center items-center h-auto w-[100vw] xs:w-[97vw]'>
-        <Left/>
+        <Left socket={socket} />
 
         <div className='chessboard relative h-[100vh] w-[55%] bg-[#222222e6] flex flex-col justify-center items-center'>
           <audio src="/capture.mp3" id="capture"></audio>

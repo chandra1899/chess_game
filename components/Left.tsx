@@ -7,6 +7,8 @@ import { History } from '@/store/atoms/history'
 import { GameFinished } from '@/store/atoms/gameFilnished'
 import { board } from '@/store/atoms/board'
 import { FormEventHandler, KeyboardEventHandler } from 'react';
+import { useSession } from 'next-auth/react'
+import { useParams } from 'next/navigation'
 
 const valueToLetter=['A','B','C','D','E','F','G','H'];
 
@@ -40,11 +42,13 @@ const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,s
   )
 }
 
-const Left = () => {
+const Left = ({socket}:{socket:any}) => {
   const history:any=useRecoilValue(History)
   const gameFinished:any=useRecoilValue(GameFinished)
   const [selected,setSelected]=useState(0)
   const setBoard=useSetRecoilState(board)
+  const { data: session, status } = useSession() 
+  const {id} = useParams()
   
   useEffect(()=>{
     setSelected(history.length-1)
@@ -73,6 +77,10 @@ const Left = () => {
     }
    }
 
+   const handleEmitDraw=async ()=>{
+    await socket.emit('receive_draw_req',session?.user?.email,id)
+   }
+
   return (
     <div className='h-[100vh] hidden xs:block w-[23%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
       <div className='h-[100%] w-[100%] overflow-y-scroll pb-10' tabIndex={0} onKeyUp={handleKeyMove} >
@@ -95,7 +103,7 @@ const Left = () => {
       }
         )}}
       />
-       {!gameFinished && <button className='text-[15px] text-black font-bold bg-yellow-300 hover:bg-yellow-400 cursor-pointer p-1 px-2 rounded-r-full rounded-l-full'>Offer Draw</button>}
+       {!gameFinished && <button className='text-[15px] text-black font-bold bg-yellow-300 hover:bg-yellow-400 cursor-pointer p-1 px-2 rounded-r-full rounded-l-full' onClick={handleEmitDraw} >Offer Draw</button>}
        <Image
       height={30}
       width={30}

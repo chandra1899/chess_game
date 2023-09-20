@@ -110,22 +110,24 @@ const Board = ({socket}:{socket:any}) => {
             setHighlightedBox([[]])
         }else if(selectedSol.length!==0){
             if(isHighlighted(row,col,highlightedBox)){
-                
+                let data={
+                    from:[selectedSol[0],selectedSol[1]],
+                    to:[row,col],
+                    roomId:id,
+                    isWhiteSide,
+                    board:boardState
+                }
                 setBoardState((pre)=>{
                     const newBoard=pre.map(innerArray => [...innerArray])
                     newBoard[row][col]=newBoard[selectedSol[0]][selectedSol[1]]
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     saveBoardHistory(newBoard,selectedSol,[row,col])
                     // console.log(newBoard);
+                    data.board=newBoard
                     return newBoard
                 })
                 setTurn((pre)=>!pre)
-                let data={
-                    from:[selectedSol[0],selectedSol[1]],
-                    to:[row,col],
-                    roomId:id,
-                    isWhiteSide
-                }
+                
                 await socket.emit('move',data)
                 setHistory((pre)=>[...pre,data])
                 if(boardState[row][col]===""){

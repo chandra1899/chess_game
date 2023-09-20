@@ -55,6 +55,16 @@ const io = new Server(httpServer, {
     // socket.to(data.roomId).emit("receive_msg", data);
   });
 
+  await socket.on("receive_draw_req", async (email,roomName) => {
+    console.log("email",email);
+      await io.to(roomName).emit("receive_draw_req",email);    
+  });
+
+  await socket.on("draw_accepted", async (email,roomName) => {
+    console.log("email",email);
+      await io.to(roomName).emit("draw_accepted",email);    
+  });
+
   socket.on('disconnect', async function () {
     // let disconnectionMessage = socket.email + " Disconnected from Socket and room " + socket.roomName;
     let res=await fetch('http://localhost:3000/api/setdisconnected',{

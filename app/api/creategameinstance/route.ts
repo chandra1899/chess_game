@@ -19,25 +19,27 @@ export async function POST(req:Request){
         await connectMongoDB()
         let existingGameInstance:gametype | null=await Game.findOne({roomName})
         if(existingGameInstance){
-            if(isWhiteSide){
-                if((Date.now()-existingGameInstance.whiteDisconnected)>=600000){
-                    existingGameInstance.gameStatus='gameOver'
-                }
-            }else{
-                if(existingGameInstance.blackDisconnected===undefined){
-                    existingGameInstance.black=email
-                }else if((Date.now()-existingGameInstance.blackDisconnected)>=600000){
-                    existingGameInstance.gameStatus='gameOver'
-                }
-            }
-            if(existingGameInstance.gameStatus==='gameOver'){
-                if((Date.now()-existingGameInstance.whiteDisconnected)<(Date.now()-existingGameInstance.blackDisconnected)){
-                    existingGameInstance.won='white'
+            if(existingGameInstance.gameStatus!=='draw'){
+                if(isWhiteSide){
+                    if((Date.now()-existingGameInstance.whiteDisconnected)>=600000){
+                        existingGameInstance.gameStatus='gameOver'
+                    }
                 }else{
-                    existingGameInstance.won='black'
+                    if(existingGameInstance.blackDisconnected===undefined){
+                        existingGameInstance.black=email
+                    }else if((Date.now()-existingGameInstance.blackDisconnected)>=600000){
+                        existingGameInstance.gameStatus='gameOver'
+                    }
                 }
+                if(existingGameInstance.gameStatus==='gameOver'){
+                    if((Date.now()-existingGameInstance.whiteDisconnected)<(Date.now()-existingGameInstance.blackDisconnected)){
+                        existingGameInstance.won='white'
+                    }else{
+                        existingGameInstance.won='black'
+                    }
+                }
+                await existingGameInstance.save()
             }
-            await existingGameInstance.save()
         }else{
             existingGameInstance=await Game.create({
                 white:email,

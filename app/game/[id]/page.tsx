@@ -21,6 +21,7 @@ import { PromotPeice } from '@/components'
 import { GameFinished } from "@/store/atoms/gameFilnished";
 import { OpenGameOver } from "@/store/atoms/opengameover";
 import { IsOfferDrawOpen } from "@/store/atoms/isOfferDrawOpen";
+import { CheckToOppo } from "@/store/atoms/checkToOppo";
 let socket =io("http://localhost:3001");
 
 export default function Game() {
@@ -32,6 +33,7 @@ export default function Game() {
   const {id} = useParams()
   const turn=useRecoilValue(Turn)
   const setMessages=useSetRecoilState(Messages)
+  const setCheckToOppo=useSetRecoilState(CheckToOppo)
   const setGameFinished=useSetRecoilState(GameFinished)
   const setOpenGameOver=useSetRecoilState(OpenGameOver)
   const setBoard=useSetRecoilState(board)
@@ -57,6 +59,11 @@ export default function Game() {
       if(res2.data.existingGameInstance.gameStatus==='running'){
         setGameFinished(false)
         setShrLink(true)
+        if(isWhiteSide){  
+        setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack)
+      }else{
+        setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack.checkBlackToWhite)
+        }
       }else{     
         setGameFinished(true)
         setShrLink(false)
@@ -113,7 +120,7 @@ export default function Game() {
     useEffect(()=>{
       setBoard([
         ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
-        ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎"],
+        ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♗", "♟︎", "♟︎"],
         ["", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", ""],

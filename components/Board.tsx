@@ -26,6 +26,7 @@ import { Turn } from '@/store/atoms/turn';
 import { History } from '@/store/atoms/history';
 import axios from 'axios';
 import { GameFinished } from '@/store/atoms/gameFilnished';
+import { CheckToOppo } from '@/store/atoms/checkToOppo';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
@@ -42,6 +43,7 @@ const Board = ({socket}:{socket:any}) => {
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
+    const setCheckToOppo=useSetRecoilState(CheckToOppo)
     const setHighlightedOppoMoveBox=useSetRecoilState(highlightedOppoMoveArray)
     const setIsOurKingCheck=useSetRecoilState(isOurKingChecked)
     const setIsOppoKingCheck=useSetRecoilState(isOppoKingChecked)
@@ -92,6 +94,15 @@ const Board = ({socket}:{socket:any}) => {
             
         }
     }
+
+    const handleUpdateOppoCheck=async ()=>{
+        let res=await axios.post('/api/updateoppokingcheck',{
+            roomName:id,isWhiteSide
+        })
+        if(res.status===200){
+            
+        }
+    }
   
   const handleOnClick=async (row:number,col:number)=>{
     if(!turn) return;
@@ -127,7 +138,13 @@ const Board = ({socket}:{socket:any}) => {
                     return newBoard
                 })
                 setTurn((pre)=>!pre)
-                
+                setCheckToOppo((pre)=>{
+                    if(isOppoKingCheck){
+                        handleUpdateOppoCheck()
+                        return pre+1
+                    }
+                    return pre
+                })                
                 await socket.emit('move',data)
                 setHistory((pre)=>[...pre,data])
                 if(boardState[row][col]===""){

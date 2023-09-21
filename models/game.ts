@@ -26,6 +26,14 @@ const gameSchema=new Schema({
     blackDisconnected:{
         type:Number,
     },
+    checkWhiteToBlack:{
+        type:Number,
+        default:0
+    },
+    checkBlackToWhite:{
+        type:Number,
+        default:0
+    },
 },{timestamps:true})
 
 const Game = models?.Game || mongoose.model('Game',gameSchema)

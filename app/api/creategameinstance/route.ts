@@ -19,7 +19,7 @@ export async function POST(req:Request){
         await connectMongoDB()
         let existingGameInstance:gametype | null=await Game.findOne({roomName})
         if(existingGameInstance){
-            if(existingGameInstance.gameStatus!=='draw'){
+            if(existingGameInstance.gameStatus==='running'){
                 if(isWhiteSide){
                     if((Date.now()-existingGameInstance.whiteDisconnected)>=600000){
                         existingGameInstance.gameStatus='gameOver'

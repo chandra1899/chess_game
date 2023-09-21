@@ -58,8 +58,9 @@ export default function Game() {
     if(res2.status===200){
       if(res2.data.existingGameInstance.gameStatus==='running'){
         setGameFinished(false)
-        setShrLink(true)
+        setShrLink(true)       
         if(isWhiteSide){  
+          console.log('in check oppo king check 1st'); 
         setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack)
       }else{
         setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack.checkBlackToWhite)
@@ -106,6 +107,16 @@ export default function Game() {
         setDraw(true)
       });
 
+      await socket.on("game_over", async (email) => {
+        if(session?.user?.email===email){
+          setWhoWon(true)
+        }else {
+          setWhoWon(false)
+        }
+        setGameFinished(true)
+        setOpenGameOver(true)
+      });
+
       socket.on('error', function (data) {
         console.log(data || 'error');
       });
@@ -119,11 +130,11 @@ export default function Game() {
 
     useEffect(()=>{
       setBoard([
-        ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
+        ["♜", "♞", "♝", "♛", "", "♝", "♞", "♜"],
         ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♗", "♟︎", "♟︎"],
         ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
+        ["", "♔", "", "", "", "", "", ""],
+        ["♜", "", "", "", "", "", "", ""],
         ["", "", "", "", "", "", "", ""],
         ["♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙"],
         ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],

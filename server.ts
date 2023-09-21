@@ -60,6 +60,11 @@ const io = new Server(httpServer, {
       await io.to(roomName).emit("receive_draw_req",email);    
   });
 
+  await socket.on("game_over", async (roomName,email) => {
+    console.log("email",email);
+      await io.to(roomName).emit("game_over",email);  
+  });
+
   await socket.on("draw_accepted", async (email,roomName) => {
     console.log("email",email);
       await io.to(roomName).emit("draw_accepted",email);    

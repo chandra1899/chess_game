@@ -27,12 +27,16 @@ import { History } from '@/store/atoms/history';
 import axios from 'axios';
 import { GameFinished } from '@/store/atoms/gameFilnished';
 import { CheckToOppo } from '@/store/atoms/checkToOppo';
+import { resourceLimits } from 'worker_threads';
+import { Session } from 'inspector';
+import { useSession } from 'next-auth/react';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
 
 const Board = ({socket}:{socket:any}) => {
     // const [rerender,setRerender]=useState(true)
+    const { data: session, status } = useSession()  
     const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
     const gameFinished=useRecoilValue(GameFinished)
@@ -95,12 +99,25 @@ const Board = ({socket}:{socket:any}) => {
         }
     }
 
+    const handlegameover=async ()=>{
+        let res=await axios.post('/api/gameover',{
+            roomName:id,isWhiteSide
+        })
+        if(res.status===200){
+            // console.log('gameover');
+            await socket.emit('game_over',id,session?.user?.email)
+        }
+    }
+
     const handleUpdateOppoCheck=async ()=>{
         let res=await axios.post('/api/updateoppokingcheck',{
             roomName:id,isWhiteSide
         })
         if(res.status===200){
-            
+            // console.log('nice');
+            if((isWhiteSide && res.data.existingGameInstance.checkWhiteToBlack>=16) || (!isWhiteSide && res.data.existingGameInstance.checkBlackToWhite>=16)){
+                handlegameover()
+            }
         }
     }
   
@@ -138,13 +155,9 @@ const Board = ({socket}:{socket:any}) => {
                     return newBoard
                 })
                 setTurn((pre)=>!pre)
-                setCheckToOppo((pre)=>{
-                    if(isOppoKingCheck){
-                        handleUpdateOppoCheck()
-                        return pre+1
-                    }
-                    return pre
-                })                
+                if(checkOppositeKingCheckmate(data.board,isWhiteSide)){
+                    handleUpdateOppoCheck()
+                }               
                 await socket.emit('move',data)
                 setHistory((pre)=>[...pre,data])
                 if(boardState[row][col]===""){

@@ -127,3 +127,83 @@ export const attackBlocksForRooks=(row:number,col:number,fromWhiteSide:boolean,n
     }
     return false;
 }
+
+const checkPawnHasMove=(row:number,col:number,isWhiteSide:boolean,newBoard:string[][])=>{
+    //1st side
+    let newRow1=row-1;
+    let newCol1=col;
+    while(isValid(newRow1,newCol1) && newBoard[newRow1][newCol1]==="" ){
+        if(!isOkToMove(row,col,newRow1,newCol1,newBoard,isWhiteSide)){
+            newRow1--
+            continue
+        }
+        return true
+        newRow1--
+    }
+    if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1,newBoard)) || (!isWhiteSide && isWhite(newRow1,newCol1,newBoard))) && isOkToMove(row,col,newRow1,newCol1,newBoard,isWhiteSide)){
+        return true
+    }
+    //2st side
+    let newRow2=row+1;
+    let newCol2=col;
+    while(isValid(newRow2,newCol2) && newBoard[newRow2][newCol2]===""){
+        if(!isOkToMove(row,col,newRow2,newCol2,newBoard,isWhiteSide)){
+            newRow2++
+            continue
+        }
+        // console.log('hello2');
+        return true
+        newRow2++
+    }
+    if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2,newBoard)) || (!isWhiteSide && isWhite(newRow2,newCol2,newBoard))) && isOkToMove(row,col,newRow2,newCol2,newBoard,isWhiteSide)){
+        return true
+    }
+    //3rd side
+    let newRow3=row;
+    let newCol3=col-1;
+    while(isValid(newRow3,newCol3) && newBoard[newRow3][newCol3]===""){
+        if(!isOkToMove(row,col,newRow3,newCol3,newBoard,isWhiteSide)){
+            newCol3--
+            continue
+        }
+        // console.log('hello2');
+        return true
+        newCol3--
+    }
+    if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3,newBoard)) || (!isWhiteSide && isWhite(newRow3,newCol3,newBoard))) && isOkToMove(row,col,newRow3,newCol3,newBoard,isWhiteSide)){
+        return true
+    }
+    //4rth side
+    let newRow4=row;
+    let newCol4=col+1;
+    while(isValid(newRow4,newCol4) && newBoard[newRow4][newCol4]===""){
+        // console.log('hello2');
+        if(!isOkToMove(row,col,newRow4,newCol4,newBoard,isWhiteSide)){
+            newCol4++
+            continue
+        }
+        return true
+        newCol4++
+    }
+    if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4,newBoard)) || (!isWhiteSide && isWhite(newRow4,newCol4,newBoard))) && isOkToMove(row,col,newRow4,newCol4,newBoard,isWhiteSide)){
+        return true
+    }
+    return false
+}
+
+export const checkOppoRookHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
+    //for Rooks
+    let IndexsforRooks
+    if(!isWhiteSide){
+        IndexsforRooks=getWhiteRookIndex(newboard)
+    }else{
+        IndexsforRooks=getBlackRookIndex(newboard)
+    }
+   for(let i=0;i<IndexsforRooks.length;i++) {
+    if(checkPawnHasMove(IndexsforRooks[i][0],IndexsforRooks[i][1],!isWhiteSide,newboard)){
+        console.log('true from rook');
+            return true;
+        }
+   }
+   return false
+}

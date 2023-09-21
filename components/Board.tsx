@@ -15,11 +15,11 @@ import { isWhite } from '@/utils/checkForColor';
 import { isHighlighted, isHighlightedOppoMove } from '@/utils/isHighlighted';
 import { checkOurKingCheckmate } from '@/utils/checkOurKingCheckmate';
 import { checkOppositeKingCheckmate } from '@/utils/checkOppositeKingCheckmate';
-import { hightlightBlocksForRook } from '@/utils/pieces/rook';
-import { hightlightBlocksForBishop } from '@/utils/pieces/bishop';
-import { hightlightBlocksForKing } from '@/utils/pieces/king';
-import { hightlightBlocksForKnight } from '@/utils/pieces/knight';
-import { hightlightBlocksForPawns } from '@/utils/pieces/pawn';
+import { checkOppoRookHasMove, hightlightBlocksForRook } from '@/utils/pieces/rook';
+import { checkOppoBishopHasMove, hightlightBlocksForBishop } from '@/utils/pieces/bishop';
+import { checkOppoKingHasMove, hightlightBlocksForKing } from '@/utils/pieces/king';
+import { checkOppoKnightsHasMove, hightlightBlocksForKnight } from '@/utils/pieces/knight';
+import { checkOppoPawnsHasMove, hightlightBlocksForPawns } from '@/utils/pieces/pawn';
 import { useParams } from 'next/navigation';
 import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
 import { Turn } from '@/store/atoms/turn';
@@ -56,6 +56,13 @@ const Board = ({socket}:{socket:any}) => {
     const selectedSol=useRecoilValue(selected) 
     const setTurn=useSetRecoilState(Turn)
     const setHistory=useSetRecoilState(History)
+
+    const handleOppoHasNoMove=(newboard:string[][])=>{
+        if(checkOppoPawnsHasMove(newboard,isWhiteSide) || checkOppoRookHasMove(newboard,isWhiteSide) || checkOppoBishopHasMove(newboard,isWhiteSide) || checkOppoKnightsHasMove(newboard,isWhiteSide) || checkOppoKingHasMove(newboard,isWhiteSide)){
+            return true
+        }
+        return false    
+    }
 
     const hightlightBlocks=(row:number,col:number)=>{
        
@@ -160,6 +167,11 @@ const Board = ({socket}:{socket:any}) => {
                 }               
                 await socket.emit('move',data)
                 setHistory((pre)=>[...pre,data])
+
+                if(!handleOppoHasNoMove(data.board)){
+                    handlegameover()
+                }
+
                 if(boardState[row][col]===""){
                     //play move_Self
                     document.getElementById('move_self')?.play()

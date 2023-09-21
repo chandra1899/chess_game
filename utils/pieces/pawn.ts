@@ -84,3 +84,59 @@ export const attackBlocksForPawns=(row:number,col:number,fromWhiteSide:boolean,n
     }
   
 }
+
+const checkPawnHasMove=(row:number,col:number,newboard:string[][],isWhiteSide:boolean)=>{
+    if(isWhiteSide){
+        if(isValid(row-1,col) && newboard[row-1][col]===""){
+            if(isValid(row-1,col) && isOkToMove(row,col,row-1,col,newboard,isWhiteSide))
+            return true
+            if(row===6){
+                if(isValid(row-2,col) && newboard[row-2][col]==="" && isOkToMove(row,col,row-2,col,newboard,isWhiteSide)){
+                    return true
+                }
+            }
+        }
+        if(isValid(row-1,col-1) && isBlack(row-1,col-1,newboard) && isOkToMove(row,col,row-1,col-1,newboard,isWhiteSide)){
+            return true
+        }
+        if( isValid(row-1,col+1) && isBlack(row-1,col+1,newboard) && isOkToMove(row,col,row-1,col+1,newboard,isWhiteSide)){
+            return true
+        }
+    }
+    else{
+        if(isValid(row+1,col) && newboard[row+1][col]===""){
+            if(isValid(row+1,col) && isOkToMove(row,col,row+1,col,newboard,isWhiteSide))
+            return true
+            if(row===1){
+                if(isValid(row+2,col) && newboard[row+2][col]==="" && isOkToMove(row,col,row+2,col,newboard,isWhiteSide)){
+                    return true
+                }
+            }
+        }
+        if(isValid(row+1,col+1) && isWhite(row+1,col+1,newboard) && isOkToMove(row,col,row+1,col+1,newboard,isWhiteSide)){
+            return true
+        }
+        if( isValid(row+1,col-1) && isWhite(row+1,col-1,newboard) && isOkToMove(row,col,row+1,col-1,newboard,isWhiteSide)){
+            return true
+        }
+    } 
+    return false
+}
+
+export const checkOppoPawnsHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
+     //for pawns
+     let IndexsPawns
+     if(!isWhiteSide){
+         IndexsPawns=getWhitePawnsIndex(newboard)
+     }else{
+         IndexsPawns=getBlackPawnsIndex(newboard)
+     }
+    for(let i=0;i<IndexsPawns.length;i++) {
+     if(checkPawnHasMove(IndexsPawns[i][0],IndexsPawns[i][1],newboard,!isWhiteSide)){
+        console.log('true from pawn');
+        
+        return true;
+     }
+    }
+    return false
+}

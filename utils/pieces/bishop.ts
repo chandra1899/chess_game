@@ -140,3 +140,92 @@ export const attackBlocksForBishops=(row:number,col:number,fromWhiteSide:boolean
     }
     return false
 }
+
+const checkBishopsHasMove=(row:number,col:number,isWhiteSide:boolean,newBoard:string[][])=>{    
+     //1st side
+     let newRow1=row-1;
+     let newCol1=col-1;
+     while(isValid(newRow1,newCol1) && newBoard[newRow1][newCol1]==="" ){
+        if(!isOkToMove(row,col,newRow1,newCol1,newBoard,isWhiteSide)){
+            newRow1--
+            newCol1--
+            continue
+        }
+        //  console.log('hello2');
+         return true
+         newRow1--
+         newCol1--
+     }
+     if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1,newBoard)) || (!isWhiteSide && isWhite(newRow1,newCol1,newBoard)))){
+        return true
+     }
+     //2st side
+     let newRow2=row+1;
+     let newCol2=col+1;
+     while(isValid(newRow2,newCol2) && newBoard[newRow2][newCol2]===""){
+        if(!isOkToMove(row,col,newRow2,newCol2,newBoard,isWhiteSide)){
+            newRow2++
+            newCol2++
+            continue
+        }
+         // console.log('hello2');
+         return true
+         newRow2++
+         newCol2++
+     }
+     if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2,newBoard)) || (!isWhiteSide && isWhite(newRow2,newCol2,newBoard)))){
+        return true
+     }
+     //3rd side
+     let newRow3=row+1;
+     let newCol3=col-1;
+     while(isValid(newRow3,newCol3) && newBoard[newRow3][newCol3]===""){
+        if(!isOkToMove(row,col,newRow3,newCol3,newBoard,isWhiteSide)){
+            newCol3--
+            newRow3++
+            continue
+        }
+         // console.log('hello2');
+         return true
+         newCol3--
+         newRow3++
+     }
+     if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3,newBoard)) || (!isWhiteSide && isWhite(newRow3,newCol3,newBoard)))){
+        return true
+     }
+     //4rth side
+     let newRow4=row-1;
+     let newCol4=col+1;
+     while(isValid(newRow4,newCol4) && newBoard[newRow4][newCol4]===""){
+        if(!isOkToMove(row,col,newRow4,newCol4,newBoard,isWhiteSide)){
+            newCol4++
+            newRow4--
+            continue
+        }
+         // console.log('hello2');
+         return true
+         newCol4++
+         newRow4--
+     }
+     if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4,newBoard)) || (!isWhiteSide && isWhite(newRow4,newCol4,newBoard)))){
+        return true
+     }
+    return false
+}
+
+export const checkOppoBishopHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
+    //for Bishops
+    let IndexsforBishops
+    if(!isWhiteSide){
+        IndexsforBishops=getWhiteBishopIndex(newboard)
+    }else{
+        IndexsforBishops=getBlackBishopIndex(newboard)
+    }
+   for(let i=0;i<IndexsforBishops.length;i++) {
+    if(checkBishopsHasMove(IndexsforBishops[i][0],IndexsforBishops[i][1],!isWhiteSide,newboard)){
+        console.log('true from bishop');
+        return true;
+    }
+   }
+   return false
+}

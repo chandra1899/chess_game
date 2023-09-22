@@ -30,7 +30,7 @@ export default function Home() {
 
         </div>      
 
-        <button className='h-[98%] mt-1 w-[75px] rounded-md bg-violet-700 font-medium hover:bg-violet-800 text-white ml-12'>Log Out</button>
+        <button className='h-[98%] mt-1 w-[75px] rounded-md bg-violet-700 font-medium hover:bg-violet-800 text-white ml-12'  onClick={async()=>{await signOut()}} >Log Out</button>
       </nav>
 
       <div className='flex flex-row justify-around'>

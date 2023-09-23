@@ -22,7 +22,7 @@ import { GameFinished } from "@/store/atoms/gameFilnished";
 import { OpenGameOver } from "@/store/atoms/opengameover";
 import { IsOfferDrawOpen } from "@/store/atoms/isOfferDrawOpen";
 import { CheckToOppo } from "@/store/atoms/checkToOppo";
-let socket =io("http://localhost:3001");
+const socket =io("https://royalcheckmate.onrender.com/");
 
 export default function Game() {
   const { data: session, status } = useSession()  
@@ -51,7 +51,19 @@ export default function Game() {
       email,roomName:id,
     })
     setWhiteSideIs(res.data.isWhiteSide)
-    setTurn(res.data.isWhiteSide)
+    if(isWhiteSide){
+      if(res.data.turn==='white'){
+        setTurn(true)
+      }else{
+        setTurn(false)
+      }
+    }else{
+      if(res.data.turn==='black'){
+        setTurn(true)
+      }else{
+        setTurn(false)
+      }
+    }
     let res2=await axios.post('/api/creategameinstance',{
       email,roomName:id,isWhiteSide:res.data.isWhiteSide
     })
@@ -87,9 +99,9 @@ export default function Game() {
   const socketFunction=async ()=>{
     let email=session?.user?.email
     if(!email) return ;
-      await socket.on("connect", async () => {
-        console.log("SOCKET CONNECTED!", socket.id);
+    await socket.on("connect", async () => {
         await socket.emit('joinRoom', id,email);
+        console.log("SOCKET CONNECTED!", socket.id);
       });
 
       await socket.on("receive_draw_req", async (email) => {

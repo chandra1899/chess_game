@@ -1,6 +1,7 @@
 {
   "name": "chess_game",
   "version": "0.1.0",
+  "include": ["server"],
   "private": true,
   "scripts": {
     "dev": "next dev",

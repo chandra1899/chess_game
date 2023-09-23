@@ -10,6 +10,7 @@ interface gametype {
     won:string
     whiteDisconnected:number
     blackDisconnected:number
+    save:()=>any
 }
 
 export async function POST(req:Request){

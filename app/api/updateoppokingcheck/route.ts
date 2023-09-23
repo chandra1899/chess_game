@@ -12,6 +12,7 @@ interface gametype {
     blackDisconnected:number
     checkWhiteToBlack:number
     checkBlackToWhite:number
+    save:()=>any
 }
 
 export async function POST(req:Request){

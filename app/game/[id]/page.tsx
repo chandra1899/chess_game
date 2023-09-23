@@ -51,18 +51,12 @@ export default function Game() {
       email,roomName:id,
     })
     setWhiteSideIs(res.data.isWhiteSide)
-    if(isWhiteSide){
-      if(res.data.turn==='white'){
-        setTurn(true)
-      }else{
-        setTurn(false)
-      }
+    console.log(res.data.turn);
+    
+    if((res.data.turn==='white' && isWhiteSide) || (res.data.turn==='black' && !isWhiteSide)){
+      setTurn(true)
     }else{
-      if(res.data.turn==='black'){
-        setTurn(true)
-      }else{
-        setTurn(false)
-      }
+      setTurn(false)
     }
     let res2=await axios.post('/api/creategameinstance',{
       email,roomName:id,isWhiteSide:res.data.isWhiteSide

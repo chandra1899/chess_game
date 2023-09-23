@@ -20,7 +20,7 @@ export async function POST(req:Request){
         let grphistory=await BoardState.find({roomName}).sort('-createdAt')
         console.log(grphistory);
         
-        if(grphistory && grphistory[0].isWhiteSide){
+        if(grphistory&& grphistory[0] && grphistory[0].isWhiteSide){
           turn='black'
         }
         if(existRoomName.email!==email){
@@ -29,6 +29,8 @@ export async function POST(req:Request){
       }    
         return NextResponse.json({isWhiteSide,turn},{status:200})
     } catch (error) {
+      console.log(error);
+      
         return NextResponse.json({message:'server error'},{status:500})
     }
 }

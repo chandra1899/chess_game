@@ -15,7 +15,7 @@ const CopyLink = () => {
   const setShrLink=useSetRecoilState(shareLink)
   const {id} = useParams()
   const handleCopiedClick=()=>{
-    navigator.clipboard.writeText(`http://localhost:3000/game/${id}`);
+    navigator.clipboard.writeText(`${process.env.NEXTAUTH_URL}game/${id}`);
     setCopied(true)
   setTimeout(function () {
     setCopied(false)
@@ -36,7 +36,7 @@ const CopyLink = () => {
       />
         </div>
        <div className='flex flex-row justify-center items-center mb-4'>
-       <input type="text" disabled value={`http://localhost:3000/game/${id}`} className={`bg-transparent bg-[#2c2c2c] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[37px] py-2 px-3  rounded-md outline-none border-blue border-[0.1rem] focus:border-solid font-medium m-2 w-[90%] pr-10`} />
+       <input type="text" disabled value={`${process.env.NEXTAUTH_URL}/game/${id}`} className={`bg-transparent bg-[#2c2c2c] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[37px] py-2 px-3  rounded-md outline-none border-blue border-[0.1rem] focus:border-solid font-medium m-2 w-[90%] pr-10`} />
        <div className='text-white'>
        
       {copied?<div className='-ml-10'>

@@ -4,20 +4,21 @@ import GoogleProvider from 'next-auth/providers/google'
 import { connectMongoDB } from '@/config/mongoose' 
 import User from '@/models/user'
 import bcrypt from 'bcryptjs'
+import { AuthOptions } from 'next-auth'
 
 interface Credentials {
     username: string;
     password: string;
   }
 
-export const authOptions={
+export const authOptions:AuthOptions={
     providers:[
         CredentialsProvider({
             name:'credentials',
             credentials:{},
 
             async authorize(credentials){
-                const {email,password}:Credentials =credentials
+                const {email,password}:any =credentials
                 console.log('email',email);
                 console.log('pass',password);
                 
@@ -50,7 +51,7 @@ export const authOptions={
         signIn:'/login'
     },
     callbacks: {
-        async signIn({ user, account }) {
+        async signIn({ user, account }:any) {
             console.log('userdfg',user);
             console.log('acctdf',account);
             // return user

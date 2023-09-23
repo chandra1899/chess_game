@@ -1,7 +1,9 @@
 {
   "name": "chess_game",
   "version": "0.1.0",
-  "include": ["server"],
+  "include": [
+    "server"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -34,5 +36,8 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.4"
   }
 }

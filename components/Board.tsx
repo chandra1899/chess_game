@@ -209,39 +209,6 @@ const Board = ({socket}:{socket:any}) => {
     // }
   },[boardState])
 
-  const socketOnMove=async ()=>{
-    await socket.on('moved',(data:any)=>{
-        console.log(data);
-
-       if(data.isWhiteSide!==isWhiteSide){
-        setHistory((pre:any)=>[...pre,data])
-        setBoardState((pre)=>{
-            const newBoard=pre.map(innerArray => [...innerArray])
-            newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]
-            newBoard[data.from[0]][data.from[1]]=""
-            return newBoard
-        })
-        setTurn((pre)=>!pre)
-        setHighlightedBox([])
-        setHighlightedOppoMoveBox([data.from,data.to])
-        if(boardState[data.to[0]][data.to[1]]===""){
-            //play move_Self
-            const song1:any=document.getElementById('move_self')
-            song1?.play()
-
-        }else{
-            //play capture
-            const song2:any=document.getElementById('capture')
-            song2?.play()
-        }
-       }
-        
-    })
-  }
-  
-  useEffect(()=>{
-    socketOnMove()
-  },[socket])
   return (
     <div className={`h-auto w-[99%vw] xs:w-[100%] flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
                 {rows.map((row,rowIndex)=>(

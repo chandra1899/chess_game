@@ -22,12 +22,14 @@ import { GameFinished } from "@/store/atoms/gameFilnished";
 import { OpenGameOver } from "@/store/atoms/opengameover";
 import { IsOfferDrawOpen } from "@/store/atoms/isOfferDrawOpen";
 import { CheckToOppo } from "@/store/atoms/checkToOppo";
+import { highlightedOppoMoveArray } from "@/store/atoms/highlightOppoMove";
 const socket =io("https://royalcheckmate.onrender.com/");
 
 export default function Game() {
   const { data: session, status } = useSession()  
   // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
+  const setBoardState=useSetRecoilState(board)
   const [draw,setDraw]=useState(false)
   const [requested,setRequested]=useState('')
   const {id} = useParams()
@@ -43,6 +45,9 @@ export default function Game() {
   const setHistory=useSetRecoilState(History)
   const isWhiteSide=useRecoilValue(WhiteSideIs)
   const setIsOfferDrawOpen=useSetRecoilState(IsOfferDrawOpen)
+  const setHighlightedBox=useSetRecoilState(highlightedArray)
+  const boardState=useRecoilValue(board)
+  const setHighlightedOppoMoveBox=useSetRecoilState(highlightedOppoMoveArray)
 
   const checkForwhiteSIde=async ()=>{
     let email=session?.user?.email
@@ -139,7 +144,34 @@ export default function Game() {
         console.log(data || 'connect_failed');
       });
 
-      // if (socket) return () => socket.disconnect();
+      await socket.on('moved',(data:any)=>{
+        console.log(data);
+
+       if(data.isWhiteSide!==isWhiteSide){
+        setHistory((pre:any)=>[...pre,data])
+        setBoardState((pre)=>{
+            const newBoard=pre.map(innerArray => [...innerArray])
+            newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]
+            newBoard[data.from[0]][data.from[1]]=""
+            return newBoard
+        })
+        setTurn((pre)=>!pre)
+        setHighlightedBox([])
+        setHighlightedOppoMoveBox([data.from,data.to])
+        if(boardState[data.to[0]][data.to[1]]===""){
+            //play move_Self
+            const song1:any=document.getElementById('move_self')
+            song1?.play()
+
+        }else{
+            //play capture
+            const song2:any=document.getElementById('capture')
+            song2?.play()
+        }
+       }
+        
+    })
+      
     }
 
     useEffect(()=>{

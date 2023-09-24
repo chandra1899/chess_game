@@ -161,12 +161,12 @@ const Board = ({socket}:{socket:any}) => {
                     data.board=newBoard
                     return pre
                 })
-                setTurn((pre)=>!pre)
+                // setTurn((pre)=>!pre)
                 if(checkOppositeKingCheckmate(data.board,isWhiteSide)){
                     handleUpdateOppoCheck()
                 }               
                 await socket.emit('move',data)
-                setHistory((pre:any)=>[...pre,data])
+                // setHistory((pre:any)=>[...pre,data])
 
                 if(!handleOppoHasNoMove(data.board)){
                     handlegameover()

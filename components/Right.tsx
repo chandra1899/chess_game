@@ -55,15 +55,6 @@ const Right = ({socket}:{socket:any}) => {
       }
       
     }
-    useEffect(()=>{
-      socket.on('receive_msg',(data:any)=>{
-        console.log(data);
-        if(data.isWhiteSide!==isWhiteSide){
-          setMessages((pre:any)=>[...pre,data])
-        }
-        
-      })
-    },[socket])
     useEffect(() => {
       if(scrollRef.current){
         scrollRef.current.scrollTop = scrollRef.current.scrollHeight;

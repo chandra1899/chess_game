@@ -123,6 +123,14 @@ export default function Game() {
         setOpenGameOver(true)
       });
 
+      await socket.on('receive_msg',(data:any)=>{
+        console.log(data);
+        if(data.isWhiteSide!==isWhiteSide){
+          setMessages((pre:any)=>[...pre,data])
+        }
+        
+      })
+
       socket.on('error', function (data) {
         console.log(data || 'error');
       });

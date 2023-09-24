@@ -26,7 +26,8 @@ import { highlightedOppoMoveArray } from "@/store/atoms/highlightOppoMove";
 const socket =io("https://royalcheckmate.onrender.com/");
 
 export default function Game() {
-  const { data: session, status } = useSession()  
+  const { data: session, status } = useSession()
+  const [arrivalMessage, setArrivalMessage] = useState(null);  
   // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
   const setBoardState=useSetRecoilState(board)
@@ -131,7 +132,7 @@ export default function Game() {
       await socket.on('receive_msg',(data:any)=>{
         console.log(data);
         if(data.isWhiteSide!==isWhiteSide){
-          setMessages((pre:any)=>[...pre,data])
+          setArrivalMessage(data);
         }
         
       })
@@ -234,6 +235,10 @@ export default function Game() {
       // console.log(boardState);
       
     },[session,socket])
+
+    useEffect(() => {
+      arrivalMessage && setMessages((pre:any)=>[...pre,arrivalMessage])
+    }, [arrivalMessage]);
   
   return (
     <main className='flex justify-center items-center bg-black'>

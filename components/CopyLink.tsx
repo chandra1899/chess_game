@@ -7,8 +7,10 @@ import { shareLink } from '@/store/atoms/shareLink'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useParams } from 'next/navigation'
 import { GameFinished } from '@/store/atoms/gameFilnished'
+import { WhiteSideIs } from '@/store/atoms/whiteSIde'
 
 const CopyLink = () => {
+  const isWhiteSide=useRecoilValue(WhiteSideIs)
   const [copied,setCopied]=useState(false)
   const gameFinished=useRecoilValue(GameFinished)
   const shrLink=useRecoilValue(shareLink)
@@ -23,7 +25,7 @@ const CopyLink = () => {
   }
   return (  
     <>
-    {shrLink && <div className='h-auto w-[99%vw] xs:w-[450px] bg-black absolute mx-auto top-[30vh] p-3 rounded-md z-[2]'>
+    {isWhiteSide && shrLink && <div className='h-auto w-[99%vw] xs:w-[450px] bg-black absolute mx-auto top-[30vh] p-3 rounded-md z-[2]'>
         <div className='text-white flex flex-row justify-between items-center relative'>
             <p className='text-[19px] font-medium mx-4 my-2'>Share Link</p>
             <Image
@@ -36,7 +38,7 @@ const CopyLink = () => {
       />
         </div>
        <div className='flex flex-row justify-center items-center mb-4'>
-       <input type="text" disabled value={`${process.env.NEXTAUTH_URL}/game/${id}`} className={`bg-transparent bg-[#2c2c2c] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[37px] py-2 px-3  rounded-md outline-none border-blue border-[0.1rem] focus:border-solid font-medium m-2 w-[90%] pr-10`} />
+       <input type="text" disabled value={`https://chessmastershub.vercel.app/game/${id}`} className={`bg-transparent bg-[#2c2c2c] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[37px] py-2 px-3  rounded-md outline-none border-blue border-[0.1rem] focus:border-solid font-medium m-2 w-[90%] pr-10`} />
        <div className='text-white'>
        
       {copied?<div className='-ml-10'>

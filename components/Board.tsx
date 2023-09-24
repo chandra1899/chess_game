@@ -166,7 +166,7 @@ const Board = ({socket}:{socket:any}) => {
                     handleUpdateOppoCheck()
                 }               
                 await socket.emit('move',data)
-                setHistory((pre)=>[...pre,data])
+                setHistory((pre:any)=>[...pre,data])
 
                 if(!handleOppoHasNoMove(data.board)){
                     handlegameover()
@@ -174,11 +174,13 @@ const Board = ({socket}:{socket:any}) => {
 
                 if(boardState[row][col]===""){
                     //play move_Self
-                    document.getElementById('move_self')?.play()
+                    const song1:any=document.getElementById('move_self')
+                    song1?.play()
 
                 }else if((isWhiteSide && isBlack(row,col,boardState) || (!isWhiteSide && isWhite(row,col,boardState)))){
                     //play capture
-                    document.getElementById('capture')?.play()
+                    const song2:any=document.getElementById('capture')
+                    song2?.play()
                 }
                 setHighlightedBox([[row,col],[selectedSol[0],selectedSol[1]]])
             }else{
@@ -208,11 +210,11 @@ const Board = ({socket}:{socket:any}) => {
   },[boardState])
   
   useEffect(()=>{
-    socket.on('moved',(data)=>{
+    socket.on('moved',(data:any)=>{
         console.log(data);
 
        if(data.isWhiteSide!==isWhiteSide){
-        setHistory((pre)=>[...pre,data])
+        setHistory((pre:any)=>[...pre,data])
         setBoardState((pre)=>{
             const newBoard=pre.map(innerArray => [...innerArray])
             newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]
@@ -224,11 +226,13 @@ const Board = ({socket}:{socket:any}) => {
         setHighlightedOppoMoveBox([data.from,data.to])
         if(boardState[data.to[0]][data.to[1]]===""){
             //play move_Self
-            document.getElementById('move_self').play()
+            const song1:any=document.getElementById('move_self')
+            song1?.play()
 
         }else{
             //play capture
-            document.getElementById('capture').play()
+            const song2:any=document.getElementById('capture')
+            song2?.play()
         }
        }
         

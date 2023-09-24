@@ -30,7 +30,7 @@ export default function RegisterForm(){
         try {
             let res=await axios.post('/api/register',form)
             if(res.status===200){
-              let form =e.target
+              let form =e.target as HTMLFormElement
                 form.reset()
                 router.replace('/login')
                 // window.alert('registered')

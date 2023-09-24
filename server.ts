@@ -13,9 +13,9 @@ const io = new Server(httpServer, {
   },
 });
 
-    io.on("connection",async  (socket) => {
+    io.on("connection",async  (socket:any) => {
     console.log("A user connected:", socket.id);
-    await socket.on('joinRoom', async (roomName,email) => {
+    await socket.on('joinRoom', async (roomName:any,email:any) => {
       if(!email) return ;
       socket.email=email;
       socket.roomName=roomName
@@ -38,14 +38,14 @@ const io = new Server(httpServer, {
     // console.log(`User joined room: ${roomName}`);
   });
 
-  await socket.on("send_msg", async (data) => {
+  await socket.on("send_msg", async (data:any) => {
     console.log(data, "DATA");
     if(data.roomId){
       await io.to(data.roomId).emit("receive_msg", data);
     }
   });
 
-  await socket.on("move", async (data) => {
+  await socket.on("move", async (data:any) => {
     console.log("data",data);
    
     if(data.roomId){
@@ -55,17 +55,17 @@ const io = new Server(httpServer, {
     // socket.to(data.roomId).emit("receive_msg", data);
   });
 
-  await socket.on("receive_draw_req", async (email,roomName) => {
+  await socket.on("receive_draw_req", async (email:any,roomName:any) => {
     console.log("email",email);
       await io.to(roomName).emit("receive_draw_req",email);    
   });
 
-  await socket.on("game_over", async (roomName,email) => {
+  await socket.on("game_over", async (roomName:any,email:any) => {
     console.log("email",email);
       await io.to(roomName).emit("game_over",email);  
   });
 
-  await socket.on("draw_accepted", async (email,roomName) => {
+  await socket.on("draw_accepted", async (email:any,roomName:any) => {
     console.log("email",email);
       await io.to(roomName).emit("draw_accepted",email);    
   });

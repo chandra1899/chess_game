@@ -28,8 +28,8 @@ export default function LoginForm(){
       let res=await signIn('credentials',{
           email:form.email,password:form.password,redirect:false
       })
-      if(res.status===200){
-        let form =e.target
+      if(res?.status===200){
+        let form =e.target as HTMLFormElement
         form.reset()
         router.replace('/')
       }  

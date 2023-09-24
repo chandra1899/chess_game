@@ -4,5 +4,5 @@ import { atom } from 'recoil'
 
 export const Messages = atom({
     key: 'Messages',
-    default: []
+    default: [] as any
   });

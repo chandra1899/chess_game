@@ -12,7 +12,7 @@ import { isEmaijiOpen } from '@/store/atoms/emoji';
 import axios from 'axios';
 
 const Right = ({socket}:{socket:any}) => {
-  const scrollRef = useRef();
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const {id} = useParams()
     const [message,setMessage]=useState('')
     const messages=useRecoilValue(Messages)
@@ -28,7 +28,7 @@ const Right = ({socket}:{socket:any}) => {
         msg += emojiObject.emoji;
         setMessage(msg);
       };
-      const handleEnter=(e)=>{
+      const handleEnter=(e:any)=>{
         if(e.key==='Enter'){
           handleSendMsg();
         }
@@ -42,7 +42,7 @@ const Right = ({socket}:{socket:any}) => {
       if(res.status===200){
         setisemojiopen(false)
         if(message=='') return ;
-        setMessages((pre)=>[...pre,{value:message,isWhiteSide}])
+        setMessages((pre:any)=>[...pre,{value:message,isWhiteSide}])
         setMessage('')
         let data={
         value:message,
@@ -56,16 +56,18 @@ const Right = ({socket}:{socket:any}) => {
       
     }
     useEffect(()=>{
-      socket.on('receive_msg',(data)=>{
+      socket.on('receive_msg',(data:any)=>{
         console.log(data);
         if(data.isWhiteSide!==isWhiteSide){
-          setMessages((pre)=>[...pre,data])
+          setMessages((pre:any)=>[...pre,data])
         }
         
       })
     },[socket])
     useEffect(() => {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      if(scrollRef.current){
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
    }, [messages]);
   return (
     <div className='relative hidden xs:block chat h-[100vh] w-[27%] bg-black border-[1px] border-slate-600 '>

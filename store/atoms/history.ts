@@ -4,5 +4,5 @@ import { atom } from 'recoil'
 
 export const History = atom({
     key: 'History',
-    default: [],
+    default: [] as any
   });

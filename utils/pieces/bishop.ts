@@ -13,12 +13,12 @@ export const hightlightBlocksForBishop=(row:number,col:number,boardState:string[
            continue
        }
        //  console.log('hello2');
-        setHighlightedBox((pre)=>[...pre,[newRow1,newCol1]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow1,newCol1]]);
         newRow1--
         newCol1--
     }
     if(isValid(newRow1,newCol1) && ((isWhiteSide && isBlack(newRow1,newCol1,boardState)) || (!isWhiteSide && isWhite(newRow1,newCol1,boardState)))){
-        setHighlightedBox((pre)=>[...pre,[newRow1,newCol1]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow1,newCol1]]);
     }
     //2st side
     let newRow2=row+1;
@@ -30,12 +30,12 @@ export const hightlightBlocksForBishop=(row:number,col:number,boardState:string[
            continue
        }
         // console.log('hello2');
-        setHighlightedBox((pre)=>[...pre,[newRow2,newCol2]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow2,newCol2]]);
         newRow2++
         newCol2++
     }
     if(isValid(newRow2,newCol2) && ((isWhiteSide && isBlack(newRow2,newCol2,boardState)) || (!isWhiteSide && isWhite(newRow2,newCol2,boardState)))){
-        setHighlightedBox((pre)=>[...pre,[newRow2,newCol2]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow2,newCol2]]);
     }
     //3rd side
     let newRow3=row+1;
@@ -47,12 +47,12 @@ export const hightlightBlocksForBishop=(row:number,col:number,boardState:string[
            continue
        }
         // console.log('hello2');
-        setHighlightedBox((pre)=>[...pre,[newRow3,newCol3]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow3,newCol3]]);
         newCol3--
         newRow3++
     }
     if(isValid(newRow3,newCol3) && ((isWhiteSide && isBlack(newRow3,newCol3,boardState)) || (!isWhiteSide && isWhite(newRow3,newCol3,boardState)))){
-        setHighlightedBox((pre)=>[...pre,[newRow3,newCol3]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow3,newCol3]]);
     }
     //4rth side
     let newRow4=row-1;
@@ -64,12 +64,12 @@ export const hightlightBlocksForBishop=(row:number,col:number,boardState:string[
            continue
        }
         // console.log('hello2');
-        setHighlightedBox((pre)=>[...pre,[newRow4,newCol4]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow4,newCol4]]);
         newCol4++
         newRow4--
     }
     if(isValid(newRow4,newCol4) && ((isWhiteSide && isBlack(newRow4,newCol4,boardState)) || (!isWhiteSide && isWhite(newRow4,newCol4,boardState)))){
-        setHighlightedBox((pre)=>[...pre,[newRow4,newCol4]]);
+        setHighlightedBox((pre:any)=>[...pre,[newRow4,newCol4]]);
     }
 }
 

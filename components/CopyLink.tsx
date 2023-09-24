@@ -25,7 +25,7 @@ const CopyLink = () => {
   }
   return (  
     <>
-    {isWhiteSide && shrLink && <div className='h-auto w-[99%vw] xs:w-[450px] bg-black absolute mx-auto top-[30vh] p-3 rounded-md z-[2]'>
+    {shrLink && <div className='h-auto w-[99%vw] xs:w-[450px] bg-black absolute mx-auto top-[30vh] p-3 rounded-md z-[2]'>
         <div className='text-white flex flex-row justify-between items-center relative'>
             <p className='text-[19px] font-medium mx-4 my-2'>Share Link</p>
             <Image

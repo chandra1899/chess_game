@@ -93,8 +93,8 @@ export default function Game() {
   const socketFunction=async ()=>{
     let email=session?.user?.email
     if(!email) return ;
+    await socket.emit('joinRoom', id,email);
     await socket.on("connect", async () => {
-        await socket.emit('joinRoom', id,email);
         console.log("SOCKET CONNECTED!", socket.id);
       });
 

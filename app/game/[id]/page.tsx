@@ -147,9 +147,9 @@ export default function Game() {
       });
 
       await socket.on('moved',(data:any)=>{
-       if(data.isWhiteSide!==isWhiteSide){
+      //  if(data.isWhiteSide!==isWhiteSide){
         setArrivalBoardState(data)
-       }  
+      //  }  
     }) 
     }
 

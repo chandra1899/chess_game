@@ -131,9 +131,9 @@ export default function Game() {
 
       await socket.on('receive_msg',(data:any)=>{
         console.log(data);
-        if(data.isWhiteSide!==isWhiteSide){
+        // if(data.isWhiteSide!==isWhiteSide){
           setArrivalMessage(data);
-        }
+        // }
         
       })
 

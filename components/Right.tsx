@@ -42,7 +42,7 @@ const Right = ({socket}:{socket:any}) => {
       if(res.status===200){
         setisemojiopen(false)
         if(message=='') return ;
-        setMessages((pre:any)=>[...pre,{value:message,isWhiteSide}])
+        // setMessages((pre:any)=>[...pre,{value:message,isWhiteSide}])
         setMessage('')
         let data={
         value:message,

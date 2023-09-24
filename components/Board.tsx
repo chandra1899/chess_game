@@ -159,7 +159,7 @@ const Board = ({socket}:{socket:any}) => {
                     saveBoardHistory(newBoard,selectedSol,[row,col])
                     // console.log(newBoard);
                     data.board=newBoard
-                    return newBoard
+                    return pre
                 })
                 setTurn((pre)=>!pre)
                 if(checkOppositeKingCheckmate(data.board,isWhiteSide)){

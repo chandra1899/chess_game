@@ -17,7 +17,7 @@ const CopyLink = () => {
   const setShrLink=useSetRecoilState(shareLink)
   const {id} = useParams()
   const handleCopiedClick=()=>{
-    navigator.clipboard.writeText(`${process.env.NEXTAUTH_URL}game/${id}`);
+    navigator.clipboard.writeText(`https://chessmastershub.vercel.app/game/${id}`);
     setCopied(true)
   setTimeout(function () {
     setCopied(false)

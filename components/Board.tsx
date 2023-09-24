@@ -208,9 +208,9 @@ const Board = ({socket}:{socket:any}) => {
         }
     // }
   },[boardState])
-  
-  useEffect(()=>{
-    socket.on('moved',(data:any)=>{
+
+  const socketOnMove=async ()=>{
+    await socket.on('moved',(data:any)=>{
         console.log(data);
 
        if(data.isWhiteSide!==isWhiteSide){
@@ -237,6 +237,10 @@ const Board = ({socket}:{socket:any}) => {
        }
         
     })
+  }
+  
+  useEffect(()=>{
+    socketOnMove()
   },[socket])
   return (
     <div className={`h-auto w-[99%vw] xs:w-[100%] flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>

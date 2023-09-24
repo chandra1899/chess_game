@@ -28,6 +28,7 @@ const socket =io("https://royalcheckmate.onrender.com/");
 export default function Game() {
   const { data: session, status } = useSession()
   const [arrivalMessage, setArrivalMessage] = useState(null);  
+  const [arrivalBoardState, setArrivalBoardState] = useState(null);  
   // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
   const setBoardState=useSetRecoilState(board)
@@ -146,33 +147,10 @@ export default function Game() {
       });
 
       await socket.on('moved',(data:any)=>{
-        console.log(data);
-
        if(data.isWhiteSide!==isWhiteSide){
-        setHistory((pre:any)=>[...pre,data])
-        setBoardState((pre)=>{
-            const newBoard=pre.map(innerArray => [...innerArray])
-            newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]
-            newBoard[data.from[0]][data.from[1]]=""
-            return newBoard
-        })
-        setTurn((pre)=>!pre)
-        setHighlightedBox([])
-        setHighlightedOppoMoveBox([data.from,data.to])
-        if(boardState[data.to[0]][data.to[1]]===""){
-            //play move_Self
-            const song1:any=document.getElementById('move_self')
-            song1?.play()
-
-        }else{
-            //play capture
-            const song2:any=document.getElementById('capture')
-            song2?.play()
-        }
-       }
-        
-    })
-      
+        setArrivalBoardState(data)
+       }  
+    }) 
     }
 
     useEffect(()=>{
@@ -236,9 +214,36 @@ export default function Game() {
       
     },[session,socket])
 
+    const afterArrivalState=async(data:any)=>{
+      setHistory((pre:any)=>[...pre,data])
+      setBoardState((pre)=>{
+          const newBoard=pre.map(innerArray => [...innerArray])
+          newBoard[data.to[0]][data.to[1]]=newBoard[data.from[0]][data.from[1]]
+          newBoard[data.from[0]][data.from[1]]=""
+          return newBoard
+      })
+      setTurn((pre)=>!pre)
+      setHighlightedBox([])
+      setHighlightedOppoMoveBox([data.from,data.to])
+      if(boardState[data.to[0]][data.to[1]]===""){
+          //play move_Self
+          const song1:any=document.getElementById('move_self')
+          song1?.play()
+
+      }else{
+          //play capture
+          const song2:any=document.getElementById('capture')
+          song2?.play()
+      }
+    }
+
     useEffect(() => {
       arrivalMessage && setMessages((pre:any)=>[...pre,arrivalMessage])
     }, [arrivalMessage]);
+
+    useEffect(() => {
+      arrivalBoardState && afterArrivalState(arrivalBoardState)
+    }, [arrivalBoardState]);
   
   return (
     <main className='flex justify-center items-center bg-black'>

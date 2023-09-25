@@ -3,8 +3,10 @@
 import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const HomeRight = () => {
+  const { data: session, status } = useSession()
   const router = useRouter();
   const generateRandomCharactors = ()=>{
     let allChar="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -34,8 +36,8 @@ const HomeRight = () => {
       />
       </div>
       <div className='flex flex-col w-[60%]'>
-     <p>Name:Chandra Kumar</p>
-     <p>Email: c4746665@gmail.com</p>
+     <p>Name:{session?.user?.name}</p>
+     <p>Email: {session?.user?.email}</p>
       </div>
      </div>
 

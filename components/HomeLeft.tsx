@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation';
+import { useRecoilValue } from 'recoil'
+import { Search } from '@/store/atoms/search'
 
 interface gameType{
   roomName:string
@@ -56,6 +58,7 @@ const MatchComponent=({game,index}:{game:gameType,index:number})=>{
 
 const HomeLeft = () => {
   const { data: session, status } = useSession()
+  const search=useRecoilValue(Search)
   const [myGames,setMyGames]=useState([])
   const getusergames=async ()=>{
     let res=await axios.post('/api/getusergames',{
@@ -86,7 +89,9 @@ const HomeLeft = () => {
           deletegameinstance(game._id)
         }
         return (
-          <MatchComponent game={game} index={index} />
+          <>
+          {(search===''|| game.white.includes(search)|| game.black.includes(search)) && <MatchComponent game={game} index={index} />}
+          </>
         )
       })}
     </div>

@@ -7,7 +7,7 @@ export async function POST(req:Request){
         const {email}=await req.json()
         // console.log(roomName)
         await connectMongoDB()
-        let games=await Game.find({$or: [{ white: email },{ black: email },],})
+        let games=await Game.find({$or: [{ white: email },{ black: email },],}).sort('-createdAt')
         return NextResponse.json({games},{status:200})
     } catch (error) {
         return NextResponse.json({message:'server error'},{status:500})

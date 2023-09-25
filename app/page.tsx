@@ -3,9 +3,13 @@
 import Image from 'next/image'
 import { signOut, useSession } from 'next-auth/react'
 import { HomeLeft, HomeRight } from '@/components'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { Search } from '@/store/atoms/search'
 
 export default function Home() {
   const {status,data:session} =useSession()
+  const setSearch=useSetRecoilState(Search)
+  const search=useRecoilValue(Search)
   return (
     <main>
       <div className='h-[100vh] w-[100vw] bg-black'>
@@ -17,6 +21,8 @@ export default function Home() {
         <input
         type="text" 
         placeholder='Search'
+        onChange={(e)=>{setSearch(e.target.value)}}
+        value={search}
         className={`bg-gray-800 border-slate-500 border-[0.1rem] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[33px] w-[270px] py-2 px-3  rounded-md outline-none focus:border-blue focus:bg-black rounded-l-full rounded-r-full focus:border-[0.1rem] focus:border-solid  font-medium`}
         />
         <Image

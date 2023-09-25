@@ -14,7 +14,7 @@ const valueToLetter=['A','B','C','D','E','F','G','H'];
 
 interface dataType {from:[number,number],to:[number,number],isWhiteSide:boolean,board:string[][]}
 
-const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,selected:any,setSelected:any})=>{
+const MoveState=({data,index,selected,setSelected,setLeftHiddenOn}:{data:dataType,index:number,selected:any,setSelected:any,setLeftHiddenOn:any})=>{
   const setBoard=useSetRecoilState(board)
   const gameFinished=useRecoilValue(GameFinished)
   
@@ -24,6 +24,7 @@ const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,s
     if(!gameFinished || data.board===undefined) return ;
     setSelected(index)
     setBoard(data.board)
+    setLeftHiddenOn(false)
   }
 //   console.log(selected===index);
   
@@ -42,7 +43,7 @@ const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,s
   )
 }
 
-const LeftHidden = ({socket,selected,setSelected}:{socket:any,selected:any,setSelected:any}) => {
+const LeftHidden = ({socket,selected,setSelected,setLeftHiddenOn}:{socket:any,selected:any,setSelected:any,setLeftHiddenOn:any}) => {
   const history:any=useRecoilValue(History)
   const gameFinished:any=useRecoilValue(GameFinished)
   const setBoard=useSetRecoilState(board)
@@ -84,7 +85,7 @@ const LeftHidden = ({socket,selected,setSelected}:{socket:any,selected:any,setSe
     <div className='h-[100%] w-[100%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
       <div className='h-[100%] w-[100%] overflow-y-scroll pb-10' tabIndex={0} onKeyUp={handleKeyMove} >
          {history.length!==0 && history.map((hisValue:any,index:number)=>(
-          <MoveState data={hisValue} index={index} selected={selected} setSelected={setSelected} />
+          <MoveState data={hisValue} index={index} selected={selected} setSelected={setSelected} setLeftHiddenOn={setLeftHiddenOn} />
         ))}      
       </div>
     </div>

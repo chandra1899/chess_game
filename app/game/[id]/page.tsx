@@ -267,7 +267,7 @@ export default function Game() {
       <GameOver whoWon={whoWon} draw={draw} />
       <BackDrop/>
       {(leftHiddenOn || rightHiddenOn) && <div className='absolute h-[92vh] w-[100vw] bg-black z-[1] top-[40px]'>
-      {leftHiddenOn && <LeftHidden socket={socket} selected={selected} setSelected={setSelected} />}
+    {leftHiddenOn && <LeftHidden socket={socket} selected={selected} setSelected={setSelected} setLeftHiddenOn={setLeftHiddenOn} />}
       {rightHiddenOn && <RightHidden socket={socket}/>}
       </div>}
       <BackDrop/>

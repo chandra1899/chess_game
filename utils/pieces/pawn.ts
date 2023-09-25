@@ -133,7 +133,7 @@ export const checkOppoPawnsHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
      }
     for(let i=0;i<IndexsPawns.length;i++) {
      if(checkPawnHasMove(IndexsPawns[i][0],IndexsPawns[i][1],newboard,!isWhiteSide)){
-        console.log('true from pawn');
+        // console.log('true from pawn');
         
         return true;
      }

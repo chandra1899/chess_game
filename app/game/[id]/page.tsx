@@ -71,7 +71,7 @@ export default function Game() {
       email,roomName:id,
     })
     setWhiteSideIs(res.data.isWhiteSide)
-    console.log(res.data.turn);
+    // console.log(res.data.turn);
     
     if((res.data.turn==='white' && isWhiteSide) || (res.data.turn==='black' && !isWhiteSide)){
       setTurn(true)
@@ -86,7 +86,7 @@ export default function Game() {
         setGameFinished(false)
         setShrLink(true)       
         if(isWhiteSide){  
-          console.log('in check oppo king check 1st'); 
+          // console.log('in check oppo king check 1st'); 
         setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack)
       }else{
         setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack.checkBlackToWhite)
@@ -144,7 +144,7 @@ export default function Game() {
       });
 
       await socket.on('receive_msg',(data:any)=>{
-        console.log(data);
+        // console.log(data);
         // if(data.isWhiteSide!==isWhiteSide){
           setArrivalMessage(data);
           setOppSendMsg(true)
@@ -206,7 +206,7 @@ export default function Game() {
       })
       if(res.status===200){
         // console.log(res);
-        console.log(res.data.history);
+        // console.log(res.data.history);
         if(res.data.history===undefined || res.data.history.length===0){
           setHistory([])
         }else{

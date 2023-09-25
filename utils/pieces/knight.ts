@@ -65,7 +65,7 @@ export const checkOppoKnightsHasMove=(newboard:string[][],isWhiteSide:boolean)=>
     }
    for(let i=0;i<IndexsforKnights.length;i++) {
     if(checkBishopsHasMove(IndexsforKnights[i][0],IndexsforKnights[i][1],!isWhiteSide,newboard)){
-        console.log('true from knight');
+        // console.log('true from knight');
         return true;
     }
    }

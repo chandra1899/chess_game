@@ -26,7 +26,7 @@ export default function RegisterForm(){
       const handlesubmit:FormEventHandler<HTMLFormElement>=async (e)=>{
         e.preventDefault()
         setIsLoading(true)
-        console.log(form);
+        // console.log(form);
         try {
             let res=await axios.post('/api/register',form)
             if(res.status===200){

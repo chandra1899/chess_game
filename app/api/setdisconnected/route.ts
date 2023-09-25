@@ -16,7 +16,7 @@ interface gametype {
 export async function POST(req:Request){
     try {
         const {roomName,email}=await req.json()
-        console.log('in setdisconnected',roomName,email)
+        // console.log('in setdisconnected',roomName,email)
         await connectMongoDB()
         let existingGameInstance:gametype | null=await Game.findOne({roomName})
         if(existingGameInstance){

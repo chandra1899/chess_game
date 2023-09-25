@@ -65,7 +65,7 @@ const HomeLeft = () => {
       email:session?.user?.email
     })
     setMyGames(res.data.games)
-    console.log(res.data.games);
+    // console.log(res.data.games);
     
   }
   const deletegameinstance=async (_id:string)=>{

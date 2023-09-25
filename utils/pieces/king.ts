@@ -51,7 +51,7 @@ export const checkOppoKingHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
          }
     }
     if(IndexsforKing!==undefined && checkBishopsHasMove(IndexsforKing[0],IndexsforKing[1],!isWhiteSide,newboard)){
-        console.log('true from king');
+        // console.log('true from king');
         return true;
     }
     return false

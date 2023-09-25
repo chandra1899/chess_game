@@ -223,7 +223,7 @@ export const checkOppoBishopHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
     }
    for(let i=0;i<IndexsforBishops.length;i++) {
     if(checkBishopsHasMove(IndexsforBishops[i][0],IndexsforBishops[i][1],!isWhiteSide,newboard)){
-        console.log('true from bishop');
+        // console.log('true from bishop');
         return true;
     }
    }

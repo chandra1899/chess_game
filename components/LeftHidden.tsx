@@ -25,7 +25,7 @@ const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,s
     setSelected(index)
     setBoard(data.board)
   }
-  console.log(selected===index);
+//   console.log(selected===index);
   
   return (
     <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center ${selected===index && gameFinished?'bg-[#A0793D]':''} ${gameFinished?'cursor-pointer hover:bg-[#A0793D]':''} ${data.isWhiteSide?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`} onClick={getStateDetails}>

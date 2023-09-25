@@ -19,8 +19,8 @@ export const authOptions:AuthOptions={
 
             async authorize(credentials){
                 const {email,password}:any =credentials
-                console.log('email',email);
-                console.log('pass',password);
+                // console.log('email',email);
+                // console.log('pass',password);
                 
                 try {
                     await connectMongoDB()
@@ -52,12 +52,12 @@ export const authOptions:AuthOptions={
     },
     callbacks: {
         async signIn({ user, account }:any) {
-            console.log('userdfg',user);
-            console.log('acctdf',account);
+            // console.log('userdfg',user);
+            // console.log('acctdf',account);
             // return user
             
           if (account.provider === "google") {
-            console.log('google');
+            // console.log('google');
             await connectMongoDB()
             let email=user.email
             let candidate=await User.findOne({email});
@@ -78,7 +78,7 @@ export const authOptions:AuthOptions={
             return null;
           }
           if (account.provider === "credentials") {
-            console.log('credentials');
+            // console.log('credentials');
             await connectMongoDB()
             return user
           }

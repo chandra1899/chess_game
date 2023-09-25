@@ -18,7 +18,7 @@ export async function POST(req:Request){
         //set isWhiteSIde true
       }else{
         let grphistory=await BoardState.find({roomName}).sort('-createdAt')
-        console.log(grphistory);
+        // console.log(grphistory);
         
         if(grphistory&& grphistory[0] && grphistory[0].isWhiteSide){
           turn='black'

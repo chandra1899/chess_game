@@ -37,7 +37,7 @@ export default function LoginForm(){
       console.log(error);
     }
     setIsLoading(false)
-    console.log(form);
+    // console.log(form);
   }
   const handleKeyEnter:KeyboardEventHandler<HTMLFormElement>=(e)=>{
     if(e.key=='Enter'){

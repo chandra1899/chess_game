@@ -201,7 +201,7 @@ export const checkOppoRookHasMove=(newboard:string[][],isWhiteSide:boolean)=>{
     }
    for(let i=0;i<IndexsforRooks.length;i++) {
     if(checkPawnHasMove(IndexsforRooks[i][0],IndexsforRooks[i][1],!isWhiteSide,newboard)){
-        console.log('true from rook');
+        // console.log('true from rook');
             return true;
         }
    }

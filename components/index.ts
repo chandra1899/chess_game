@@ -8,6 +8,7 @@ import Left from './Left'
 import Board from './Board'
 import HomeLeft from './HomeLeft'
 import HomeRight from './HomeRight'
+import HomeRightHidden from './HomeRightHidden'
 import CopyLink from './CopyLink'
 import GameOver from './GameOver'
 import BackDrop from './BackDrop'
@@ -24,6 +25,7 @@ export {
     Left,
     Board,
     HomeRight,
+    HomeRightHidden,
     HomeLeft,
     CopyLink,
     GameOver,

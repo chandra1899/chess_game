@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
-const HomeRight = () => {
+const HomeRightHidden = () => {
   const { data: session, status } = useSession()
   const router = useRouter();
   const generateRandomCharactors = ()=>{
@@ -24,7 +24,7 @@ const HomeRight = () => {
   router.push(`/game/${_id}`);
   }
   return (
-    <div className='hidden xs:block h-[100vh] w-[27%] bg-[#222222e6] text-white'>
+    <div className='block xs:hidden h-[100vh] w-[100%] bg-black text-white absolute z-[1]'>
      <div className='w-[100%] h-[40%] flex flex-row justify-center items-center'>
       <div className='w-[30%] mx-3'>
       <Image
@@ -36,7 +36,7 @@ const HomeRight = () => {
       />
       </div>
       <div className='flex flex-col w-[60%]'>
-      <p className='break-all mx-2 '>Name: <span className='text-orange-400'>{session?.user?.name}</span></p>
+     <p className='break-all mx-2 '>Name: <span className='text-orange-400'>{session?.user?.name}</span></p>
      <p className='break-all mx-2'>Email: <span className='text-orange-400'>{session?.user?.email}</span></p>
       </div>
      </div>
@@ -50,4 +50,4 @@ const HomeRight = () => {
   )
 }
 
-export default HomeRight
+export default HomeRightHidden

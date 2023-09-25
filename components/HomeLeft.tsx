@@ -82,7 +82,7 @@ const HomeLeft = () => {
   },[session])
   return (
     <div className='h-[100vh] w-[45%] relative bg-[#222222e6] text-white p-4 overflow-y-scroll'>
-      {myGames.length===0 && <p className='absolute m-auto top-[20vh]'>No Games Found</p>}
+      {myGames.length===0 && <p className='absolute m-auto top-[20vh] text-red-500 font-medium text-[1.125rem]'>No Games Found</p>}
       {myGames.map((game:gameType,index)=>{
         
         if(game.white && game.black){

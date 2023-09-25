@@ -1,6 +1,6 @@
 "use client"
-
-import { BackDrop, Board, CopyLink, GameOver, Left, OfferDraw, Right } from "@/components"
+import Image from 'next/image'
+import { BackDrop, Board, CopyLink, GameOver, Left, LeftHidden, OfferDraw, Right, RightHidden } from "@/components"
 import { useRecoilState, useRecoilValue,useSetRecoilState ,} from "recoil";
 import { highlightedArray } from "@/store/atoms/highlight";
 import { useEffect, useState } from "react";
@@ -23,15 +23,24 @@ import { OpenGameOver } from "@/store/atoms/opengameover";
 import { IsOfferDrawOpen } from "@/store/atoms/isOfferDrawOpen";
 import { CheckToOppo } from "@/store/atoms/checkToOppo";
 import { highlightedOppoMoveArray } from "@/store/atoms/highlightOppoMove";
+import { OppSendMsg } from '@/store/atoms/oppSendMsg';
 const socket =io("https://royalcheckmate.onrender.com/");
 
 export default function Game() {
+  const history:any=useRecoilValue(History)
+  const gameFinished:any=useRecoilValue(GameFinished)
+  const [selected,setSelected]=useState(0)
+
+  const [leftHiddenOn,setLeftHiddenOn]=useState(false)
+  const [rightHiddenOn,setRightHiddenOn]=useState(false)
+
   const { data: session, status } = useSession()
   const [arrivalMessage, setArrivalMessage] = useState(null);  
   const [arrivalBoardState, setArrivalBoardState] = useState(null);  
   // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
   const setBoardState=useSetRecoilState(board)
+  const [oppSendMsg,setOppSendMsg]=useRecoilState(OppSendMsg)
   const [draw,setDraw]=useState(false)
   const [requested,setRequested]=useState('')
   const {id} = useParams()
@@ -50,6 +59,10 @@ export default function Game() {
   const setHighlightedBox=useSetRecoilState(highlightedArray)
   const boardState=useRecoilValue(board)
   const setHighlightedOppoMoveBox=useSetRecoilState(highlightedOppoMoveArray)
+
+  const handleEmitDraw=async ()=>{
+    await socket.emit('receive_draw_req',session?.user?.email,id)
+   }
 
   const checkForwhiteSIde=async ()=>{
     let email=session?.user?.email
@@ -134,6 +147,7 @@ export default function Game() {
         console.log(data);
         // if(data.isWhiteSide!==isWhiteSide){
           setArrivalMessage(data);
+          setOppSendMsg(true)
         // }
         
       })
@@ -252,18 +266,84 @@ export default function Game() {
       <OfferDraw requested={requested} socket={socket} />
       <GameOver whoWon={whoWon} draw={draw} />
       <BackDrop/>
-      <div className='flex flex-row justify-center items-center h-auto w-[100vw] xs:w-[97vw]'>
-        <Left socket={socket} />
-
+      {(leftHiddenOn || rightHiddenOn) && <div className='absolute h-[92vh] w-[100vw] bg-black z-[1] top-[40px]'>
+      {leftHiddenOn && <LeftHidden socket={socket} selected={selected} setSelected={setSelected} />}
+      {rightHiddenOn && <RightHidden socket={socket}/>}
+      </div>}
+      <BackDrop/>
+      <div className='flex flex-row justify-center items-center h-auto w-[100vw] xs:w-[97vw] relative'>
+        <Left socket={socket} selected={selected} setSelected={setSelected}/>
+       {leftHiddenOn? <Image
+        src={'/close.svg'}
+        height={30}
+        width={30}
+        className='block xs:hidden cursor-pointer absolute top-2 left-2'
+        alt='menu'
+        onClick={()=>{setLeftHiddenOn((pre)=>!pre)}}
+        />: <Image
+        src={'/menu.svg'}
+        height={30}
+        width={30}
+        className='block xs:hidden cursor-pointer absolute top-2 left-2'
+        alt='menu'
+        onClick={()=>{setLeftHiddenOn((pre)=>!pre);setRightHiddenOn(false)}}
+        />}
+        {rightHiddenOn?<Image
+        src={'/close.svg'}
+        height={30}
+        width={30}
+        className=' block xs:hidden cursor-pointer absolute top-2 right-2'
+        alt='menu'
+        onClick={()=>{setRightHiddenOn((pre)=>!pre);setOppSendMsg(false)}}
+        />:<Image
+        src={'/menu.svg'}
+        height={30}
+        width={30}
+        className=' block xs:hidden cursor-pointer absolute top-2 right-2'
+        alt='menu'
+        onClick={()=>{setRightHiddenOn((pre)=>!pre);setLeftHiddenOn(false);setOppSendMsg(false)}}
+        />}
+        {oppSendMsg && <div className='h-[10px] w-[10px] block xs:hidden rounded-full bg-red-600 absolute top-1 right-1'></div>}
         <div className='chessboard relative h-[100vh] w-[55%] bg-[#222222e6] flex flex-col justify-center items-center'>
           <audio src="/capture.mp3" id="capture"></audio>
           <audio src="/move-self.mp3" id="move_self"></audio>
-          {!turn && <p className="bg-[#00C300] text-[3.5vw] absolute top-2 xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Opponent Turn</p>}
+          {!turn && <p className="bg-[#00C300] text-[3.5vw] absolute top-[20vh] xs:top-2 xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Opponent Turn</p>}
             <Board  socket={socket} />
-          {turn && <p className="bg-[#00C300] text-[3.5vw] absolute bottom-2 xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Your Turn</p>}
+          {turn && <p className="bg-[#00C300] text-[3.5vw] absolute bottom-[20vh] xs:bottom-2 xs:text-[15px] text-black px-2 rounded-xl m-2 font-bold">Your Turn</p>}
         </div>
 
-        <Right socket={socket}/>
+        <Right socket={socket} />
+
+        <div className='absolute h-[55px] w-[100%] bg-[#222222e6] bottom-0 flex xs:hidden flex-row justify-between items-center'>
+        <Image
+        height={30}
+        width={30}
+        src={'/left_arrow.png'}
+        alt='right arrow'
+        className={`ml-4 ${gameFinished?'cursor-pointer':''}`}
+        onClick={()=>{setSelected((pre)=>{
+          if(!gameFinished) return pre;
+          if(pre-1>=0)
+          return pre-1
+          else return pre
+        }
+          )}}
+        />
+        {!gameFinished && <button className='text-[15px] text-black font-bold bg-yellow-300 hover:bg-yellow-400 cursor-pointer p-1 px-2 rounded-r-full rounded-l-full' onClick={handleEmitDraw} >Offer Draw</button>}
+        <Image
+        height={30}
+        width={30}
+        src={'/right_arrow.png'}
+        alt='right arrow'
+        className={`mr-12 ${gameFinished?'cursor-pointer':''}`}
+        onClick={()=>{setSelected((pre:any)=>{
+          if(!gameFinished) return pre;
+          if(pre+1<history.length)
+          return pre+1
+        else return pre
+        })}}
+        />
+        </div>
       </div>
     </main>
   )

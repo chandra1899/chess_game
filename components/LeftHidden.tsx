@@ -42,7 +42,7 @@ const MoveState=({data,index,selected,setSelected}:{data:dataType,index:number,s
   )
 }
 
-const Left = ({socket,selected,setSelected}:{socket:any,selected:any,setSelected:any}) => {
+const LeftHidden = ({socket,selected,setSelected}:{socket:any,selected:any,setSelected:any}) => {
   const history:any=useRecoilValue(History)
   const gameFinished:any=useRecoilValue(GameFinished)
   const setBoard=useSetRecoilState(board)
@@ -81,44 +81,14 @@ const Left = ({socket,selected,setSelected}:{socket:any,selected:any,setSelected
    }
 
   return (
-    <div className='h-[100vh] hidden xs:block w-[23%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
+    <div className='h-[100%] w-[100%] bg-black text-white border-[1px] border-slate-600 p-2 relative'>
       <div className='h-[100%] w-[100%] overflow-y-scroll pb-10' tabIndex={0} onKeyUp={handleKeyMove} >
          {history.length!==0 && history.map((hisValue:any,index:number)=>(
           <MoveState data={hisValue} index={index} selected={selected} setSelected={setSelected} />
         ))}      
       </div>
-      <div className='absolute h-[55px] w-[100%] bg-[#222222e6] bottom-0 flex flex-row justify-between items-center'>
-      <Image
-      height={30}
-      width={30}
-      src={'/left_arrow.png'}
-      alt='right arrow'
-      className={`ml-4 ${gameFinished?'cursor-pointer':''}`}
-      onClick={()=>{setSelected((pre:any)=>{
-        if(!gameFinished) return pre;
-        if(pre-1>=0)
-        return pre-1
-        else return pre
-      }
-        )}}
-      />
-       {!gameFinished && <button className='text-[15px] text-black font-bold bg-yellow-300 hover:bg-yellow-400 cursor-pointer p-1 px-2 rounded-r-full rounded-l-full' onClick={handleEmitDraw} >Offer Draw</button>}
-       <Image
-      height={30}
-      width={30}
-      src={'/right_arrow.png'}
-      alt='right arrow'
-      className={`mr-12 ${gameFinished?'cursor-pointer':''}`}
-      onClick={()=>{setSelected((pre:any)=>{
-        if(!gameFinished) return pre;
-        if(pre+1<history.length)
-        return pre+1
-      else return pre
-      })}}
-      />
-      </div>
     </div>
   )
 }
 
-export default Left
+export default LeftHidden

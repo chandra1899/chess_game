@@ -63,18 +63,18 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
   const setEstablishStatus=useSetRecoilState(establishStatus)
   const setEstablishStatusOn=useSetRecoilState(establishStatusOn)
 
-    // useEffect(() => {
-    //     setBoard([
-    //         ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
-    //         ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎"],
-    //         ["", "", "", "", "", "", "", ""],
-    //         ["", "", "", "", "", "", "", ""],
-    //         ["", "", "", "", "", "", "", ""],
-    //         ["", "", "", "", "", "", "", ""],
-    //         ["♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙"],
-    //         ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
-    //       ])
-    // }, [])
+    useEffect(() => {
+        setBoard([
+            ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
+            ["♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎", "♟︎"],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["♙", "♙", "♙", "♙", "♙", "♙", "♙", "♙"],
+            ["♖", "♘", "♗", "♕", "♔", "♗", "♘", "♖"],
+          ])
+    }, [])
 
   useEffect(()=>{
     const s = io("http://localhost:3001/");
@@ -169,7 +169,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
       }, [socket])
 
     useEffect(() => {
-        if(socket == null || connectionEstablished == false) return ;
+        if(socket == null || connectionEstablished == false || !session) return ;
         console.log('inside draw req');
         
         const handler = (email : any) => {
@@ -184,7 +184,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         return () => {
           socket.off("receive_draw_req", handler); 
         }
-    }, [socket, session])
+    }, [socket, session, connectionEstablished])
 
     useEffect(() => {
       if(socket == null || connectionEstablished == false || !session) return ;
@@ -199,10 +199,10 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         return () => {
           socket.off("draw_accepted", handler);
         }
-    }, [socket, session])
+    }, [socket, session, connectionEstablished])
 
     useEffect(() => {
-      if(socket == null || connectionEstablished == false) return ;
+      if(socket == null || connectionEstablished == false || !session) return ;
         const handler = (email : any) => {
           if(session?.user?.email===email){
             setWhoWon(true)
@@ -216,10 +216,10 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         return () => {
           socket.off("game_over", handler);
         }
-    }, [socket, session])
+    }, [socket, session, connectionEstablished])
 
     useEffect(() => {
-      if(socket == null || connectionEstablished == false) return ;
+      if(socket == null || connectionEstablished == false || !session) return ;
       console.log('in moved initialse');
       
         const handler = (data:any)=>{
@@ -231,10 +231,10 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         return () => {
           socket.off('moved',handler) 
         }
-    }, [socket, session])
+    }, [socket, session, connectionEstablished])
 
     useEffect(() => {
-      if(socket == null || connectionEstablished == false) return ;
+      if(socket == null || connectionEstablished == false || !session) return ;
       console.log('in receive_msg initialse');
         const handler = (data:any)=>{
           setArrivalMessage(data);
@@ -244,7 +244,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         return () => {
           socket.off('receive_msg', handler)
         }
-    }, [socket, session])
+    }, [socket, session, connectionEstablished])
 
     const checkForwhiteSIde=async ()=>{
         let email=session?.user?.email

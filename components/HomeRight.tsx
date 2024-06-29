@@ -3,10 +3,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
-const HomeRight = () => {
-  const { data: session, status } = useSession()
+const HomeRight = ({sessionData} : any) => {
   const router = useRouter();
   const generateRandomCharactors = ()=>{
     let allChar="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -36,15 +34,15 @@ const HomeRight = () => {
       />
       </div>
       <div className='flex flex-col w-[60%]'>
-      <p className='break-all mx-2 '>Name: <span className='text-orange-400'>{session?.user?.name}</span></p>
-     <p className='break-all mx-2'>Email: <span className='text-orange-400'>{session?.user?.email}</span></p>
+      <p className='break-all mx-2 '>Name: <span className='text-orange-400'>{sessionData?.user?.name}</span></p>
+     <p className='break-all mx-2'>Email: <span className='text-orange-400'>{sessionData?.user?.email}</span></p>
       </div>
      </div>
 
      <div className='flex flex-col justify-center items-center p-5'>
-        <p className='h-[45px] w-[80%] flex justify-center items-center rounded-md cursor-pointer hover:bg-[#736767e6] bg-[#4b4545e6] m-2 transition-all ease-in-out delay-[20ms]'>Create Game</p>
+        <p className='h-[45px] w-[80%] flex justify-center items-center rounded-md bg-[#353131e6] m-2 transition-all ease-in-out delay-[20ms]'>Create Game</p>
         <p onClick={onClickPlayWithFriend} className='h-[45px] w-[80%] flex justify-center items-center rounded-md cursor-pointer hover:bg-[#736767e6] bg-[#4b4545e6] m-2 transition-all ease-in-out delay-[20ms]'>Play with Friend</p>
-        <p className='h-[45px] w-[80%] flex justify-center items-center rounded-md cursor-pointer hover:bg-[#736767e6] bg-[#4b4545e6] m-2 transition-all ease-in-out delay-[20ms]'>Play with Computer</p>
+        <p className='h-[45px] w-[80%] flex justify-center items-center rounded-md bg-[#353131e6] m-2 transition-all ease-in-out delay-[20ms]'>Play with Computer</p>
      </div>
     </div>
   )

@@ -1,82 +1,46 @@
-"use client"
+import { HomeClient } from "@/components";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import Link from "next/link";
 
-import Image from 'next/image'
-import { signOut, useSession } from 'next-auth/react'
-import { HomeLeft, HomeRight, HomeRightHidden } from '@/components'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { Search } from '@/store/atoms/search'
-import { HiddenHomeRIghtOn } from '@/store/atoms/hiddenHomeRIghtOn'
+export default async function Home() {
+  const sessionData = await getServerSession(authOptions)
 
-export default function Home() {
-  const {status,data:session} =useSession()
-  const setSearch=useSetRecoilState(Search)
-  const [hiddenHomeRIghtOn,setHiddenHomeRIghtOn]=useRecoilState(HiddenHomeRIghtOn)
-  const search=useRecoilValue(Search)
-  return (
-    <main>
-      <div className='h-[100vh] w-[100vw] bg-black'>
-      <nav className='flex flex-row h-[40px] w-[100vw] justify-between px-12 pr-24 pt-2 items-center bg-[#222222e6]'>
-        <div className='flex w-[100%] xs:w-[60%] justify-around items-center'>
-        <h3 className='hidden xs:block text-white font-medium text-[18px]'>ChessFocus</h3>
-
-        <div className='flex flex-row w-auto'>
-        <input
-        type="text" 
-        placeholder='Search'
-        onChange={(e)=>{setSearch(e.target.value)}}
-        value={search}
-        className={`bg-gray-800 border-slate-500 border-[0.1rem] border-solid text-white placeholder:text-secondary placeholder:opacity-60 h-[33px] w-[60vw] xs:w-[270px] py-2 px-3  rounded-md outline-none focus:border-blue focus:bg-black rounded-l-full rounded-r-full focus:border-[0.1rem] focus:border-solid -ml-10 xs:ml-0 font-medium`}
-        />
-        <Image
-        src={'/search.png'}
-        height={2}
-        width={30}
-        className='-ml-10'
-        alt='search'
-        />
-        </div>
-
-        </div>      
-
-        <button className='hidden xs:block h-[98%] mt-1 w-[75px] rounded-md bg-violet-700 font-medium hover:bg-violet-800 text-white ml-12'  onClick={async()=>{await signOut()}} >Log Out</button>
-        {/* <div className='w-[35px]'> */}
-        <div className='flex xs:hidden flex-row justify-around items-center absolute right-2 top-1'>
-        <Image
-        src={'/logout.png'}
-        height={40}
-        width={40}
-        className=' block xs:hidden mx-2 cursor-pointer'
-        alt='search'
-        onClick={async()=>{await signOut()}}
-        />
-        {/* </div>
-        <div className='w-[35px]'> */}
-       {hiddenHomeRIghtOn?<Image
-        src={'/close.svg'}
-        height={30}
-        width={30}
-        className=' block xs:hidden cursor-pointer'
-        alt='search'
-        onClick={()=>{setHiddenHomeRIghtOn((pre)=>!pre)}}
-        />:<Image
-        src={'/menu.svg'}
-        height={30}
-        width={30}
-        className=' block xs:hidden cursor-pointer'
-        alt='search'
-        onClick={()=>{setHiddenHomeRIghtOn((pre)=>!pre)}}
-        />}
-        </div>
-        
-         {/* </div> */}
-      </nav>
-
-      <div className='flex flex-row justify-around relative'>
-        <HomeLeft/>
-        <HomeRight/>
-        {hiddenHomeRIghtOn && <HomeRightHidden/>}
-      </div>
-      </div>      
-    </main>
-  )
+  if (!sessionData) {
+    return <div className="flex flex-row justify-center items-center mt-4">
+      <p>Please Login Here</p>
+      <Link href={`${process.env.NEXTJS_URL}/api/auth/signin`}>
+        <p className="text-blue-600 hover:text-blue-700 cursor-pointer">SignIn</p>
+      </Link>
+    </div>
+  }
+    
+    let mygames ;
+  try {
+        let email=sessionData?.user?.email
+        let res = await fetch(`${process.env.NEXTAUTH_URL}/api/getusergames`,{
+          method:'POST',
+          headers:{
+            'Access-Control-Allow-Origin': '*',
+            Accept:"application/json",
+            "Content-Type":"application/json"
+          },
+          credentials:'include',
+          body:JSON.stringify({
+            email 
+          })
+        })
+        if(res.status !== 200) {
+          console.log('serverside error');
+          return ;      
+        }
+        let data = await res.json()  
+        mygames = data.games
+      } catch (error) {
+        console.log('error in fetching initialCheckForWhiteSide at server', error);
+        return 
+      }
+    return (
+      <HomeClient mygames = {mygames} sessionData = {sessionData} />
+    )
 }

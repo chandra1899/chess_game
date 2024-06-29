@@ -19,6 +19,7 @@ import OfferDraw from './OfferDraw'
 import InitialConStatusPopup from './InitialConStatusPopup'
 import GameClient from './GameClient'
 import NotFound from './NotFound'
+import HomeClient from './HomeClient'
 
 export {
     Authenticate,
@@ -41,5 +42,6 @@ export {
     OfferDraw,
     InitialConStatusPopup,
     GameClient,
-    NotFound
+    NotFound,
+    HomeClient
 }

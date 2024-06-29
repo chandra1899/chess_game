@@ -56,18 +56,8 @@ const MatchComponent=({game,index}:{game:gameType,index:number})=>{
   )
 }
 
-const HomeLeft = () => {
-  const { data: session, status } = useSession()
+const HomeLeft = ({myGames} : any) => {
   const search=useRecoilValue(Search)
-  const [myGames,setMyGames]=useState([])
-  const getusergames=async ()=>{
-    let res=await axios.post('/api/getusergames',{
-      email:session?.user?.email
-    })
-    setMyGames(res.data.games)
-    // console.log(res.data.games);
-    
-  }
   const deletegameinstance=async (_id:string)=>{
     try {
       await axios.post('/api/deletegameinstance',{
@@ -77,9 +67,7 @@ const HomeLeft = () => {
       console.log(error);
     }
   }
-  useEffect(()=>{
-    getusergames()
-  },[session])
+
   return (
     <div className='h-[100vh] w-[100%] xs:w-[45%] relative bg-[#222222e6] text-white p-4 overflow-y-scroll'>
       {myGames.length===0 && <p className='absolute m-auto top-[20vh] text-red-500 font-medium text-[1.125rem]'>No Games Found</p>}

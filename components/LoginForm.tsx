@@ -13,6 +13,8 @@ import * as React from 'react';
 export default function LoginForm(){
   const router=useRouter()
   const [isLoading,setIsLoading]=useState(false)
+  const [blockLogin,setBlockLogin]=useState(false)
+  const [status,setStatus]=useState('Login')
   const [form,setForm]=useState({
     email:'',
     password:'',
@@ -23,6 +25,7 @@ export default function LoginForm(){
   }
   const handlesubmit:FormEventHandler<HTMLFormElement>=async (e)=>{
     e.preventDefault()
+    setBlockLogin(true)
     setIsLoading(true)
     try {
       let res=await signIn('credentials',{
@@ -31,12 +34,13 @@ export default function LoginForm(){
       if(res?.status===200){
         let form =e.target as HTMLFormElement
         form.reset()
+        setIsLoading(false)
+        setStatus('Redirecting...')
         router.replace('/')
       }  
     } catch (error) {
       console.log(error);
     }
-    setIsLoading(false)
     // console.log(form);
   }
   const handleKeyEnter:KeyboardEventHandler<HTMLFormElement>=(e)=>{
@@ -61,7 +65,8 @@ export default function LoginForm(){
         onChange={handleChange}
         className={`bg-transparent border-[#8C6529] border-[0.1rem] border-solid text-white placeholder:text-secondary placeholder:opacity-60 py-2 px-3  rounded-lg outline-none focus:border-[#461F00] focus:border-[0.1rem] focus:border-solid  font-medium my-2`}
         />
-        <button className={`h-[35px] rounded-lg font-medium text-white w-[100%] mt-4 p-1 bg-[#8C6529] hover:bg-[#825B1F] tracking-widest`}>
+        <button className={`h-[35px] rounded-lg font-medium text-white w-[100%] mt-4 p-1 bg-[#8C6529] hover:bg-[#825B1F] tracking-widest relative`}>
+        {blockLogin && <div className="absolute h-[100%] w-[100%] opacity-40 bg-slate-500 top-0 left-0 rounded-lg"></div>}
         {isLoading? 
     //      <Box sx={{ display: 'flex' ,justifyContent:'center',color:'red'}} >
     //   <CircularProgress size={23} />
@@ -74,7 +79,8 @@ export default function LoginForm(){
     {/* <span class="sr-only">Loading...</span> */}
 </div>
     :
-       'Login'}    
+       `${status}`}  
+          
           </button>
       <p className="text-[13px] my-2 ml-2 text-[#E6BF83]">don't have acct?  
         <Link href={'/register'} className="underline hover:text-[#A0793D]"> register</Link>

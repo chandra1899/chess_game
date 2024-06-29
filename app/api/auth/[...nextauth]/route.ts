@@ -19,7 +19,7 @@ export const authOptions:AuthOptions={
 
             async authorize(credentials){
                 const {email,password}:any =credentials
-                // console.log('email',email);
+                console.log('email',email);
                 // console.log('pass',password);
                 
                 try {

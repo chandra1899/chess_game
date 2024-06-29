@@ -1,5 +1,4 @@
 "use client"
-
 import { board } from '@/store/atoms/board';
 import { WhiteSideIs } from '@/store/atoms/whiteSIde';
 import { highlightedArray } from '@/store/atoms/highlight';

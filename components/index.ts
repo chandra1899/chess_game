@@ -16,6 +16,9 @@ import GameOver from './GameOver'
 import BackDrop from './BackDrop'
 import PromotPeice from './PromotPeice'
 import OfferDraw from './OfferDraw'
+import InitialConStatusPopup from './InitialConStatusPopup'
+import GameClient from './GameClient'
+import NotFound from './NotFound'
 
 export {
     Authenticate,
@@ -35,5 +38,8 @@ export {
     GameOver,
     BackDrop,
     PromotPeice,
-    OfferDraw
+    OfferDraw,
+    InitialConStatusPopup,
+    GameClient,
+    NotFound
 }

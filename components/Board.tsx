@@ -4,7 +4,6 @@ import { WhiteSideIs } from '@/store/atoms/whiteSIde';
 import { highlightedArray } from '@/store/atoms/highlight';
 import React, { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { checkCheckmate } from '@/store/atoms/checkCheckmate';
 import { selected } from '@/store/atoms/selectedBlock';
 import { isOppoKingChecked } from '@/store/atoms/isOppoKingChecked';
 import { isOurKingChecked } from '@/store/atoms/isOurKingChecked';
@@ -26,15 +25,12 @@ import { History } from '@/store/atoms/history';
 import axios from 'axios';
 import { GameFinished } from '@/store/atoms/gameFilnished';
 import { CheckToOppo } from '@/store/atoms/checkToOppo';
-import { resourceLimits } from 'worker_threads';
-import { Session } from 'inspector';
 import { useSession } from 'next-auth/react';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
 
 const Board = ({socket}:{socket:any}) => {
-    // const [rerender,setRerender]=useState(true)
     const { data: session, status } = useSession()  
     const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
@@ -46,15 +42,12 @@ const Board = ({socket}:{socket:any}) => {
     const boardState=useRecoilValue(board)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
     const setHighlightedBox=useSetRecoilState(highlightedArray)
-    const setCheckToOppo=useSetRecoilState(CheckToOppo)
     const setHighlightedOppoMoveBox=useSetRecoilState(highlightedOppoMoveArray)
     const setIsOurKingCheck=useSetRecoilState(isOurKingChecked)
     const setIsOppoKingCheck=useSetRecoilState(isOppoKingChecked)
     const setSelectedSol=useSetRecoilState(selected)
     const setBoardState=useSetRecoilState(board)
     const selectedSol=useRecoilValue(selected) 
-    const setTurn=useSetRecoilState(Turn)
-    const setHistory=useSetRecoilState(History)
 
     const handleOppoHasNoMove=(newboard:string[][])=>{
         if(checkOppoPawnsHasMove(newboard,isWhiteSide) || checkOppoRookHasMove(newboard,isWhiteSide) || checkOppoBishopHasMove(newboard,isWhiteSide) || checkOppoKnightsHasMove(newboard,isWhiteSide) || checkOppoKingHasMove(newboard,isWhiteSide)){
@@ -100,8 +93,7 @@ const Board = ({socket}:{socket:any}) => {
                 board,isWhiteSide,from,to,roomName:id
             })
         } catch (error) {
-            console.log(error);
-            
+            console.log(error);  
         }
     }
 
@@ -110,7 +102,6 @@ const Board = ({socket}:{socket:any}) => {
             roomName:id,isWhiteSide
         })
         if(res.status===200){
-            // console.log('gameover');
             await socket.emit('game_over',id,session?.user?.email)
         }
     }
@@ -120,7 +111,6 @@ const Board = ({socket}:{socket:any}) => {
             roomName:id,isWhiteSide
         })
         if(res.status===200){
-            // console.log('nice');
             if((isWhiteSide && res.data.existingGameInstance.checkWhiteToBlack>=16) || (!isWhiteSide && res.data.existingGameInstance.checkBlackToWhite>=16)){
                 handlegameover()
             }
@@ -156,16 +146,13 @@ const Board = ({socket}:{socket:any}) => {
                     newBoard[row][col]=newBoard[selectedSol[0]][selectedSol[1]]
                     newBoard[selectedSol[0]][selectedSol[1]]=""
                     saveBoardHistory(newBoard,selectedSol,[row,col])
-                    // console.log(newBoard);
                     data.board=newBoard
                     return pre
                 })
-                // setTurn((pre)=>!pre)
                 if(checkOppositeKingCheckmate(data.board,isWhiteSide)){
                     handleUpdateOppoCheck()
                 }               
                 await socket.emit('move',data)
-                // setHistory((pre:any)=>[...pre,data])
 
                 if(!handleOppoHasNoMove(data.board)){
                     handlegameover()
@@ -194,7 +181,6 @@ const Board = ({socket}:{socket:any}) => {
 
   }
   useEffect(()=>{
-    // if(boardState){
         if(checkOppositeKingCheckmate(boardState,isWhiteSide)){
             setIsOppoKingCheck(true)
         }else{
@@ -205,11 +191,10 @@ const Board = ({socket}:{socket:any}) => {
         }else{
             setIsOurKingCheck(false)
         }
-    // }
   },[boardState])
 
   return (
-    <div className={`h-auto w-[99%vw] xs:w-[100%] flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`}>
+    <div className={`h-auto w-[99%vw] xs:w-[100%] flex flex-col justify-center items-center ${isWhiteSide?'':'rotate-180'}`} tabIndex={0} onBlur={() => setHighlightedBox([[]])} >
                 {rows.map((row,rowIndex)=>(
                     <div className="flex flex-row">
                         {cols.map((col,colIndex)=>(

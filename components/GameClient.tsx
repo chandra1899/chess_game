@@ -38,7 +38,6 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
   const { data: session, status } = useSession()
   const [arrivalMessage, setArrivalMessage] = useState(null);  
   const [arrivalBoardState, setArrivalBoardState] = useState(null);  
-  // console.log(session);
   const [whoWon,setWhoWon]=useState(false)
   const setBoardState=useSetRecoilState(board)
   const [oppSendMsg,setOppSendMsg]=useRecoilState(OppSendMsg)
@@ -169,12 +168,8 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
       }, [socket])
 
     useEffect(() => {
-        if(socket == null || connectionEstablished == false || !session) return ;
-        console.log('inside draw req');
-        
-        const handler = (email : any) => {
-            console.log('received draw req');
-            
+        if(socket == null || connectionEstablished == false || !session) return ;        
+        const handler = (email : any) => {            
           if(session?.user?.email!==email){
           setRequested(email)
           setIsOfferDrawOpen(true)
@@ -219,12 +214,8 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
     }, [socket, session, connectionEstablished])
 
     useEffect(() => {
-      if(socket == null || connectionEstablished == false || !session) return ;
-      console.log('in moved initialse');
-      
-        const handler = (data:any)=>{
-            console.log('received move');
-            
+      if(socket == null || connectionEstablished == false || !session) return ;      
+        const handler = (data:any)=>{            
           setArrivalBoardState(data)
         }
         socket.on('moved',handler) 
@@ -235,7 +226,6 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
 
     useEffect(() => {
       if(socket == null || connectionEstablished == false || !session) return ;
-      console.log('in receive_msg initialse');
         const handler = (data:any)=>{
           setArrivalMessage(data);
           setOppSendMsg(true)        
@@ -252,9 +242,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         let res=await axios.post('/api/groupCreatedBy',{
           email,roomName:id,
         })
-        setWhiteSideIs(res.data.isWhiteSide)
-        console.log('inside checkForwhiteSIde1');
-        
+        setWhiteSideIs(res.data.isWhiteSide)        
         if((res.data.turn==='white' && res.data.isWhiteSide) || (res.data.turn==='black' && !res.data.isWhiteSide)){
           setTurn(true)
         }else{
@@ -263,21 +251,17 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         let res2=await axios.post('/api/creategameinstance',{
           email,roomName:id,isWhiteSide:res.data.isWhiteSide
         })
-        console.log('inside checkForwhiteSIde2');
-        
+
         if(res2.status===200){
           if(res2.data.existingGameInstance.gameStatus==='running'){
-            setGameFinished(false)
-            // setShrLink(true)       
+            setGameFinished(false)     
             if(isWhiteSide){  
-              // console.log('in check oppo king check 1st'); 
             setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack)
           }else{
             setCheckToOppo(res2.data.existingGameInstance.checkWhiteToBlack.checkBlackToWhite)
             }
           }else{     
             setGameFinished(true)
-            // setShrLink(false)
             setOpenGameOver(true)
             if(res2.data.existingGameInstance.gameStatus==='draw'){
               setDraw(true)
@@ -299,7 +283,6 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         roomName:id
       })
       if(res.status===200){
-        console.log('inside getGroupMessages');
         if(res.data.messages===undefined){
           setMessages([])        
         }
@@ -313,9 +296,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
       let res=await axios.post('/api/gethistory',{
         roomName:id
       })
-      if(res.status===200){
-        console.log('inside gethistory');
-        
+      if(res.status===200){        
         if(res.data.history===undefined || res.data.history.length===0){
           setHistory([])
         }else{

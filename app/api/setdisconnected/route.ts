@@ -16,7 +16,6 @@ interface gametype {
 export async function POST(req:Request){
     try {
         const {roomName,email}=await req.json()
-        // console.log('in setdisconnected',roomName,email)
         await connectMongoDB()
         let existingGameInstance:gametype | null=await Game.findOne({roomName})
         if(existingGameInstance){
@@ -27,7 +26,6 @@ export async function POST(req:Request){
             }
             await existingGameInstance.save()
         }
-       
         return NextResponse.json({},{status:200})
     } catch (error) {
         return NextResponse.json({message:'server error'},{status:500})

@@ -5,7 +5,6 @@ import Game from '@/models/game'
 export async function POST(req:Request){
     try {
         const {email}=await req.json()
-        // console.log(roomName)
         await connectMongoDB()
         let games=await Game.find({$or: [{ white: email },{ black: email },],}).sort('-createdAt')
         return NextResponse.json({games},{status:200})

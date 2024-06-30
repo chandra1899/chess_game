@@ -19,14 +19,11 @@ const MoveState=({data,index,selected,setSelected,setLeftHiddenOn}:{data:dataTyp
   const gameFinished=useRecoilValue(GameFinished)
   
   const getStateDetails=()=>{
-    // console.log(selected);
-    
     if(!gameFinished || data.board===undefined) return ;
     setSelected(index)
     setBoard(data.board)
     setLeftHiddenOn(false)
   }
-//   console.log(selected===index);
   
   return (
     <div className={`w-[100%] h-[40px] rounded-md flex flex-row justify-center items-center ${selected===index && gameFinished?'bg-[#A0793D]':''} ${gameFinished?'cursor-pointer hover:bg-[#A0793D]':''} ${data.isWhiteSide?'text-black bg-slate-100 ':'text-white bg-black'} transition-all ease-in-out delay-[10ms] my-3`} onClick={getStateDetails}>
@@ -75,10 +72,6 @@ const LeftHidden = ({socket,selected,setSelected,setLeftHiddenOn}:{socket:any,se
       else return pre
       })
     }
-   }
-
-   const handleEmitDraw=async ()=>{
-    await socket.emit('receive_draw_req',session?.user?.email,id)
    }
 
   return (

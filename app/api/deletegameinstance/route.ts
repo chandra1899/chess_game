@@ -5,7 +5,6 @@ import Game from '@/models/game'
 export async function POST(req:Request){
     try {
         const {_id}=await req.json()
-        // console.log(roomName)
         await connectMongoDB()
         await Game.findByIdAndDelete(_id)
         return NextResponse.json({},{status:200})

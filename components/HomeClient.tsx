@@ -33,11 +33,8 @@ const HomeClient = ({mygames, sessionData} : any) => {
             alt='search'
             />
             </div>
-    
             </div>      
-    
             <button className='hidden xs:block h-[98%] mt-1 w-[75px] rounded-md bg-violet-700 font-medium hover:bg-violet-800 text-white ml-12'  onClick={async()=>{await signOut()}} >Log Out</button>
-            {/* <div className='w-[35px]'> */}
             <div className='flex xs:hidden flex-row justify-around items-center absolute right-2 top-1'>
             <Image
             src={'/logout.png'}
@@ -47,8 +44,6 @@ const HomeClient = ({mygames, sessionData} : any) => {
             alt='search'
             onClick={async()=>{await signOut()}}
             />
-            {/* </div>
-            <div className='w-[35px]'> */}
            {hiddenHomeRIghtOn?<Image
             src={'/close.svg'}
             height={30}
@@ -65,8 +60,6 @@ const HomeClient = ({mygames, sessionData} : any) => {
             onClick={()=>{setHiddenHomeRIghtOn((pre)=>!pre)}}
             />}
             </div>
-            
-             {/* </div> */}
           </nav>
     
           <div className='flex flex-row justify-around relative'>

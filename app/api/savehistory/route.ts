@@ -5,8 +5,6 @@ import BoardState from '@/models/boardState';
 export async function POST(req:Request){
     try {
         const {board,isWhiteSide,from,to,roomName}=await req.json()
-        // console.log(board,isWhiteSide,from,to,roomName);
-        
         await connectMongoDB()
         let createdhistory=await BoardState.create({
             board,isWhiteSide,from,to,roomName

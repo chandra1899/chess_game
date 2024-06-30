@@ -18,18 +18,13 @@ export const authOptions:AuthOptions={
             credentials:{},
 
             async authorize(credentials){
-                const {email,password}:any =credentials
-                console.log('email',email);
-                console.log('pass',password);
-                
+                const {email,password}:any =credentials                
                 try {
                     await connectMongoDB()
                     let user=await User.findOne({email})
                     if(!user) return null
                     const passwordmatch=await bcrypt.compare(password,user.password)
-                    if(!passwordmatch) return null
-                    // console.log(user);
-                    
+                    if(!passwordmatch) return null                    
                     return user
                     
                 } catch (error) {
@@ -52,12 +47,7 @@ export const authOptions:AuthOptions={
     },
     callbacks: {
         async signIn({ user, account }:any) {
-            console.log('userdfg',user);
-            console.log('acctdf',account);
-            // return user
-            
           if (account.provider === "google") {
-            console.log('google');
             await connectMongoDB()
             let email=user.email
             let candidate=await User.findOne({email});

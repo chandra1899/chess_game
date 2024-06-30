@@ -5,7 +5,6 @@ import BoardState from '@/models/boardState'
 export async function POST(req:Request){
     try {
         const {roomName}=await req.json()
-        // console.log(roomName)
         await connectMongoDB()
         let history=await BoardState.find({roomName})
         return NextResponse.json({history},{status:200})

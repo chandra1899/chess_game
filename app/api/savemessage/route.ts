@@ -5,7 +5,6 @@ import Message from '@/models/message'
 export async function POST(req:Request){
     try {
         const {roomName,value,isWhiteSide}=await req.json()
-        // console.log(roomName,value,isWhiteSide)
         await connectMongoDB()
         let newMessage=await Message.create({
             roomName,value,isWhiteSide

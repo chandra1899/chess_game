@@ -17,11 +17,9 @@ const Right = ({socket}:{socket:any}) => {
     const [message,setMessage]=useState('')
     const messages=useRecoilValue(Messages)
     const isWhiteSide=useRecoilValue(WhiteSideIs)
-    const setMessages=useSetRecoilState(Messages)
     const setisemojiopen=useSetRecoilState(isEmaijiOpen)
     const handleChange=(e:React.ChangeEvent<HTMLInputElement>)=>{
-        setMessage(e.target.value)
-        // console.log(message);    
+        setMessage(e.target.value)   
     }
     const handleEmojiClick = (emojiObject:EmojiClickData) => {
         let msg = message;
@@ -42,7 +40,6 @@ const Right = ({socket}:{socket:any}) => {
       if(res.status===200){
         setisemojiopen(false)
         if(message=='') return ;
-        // setMessages((pre:any)=>[...pre,{value:message,isWhiteSide}])
         setMessage('')
         let data={
         value:message,

@@ -5,7 +5,6 @@ import Message from '@/models/message'
 export async function POST(req:Request){
     try {
         const {roomName}=await req.json()
-        // console.log(roomName)
         await connectMongoDB()
         let messages=await Message.find({roomName})
         return NextResponse.json({messages},{status:200})

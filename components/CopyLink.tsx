@@ -10,9 +10,7 @@ import { GameFinished } from '@/store/atoms/gameFilnished'
 import { WhiteSideIs } from '@/store/atoms/whiteSIde'
 
 const CopyLink = () => {
-  const isWhiteSide=useRecoilValue(WhiteSideIs)
   const [copied,setCopied]=useState(false)
-  const gameFinished=useRecoilValue(GameFinished)
   const shrLink=useRecoilValue(shareLink)
   const setShrLink=useSetRecoilState(shareLink)
   const {id} = useParams()

@@ -29,7 +29,6 @@ export default function RegisterForm(){
         e.preventDefault()
         setBlockLogin(true)
         setIsLoading(true)
-        // console.log(form);
         try {
             let res=await axios.post('/api/register',form)
             if(res.status===200){
@@ -38,7 +37,6 @@ export default function RegisterForm(){
                 setIsLoading(false)
                 setStatus('Redirecting...')
                 router.replace('/login')
-                // window.alert('registered')
             }
             
         } catch (error) {

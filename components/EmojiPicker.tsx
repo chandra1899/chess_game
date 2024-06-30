@@ -1,7 +1,7 @@
 "use client"
 
 import EmojiPicker, { Theme } from 'emoji-picker-react';
-import { useRecoilValue, useSetRecoilState,useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { isEmaijiOpen } from '@/store/atoms/emoji';
 import { BsEmojiSmile ,BsEmojiSmileFill} from "react-icons/bs";
 import { EmojiClickData } from 'emoji-picker-react';
@@ -12,7 +12,6 @@ interface EmojiPickComponentProps{
 const theme: Theme | any = 'dark';
 export default function EmojiPickComponent({handleEmojiClick}:EmojiPickComponentProps){
     const [isemojiopen,setisemojiopen]=useRecoilState(isEmaijiOpen)
-    // const setisemojiopen=useSetRecoilState(isEmaijiOpen)
     return <>
     {isemojiopen && <BsEmojiSmileFill size='33px' className=' cursor-pointer' onClick={()=>{setisemojiopen(false)}}/>}
       {!isemojiopen && <BsEmojiSmile size='33px' className='cursor-pointer' onClick={()=>{setisemojiopen(true)}} />}

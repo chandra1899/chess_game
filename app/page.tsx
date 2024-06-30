@@ -18,7 +18,7 @@ export default async function Home() {
     let mygames ;
   try {
         let email=sessionData?.user?.email
-        let res = await fetch(`${process.env.NEXTAUTH_URL}/api/getusergames`,{
+        let res = await fetch(`https://chessmastershub.vercel.app/api/getusergames`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',
@@ -37,7 +37,7 @@ export default async function Home() {
         let data = await res.json()  
         mygames = data.games
       } catch (error) {
-        console.log('error in fetching initialCheckForWhiteSide at server', error);
+        console.log('error in fetching usergames at server', error);
         return 
       }
     return (

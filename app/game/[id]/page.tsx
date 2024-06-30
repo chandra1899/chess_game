@@ -18,7 +18,7 @@ export default async function Game({params} : any) {
   let initialCheckForWhiteSide ;
   try {
         let email=sessionData?.user?.email
-        let res = await fetch(`${process.env.NEXTAUTH_URL}/api/groupCreatedBy`,{
+        let res = await fetch(`https://chessmastershub.vercel.app/api/groupCreatedBy`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',
@@ -41,7 +41,7 @@ export default async function Game({params} : any) {
       }
   let initialMessages ;
   try {
-        let res = await fetch(`${process.env.NEXTAUTH_URL}/api/getmessages`,{
+        let res = await fetch(`https://chessmastershub.vercel.app/api/getmessages`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',
@@ -64,7 +64,7 @@ export default async function Game({params} : any) {
       }
   let initialHistory ;
   try {
-        let res = await fetch(`${process.env.NEXTAUTH_URL}/api/gethistory`,{
+        let res = await fetch(`https://chessmastershub.vercel.app/api/gethistory`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',

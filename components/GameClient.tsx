@@ -76,7 +76,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
     }, [])
 
   useEffect(()=>{
-    const s = io("http://localhost:3001/");
+    const s = io(`${process.env.SERVER_SOCKET_URL}`);
     setSocket(s)
     return ()=>{
       s.disconnect()

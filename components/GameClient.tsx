@@ -76,7 +76,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
     }, [])
 
   useEffect(()=>{
-    const s = io(`${process.env.SERVER_SOCKET_URL}`);
+    const s = io(`https://docs-socket-server.onrender.com/`);
     setSocket(s)
     return ()=>{
       s.disconnect()

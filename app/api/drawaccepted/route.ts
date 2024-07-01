@@ -1,23 +1,22 @@
 import {NextResponse } from 'next/server'
 import { connectMongoDB } from '@/config/mongoose'
 import Game from '@/models/game'
+import { z } from "zod"
 
-interface gametype {
-    roomName:string
-    white:string
-    black:string
-    gameStatus:string
-    won:string
-    whiteDisconnected:number
-    blackDisconnected:number
-    save:()=>any
-}
+const inputTypes = z.object({
+    roomName : z.string()
+})
 
 export async function POST(req:Request){
     try {
-        const {roomName}=await req.json()
+        const body = await req.json()
+        const parsedInput = inputTypes.safeParse(body)
+        if(!parsedInput.success){
+            return NextResponse.json({message:parsedInput.error},{status:411})
+        }
+        
         await connectMongoDB()
-        let existingGameInstance:gametype | null=await Game.findOne({roomName})
+        let existingGameInstance = await Game.findOne({roomName : parsedInput.data.roomName})
         if(existingGameInstance){
             existingGameInstance.gameStatus='draw'
             existingGameInstance.whiteDisconnected=Date.now()

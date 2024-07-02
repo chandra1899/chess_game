@@ -6,17 +6,10 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation';
 import { useRecoilValue } from 'recoil'
 import { Search } from '@/store/atoms/search'
+import { MyGamesType } from './HomeClient';
 
-interface gameType{
-  roomName:string
-  white:string
-  black:string
-  gameStatus:string
-  won:string
-  _id:string
-}
 
-const MatchComponent=({game,index}:{game:gameType,index:number})=>{
+const MatchComponent=({game,index}:{game:MyGamesType,index:number})=>{
   const router = useRouter();
   return (
     <div className='w-[100%] h-[60px] rounded-md flex flex-row justify-around items-center cursor-pointer hover:bg-[#3b3b3be6] bg-[#302c2ce6] transition-all ease-in-out delay-[20ms] my-3 p-2 xs:p-0' onClick={()=>{router.push(`/game/${game.roomName}`)}}>
@@ -55,7 +48,7 @@ const MatchComponent=({game,index}:{game:gameType,index:number})=>{
   )
 }
 
-const HomeLeft = ({myGames} : any) => {
+const HomeLeft = ({myGames} : {myGames : MyGamesType[]}) => {
   const search=useRecoilValue(Search)
   const deletegameinstance=async (_id:string)=>{
     try {
@@ -70,7 +63,7 @@ const HomeLeft = ({myGames} : any) => {
   return (
     <div className='h-[100vh] w-[100%] xs:w-[45%] relative bg-[#222222e6] text-white p-4 overflow-y-scroll'>
       {myGames.length===0 && <p className='absolute m-auto top-[20vh] text-red-500 font-medium text-[1.125rem]'>No Games Found</p>}
-      {myGames.map((game:gameType,index : any)=>{
+      {myGames.map((game:MyGamesType,index : any)=>{
         
         if(game.white && game.black){
         }else{

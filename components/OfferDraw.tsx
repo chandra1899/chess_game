@@ -9,8 +9,9 @@ import { useParams } from 'next/navigation'
 import { GameFinished } from '@/store/atoms/gameFilnished'
 import { useSession } from 'next-auth/react'
 import { OpenGameOver } from '@/store/atoms/opengameover'
+import { Socket } from 'socket.io-client'
 
-const OfferDraw = ({requested,socket}:{requested:string,socket:any}) => {
+const OfferDraw = ({requested,socket}:{requested:string,socket:Socket | null}) => {
     const setGameFinished=useSetRecoilState(GameFinished)
     const isOfferDrawOpen=useRecoilValue(IsOfferDrawOpen)
     const setIsOfferDrawOpen=useSetRecoilState(IsOfferDrawOpen)
@@ -25,7 +26,7 @@ const OfferDraw = ({requested,socket}:{requested:string,socket:any}) => {
             setGameFinished(true)
             setIsOfferDrawOpen(false)
             setOpenGameOver(true)
-            await socket.emit('draw_accepted',session?.user?.email,id)
+            await socket?.emit('draw_accepted',session?.user?.email,id)
         }
     }
   return (

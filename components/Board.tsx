@@ -2,7 +2,7 @@
 import { board } from '@/store/atoms/board';
 import { WhiteSideIs } from '@/store/atoms/whiteSIde';
 import { highlightedArray } from '@/store/atoms/highlight';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selected } from '@/store/atoms/selectedBlock';
 import { isOppoKingChecked } from '@/store/atoms/isOppoKingChecked';
@@ -21,16 +21,15 @@ import { checkOppoPawnsHasMove, hightlightBlocksForPawns } from '@/utils/pieces/
 import { useParams } from 'next/navigation';
 import { highlightedOppoMoveArray } from '@/store/atoms/highlightOppoMove';
 import { Turn } from '@/store/atoms/turn';
-import { History } from '@/store/atoms/history';
 import axios from 'axios';
 import { GameFinished } from '@/store/atoms/gameFilnished';
-import { CheckToOppo } from '@/store/atoms/checkToOppo';
 import { useSession } from 'next-auth/react';
+import { Socket } from 'socket.io-client';
 
 const rows=['A','B','C','D','E','F','G','H']
 const cols=['1','2','3','4','5','6','7','8']
 
-const Board = ({socket}:{socket:any}) => {
+const Board = ({socket}:{socket:Socket | null}) => {
     const { data: session, status } = useSession()  
     const {id} = useParams()
     const highlightedBox=useRecoilValue(highlightedArray)
@@ -102,7 +101,7 @@ const Board = ({socket}:{socket:any}) => {
             roomName:id,isWhiteSide
         })
         if(res.status===200){
-            await socket.emit('game_over',id,session?.user?.email)
+            await socket?.emit('game_over',id,session?.user?.email)
         }
     }
 
@@ -152,7 +151,7 @@ const Board = ({socket}:{socket:any}) => {
                 if(checkOppositeKingCheckmate(data.board,isWhiteSide)){
                     handleUpdateOppoCheck()
                 }               
-                await socket.emit('move',data)
+                await socket?.emit('move',data)
 
                 if(!handleOppoHasNoMove(data.board)){
                     handlegameover()

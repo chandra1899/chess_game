@@ -6,11 +6,9 @@ import { FaRegCopy } from "react-icons/fa"
 import { shareLink } from '@/store/atoms/shareLink'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useParams } from 'next/navigation'
-import { GameFinished } from '@/store/atoms/gameFilnished'
-import { WhiteSideIs } from '@/store/atoms/whiteSIde'
 
 const CopyLink = () => {
-  const [copied,setCopied]=useState(false)
+  const [copied,setCopied]=useState<boolean>(false)
   const shrLink=useRecoilValue(shareLink)
   const setShrLink=useSetRecoilState(shareLink)
   const {id} = useParams()

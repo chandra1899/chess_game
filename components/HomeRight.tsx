@@ -3,8 +3,9 @@
 import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
+import { Session } from 'next-auth';
 
-const HomeRight = ({sessionData} : any) => {
+const HomeRight = ({sessionData} : {sessionData : Session}) => {
   const router = useRouter();
   const generateRandomCharactors = ()=>{
     let allChar="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

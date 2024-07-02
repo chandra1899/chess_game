@@ -3,7 +3,7 @@ import { GameClient, NotFound } from "@/components";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
-export default async function Game({params} : any) {
+export default async function Game({params} : {params : { id : string}}) {
   const sessionData = await getServerSession(authOptions)
 
   if (!sessionData) {
@@ -19,6 +19,7 @@ export default async function Game({params} : any) {
   try {
         let email=sessionData?.user?.email
         let res = await fetch(`https://chessmastershub.vercel.app/api/groupCreatedBy`,{
+        // let res = await fetch(`http://localhost:8000/api/groupCreatedBy`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',
@@ -42,6 +43,7 @@ export default async function Game({params} : any) {
   let initialMessages ;
   try {
         let res = await fetch(`https://chessmastershub.vercel.app/api/getmessages`,{
+        // let res = await fetch(`http://localhost:8000/api/getmessages`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',
@@ -65,6 +67,7 @@ export default async function Game({params} : any) {
   let initialHistory ;
   try {
         let res = await fetch(`https://chessmastershub.vercel.app/api/gethistory`,{
+        // let res = await fetch(`http://localhost:8000/api/gethistory`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',

@@ -12,9 +12,9 @@ import * as React from 'react';
 
 export default function RegisterForm(){
   const router=useRouter()
-    const [isLoading,setIsLoading]=useState(false)
-    const [blockLogin,setBlockLogin]=useState(false)
-    const [status,setStatus]=useState('Login')
+    const [isLoading,setIsLoading]=useState<boolean>(false)
+    const [blockLogin,setBlockLogin]=useState<boolean>(false)
+    const [status,setStatus]=useState<string>('Register')
     const [form,setForm]=useState({
         name:'',
         email:'',

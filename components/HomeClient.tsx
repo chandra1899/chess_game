@@ -5,8 +5,25 @@ import { HomeLeft, HomeRight, HomeRightHidden } from '@/components'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { Search } from '@/store/atoms/search'
 import { HiddenHomeRIghtOn } from '@/store/atoms/hiddenHomeRIghtOn'
+import { Session } from 'next-auth'
 
-const HomeClient = ({mygames, sessionData} : any) => {
+export interface MyGamesType {
+  black : string,
+  checkBlackToWhite : number,
+  checkWhiteToBlack : number,
+  gameStatus : string,
+  roomName : string,
+  white : string,
+  _id : string,
+  won? : string | undefined
+}
+
+interface Props {
+  mygames : MyGamesType[],
+  sessionData : Session
+}
+
+const HomeClient = ({mygames, sessionData} : Props) => {
     const setSearch=useSetRecoilState(Search)
     const [hiddenHomeRIghtOn,setHiddenHomeRIghtOn]=useRecoilState(HiddenHomeRIghtOn)
     const search=useRecoilValue(Search)

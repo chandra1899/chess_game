@@ -19,6 +19,7 @@ export default async function Home() {
   try {
         let email=sessionData?.user?.email
         let res = await fetch(`https://chessmastershub.vercel.app/api/getusergames`,{
+        // let res = await fetch(`http://localhost:8000//api/getusergames`,{
           method:'POST',
           headers:{
             'Access-Control-Allow-Origin': '*',

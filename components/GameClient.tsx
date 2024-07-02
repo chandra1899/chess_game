@@ -11,8 +11,8 @@ import { useSession } from "next-auth/react"
 import { WhiteSideIs } from "@/store/atoms/whiteSIde";
 import axios from "axios";
 import { Turn } from "@/store/atoms/turn";
-import { Messages } from "@/store/atoms/messages";
-import { History } from "@/store/atoms/history";
+import { MessageType, Messages } from "@/store/atoms/messages";
+import { History, HistoryType } from "@/store/atoms/history";
 import { board } from "@/store/atoms/board";
 import { PromotPeice } from '@/components'
 import { GameFinished } from "@/store/atoms/gameFilnished";
@@ -23,25 +23,40 @@ import { highlightedOppoMoveArray } from "@/store/atoms/highlightOppoMove";
 import { OppSendMsg } from '@/store/atoms/oppSendMsg';
 import { establishStatus } from '@/store/atoms/establishStatus';
 import { establishStatusOn } from '@/store/atoms/establishStatusOn';
+import { Session } from 'next-auth';
 
-const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, sessionData} : any) => {    
-    const [socket, setSocket] = useState<null | Socket>(null)
+interface Props {
+  initialCheckForWhiteSide : {
+    isWhiteSide : boolean,
+    turn : string
+  },
+  initialMessages : {
+    messages : MessageType[]
+  },
+  initialHistory : {
+    history : HistoryType[]
+  },
+  sessionData : Session
+}
+
+const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, sessionData} : Props) => {   
+  const [socket, setSocket] = useState<null | Socket>(null)
   const [connectionEstablished, setConnectionEstablished] = useState<Boolean>(false)
   const [initialRender, setInitialRender] = useState(0)
-  const history:any=useRecoilValue(History)
-  const gameFinished:any=useRecoilValue(GameFinished)
-  const [selected,setSelected]=useState(0)
+  const history = useRecoilValue(History)
+  const gameFinished = useRecoilValue(GameFinished)
+  const [selected,setSelected]=useState<number>(0)
 
-  const [leftHiddenOn,setLeftHiddenOn]=useState(false)
-  const [rightHiddenOn,setRightHiddenOn]=useState(false)
+  const [leftHiddenOn,setLeftHiddenOn]=useState<boolean>(false)
+  const [rightHiddenOn,setRightHiddenOn]=useState<boolean>(false)
 
   const { data: session, status } = useSession()
   const [arrivalMessage, setArrivalMessage] = useState(null);  
   const [arrivalBoardState, setArrivalBoardState] = useState(null);  
-  const [whoWon,setWhoWon]=useState(false)
+  const [whoWon,setWhoWon]=useState<boolean>(false)
   const setBoardState=useSetRecoilState(board)
   const [oppSendMsg,setOppSendMsg]=useRecoilState(OppSendMsg)
-  const [draw,setDraw]=useState(false)
+  const [draw,setDraw]=useState<boolean>(false)
   const [requested,setRequested]=useState('')
   const {id} = useParams()
   const turn=useRecoilValue(Turn)
@@ -76,6 +91,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
     }, [])
 
   useEffect(()=>{
+    // const s = io(`http://localhost:3001/`);
     const s = io(`https://royalcheckmate.onrender.com`);
     setSocket(s)
     return ()=>{
@@ -92,12 +108,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         if(initialRender >= 1) return ;
         setConnectionEstablished(false)
         setEstablishStatus("Establishing connection.........")
-        socket.on("connection-established", async () => {
-            console.log('connection established');
-            console.log('initialCheckForWhiteSide', initialCheckForWhiteSide);
-            console.log('initialMessages', initialMessages);
-            console.log('initialHistory', initialHistory);
-            
+        socket.on("connection-established", async () => {            
             setEstablishStatus("setting up initial state of game.........")
             // checkForWhiteSide1
             setWhiteSideIs(initialCheckForWhiteSide.isWhiteSide)            
@@ -128,7 +139,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
             // checkForWhiteSide2
             try {
                 let res2=await axios.post('/api/creategameinstance',{
-                    email : sessionData.user.email,roomName:id,isWhiteSide:initialCheckForWhiteSide.isWhiteSide
+                    email : sessionData?.user?.email,roomName:id,isWhiteSide:initialCheckForWhiteSide.isWhiteSide
                   })
                   
                   if(res2.status===200){
@@ -164,12 +175,12 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
                 console.log('Error in fetcing initial state of document, Please refresh',error);
             }
       })
-      socket.emit("establish-conection", id, sessionData.user.email)        
+      socket.emit("establish-conection", id, sessionData?.user?.email)        
       }, [socket])
 
     useEffect(() => {
         if(socket == null || connectionEstablished == false || !session) return ;        
-        const handler = (email : any) => {            
+        const handler = (email : string) => {            
           if(session?.user?.email!==email){
           setRequested(email)
           setIsOfferDrawOpen(true)
@@ -183,7 +194,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
 
     useEffect(() => {
       if(socket == null || connectionEstablished == false || !session) return ;
-        const handler = (email : any) => {
+        const handler = (email : string) => {
           if(session?.user?.email!==email){
             setGameFinished(true)
             setOpenGameOver(true)
@@ -198,7 +209,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
 
     useEffect(() => {
       if(socket == null || connectionEstablished == false || !session) return ;
-        const handler = (email : any) => {
+        const handler = (email : string) => {
           if(session?.user?.email===email){
             setWhoWon(true)
           }else {
@@ -432,7 +443,7 @@ const GameClient = ({initialCheckForWhiteSide, initialMessages, initialHistory, 
         src={'/right_arrow.png'}
         alt='right arrow'
         className={`mr-12 ${gameFinished?'cursor-pointer':''}`}
-        onClick={()=>{setSelected((pre:any)=>{
+        onClick={()=>{setSelected((pre)=>{
           if(!gameFinished) return pre;
           if(pre+1<history.length)
           return pre+1

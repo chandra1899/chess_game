@@ -31,7 +31,7 @@ export default function RegisterForm(){
         setIsLoading(true)
         try {
             let res=await axios.post('/api/register',form)
-            if(res.status===200){
+            if(res.status===200 || res.status === 409){
               let form =e.target as HTMLFormElement
                 form.reset()
                 setIsLoading(false)
